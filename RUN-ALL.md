@@ -1,6 +1,8 @@
 # RUN-ALL: Full Experiment Suite (A1–A6)
 
-This file covers running all six experiments end-to-end on any model via GitHub Copilot CLI (or Copilot Chat in VS Code/JetBrains). It is designed to be self-contained — no external slash commands, no Claude Code dependencies. Everything is expanded inline.
+This file covers running all six experiments end-to-end on any model via GitHub Copilot CLI or Copilot Chat (VS Code/JetBrains). It is self-contained — all instructions are expanded inline, no external slash commands required.
+
+**New to the toolkit agents?** Read `USAGE.md` first. It covers how to invoke the prompt-architect, prompt-writer, and evaluator agents from Claude Code, Copilot Chat, and Copilot CLI.
 
 ---
 
@@ -20,19 +22,31 @@ Copilot will ask you to confirm you trust the files in the current directory.
 |---|---|
 | `/add-dir <path>` | Grant Copilot access to a directory |
 | `/model` | Select which model to use — do this before starting |
-| `/clear` | Reset the conversation context (fresh session equivalent) |
+| `/clear` | Reset the conversation context |
 | `/exit` | End the session |
 | `/session` | Show session metadata including model in use |
 
-### Slash commands vs. prompts
+> These are session management commands — they do **not** invoke the AI. All AI work happens through natural language prompts you type or paste.
 
-Copilot CLI slash commands (`/clear`, `/model`, etc.) are session management instructions — they do **not** invoke AI. All AI work happens through natural language prompts that you type or paste. There are no custom skill slash commands like `/analyse-prompt` in Copilot — those are Claude Code-specific. This file contains the expanded inline equivalents.
+### Invoking the toolkit agents in Copilot
+
+This repo includes pre-built agents in `.github/agents/`. In Copilot CLI and Copilot Chat, use `@agent-name` to invoke them:
+
+```
+@prompt-architect analyse experiments/A1-legal-contract-review/original/SKILL.md
+@prompt-writer revise based on analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
+@evaluator compare outputs for experiment A1 [paths]
+```
+
+If `@agent-name` syntax isn't supported in your CLI version, paste the expanded prompt instructions below — they are self-contained and work without the agents.
+
+After `@prompt-architect` completes, a **handoff button** will appear to transition to `@prompt-writer` with context carried forward. Use it — it is the pipeline pattern applied to the meta-level.
 
 ### Getting fresh context between steps
 
-**Within a session**: Use `/clear` to reset context between steps. This is sufficient for most steps.
+**Steps 1–6**: Use `/clear` between steps, or use the agents (they manage their own context).
 
-**For pipeline stages (Step 6 in each experiment)**: Start a **new terminal session** (`copilot`) for each pipeline stage. This is not optional — `/clear` between stages in the same session leaves residual context that recreates the contamination you're testing against. The whole point of the pipeline is clean context at each stage boundary.
+**For pipeline stages (Step 6)**: Start a **new terminal session** (`copilot`) for each pipeline stage. `/clear` is not sufficient here — pipeline stages need completely isolated contexts because that is the thing being tested. Do not run multiple pipeline stages in the same session.
 
 ---
 
@@ -91,57 +105,64 @@ For A1 and A2: run 3 times per tier. For A3–A6: run once per tier (or 3 times 
 **Test scenario**: Customer/buyer perspective, $150K/year, 2-week deadline, priorities are data protection and IP ownership.
 **Domain dimension**: Risk identification accuracy
 
-### Step 1: Analyse — fresh session
+### Step 1: Analyse
 
+**Preferred — using the toolkit agent (Copilot Chat or CLI):**
 ```
-Read the analysis framework at toolkit/prompt-architect-agent.md. Also read the theoretical foundation at toolkit/cognitive-stance-reference.md. You are acting as the Prompt Architect described in those files.
-
-Apply this framework to analyse the prompt at experiments/A1-legal-contract-review/original/SKILL.md.
-
-Your analysis should cover:
-1. What the prompt is actually asking for — what types of thinking it requires and how they relate (not a list of tasks, a description of cognitive posture)
-2. Where modes interfere — specific, evidence-based observations quoting the prompt and explaining the interference mechanism
-3. What to look for in the output — diagnostic signals that contamination is happening, testable predictions
-4. What to do about it — interventions at prompt level (scope boundaries, seed-to-lens conversions, anchor removal) and pipeline level (when and how to split), with trade-offs stated
-
-Save your full analysis to experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
+@prompt-architect Analyse experiments/A1-legal-contract-review/original/SKILL.md. Save your analysis to experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
 ```
 
-### Step 2: Create Tier 2 (optimised) — /clear or new session
-
+**Expanded inline (paste this if @agent-name doesn't work):**
 ```
-Read the prompt writer framework at toolkit/prompt-writer-agent.md and the theoretical foundation at toolkit/cognitive-stance-reference.md. You are acting as the Prompt Writer described in those files.
+Read the analysis framework at toolkit/prompt-architect-agent.md. Also read toolkit/cognitive-stance-reference.md as your theoretical foundation. You are the Prompt Architect.
 
-Read the architect's analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md. Read the original prompt at experiments/A1-legal-contract-review/original/SKILL.md.
+Analyse the prompt at experiments/A1-legal-contract-review/original/SKILL.md. Cover:
+1. What types of thinking the prompt requires and how they relate
+2. Where modes interfere — quote the prompt, explain the mechanism
+3. What to look for in the output — diagnostic signals and testable predictions
+4. What to do about it — prompt-level fixes and pipeline-level interventions, with trade-offs
 
-Your job is to implement the prompt-level optimisations identified in the analysis. Produce a revised version that:
-- Addresses the specific interference mechanisms identified
-- Preserves what the architect found to be working
-- Does not restructure the whole prompt — fix what needs fixing
+Save your analysis to experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
+```
 
-Also produce revision notes documenting: each finding → what changed → why.
+### Step 2: Create Tier 2 (optimised) — /clear or handoff from Step 1
+
+**Preferred — using the toolkit agent:**
+```
+@prompt-writer Revise the prompt at experiments/A1-legal-contract-review/original/SKILL.md based on the analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md. Save to experiments/A1-legal-contract-review/optimised/SKILL.md with revision notes at experiments/A1-legal-contract-review/optimised/revision-notes.md
+```
+
+**Expanded inline:**
+```
+Read toolkit/prompt-writer-agent.md and toolkit/cognitive-stance-reference.md. You are the Prompt Writer.
+
+Read the architect's analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md and the original prompt at experiments/A1-legal-contract-review/original/SKILL.md.
+
+Implement the prompt-level optimisations identified in the analysis. Preserve what works. Fix what needs fixing. Document each finding → change → rationale.
 
 Save the revised prompt to experiments/A1-legal-contract-review/optimised/SKILL.md
-Save the revision notes to experiments/A1-legal-contract-review/optimised/revision-notes.md
+Save revision notes to experiments/A1-legal-contract-review/optimised/revision-notes.md
 ```
 
 ### Step 3: Create Tier 3 (pipeline) — /clear or new session
 
+**Preferred — using the toolkit agent:**
 ```
-Read the prompt writer framework at toolkit/prompt-writer-agent.md and the theoretical foundation at toolkit/cognitive-stance-reference.md. You are acting as the Prompt Writer designing a multi-agent pipeline.
+@prompt-writer Design a Tier 3 pipeline for experiments/A1-legal-contract-review/ based on the analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md. Produce agent files in both Claude Code subagent format and Copilot agent format. Save to experiments/A1-legal-contract-review/pipeline/ with handoff-spec.md and design-notes.md
+```
 
-Read the architect's analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md. Read the original prompt at experiments/A1-legal-contract-review/original/SKILL.md.
+**Expanded inline:**
+```
+Read toolkit/prompt-writer-agent.md and toolkit/cognitive-stance-reference.md. You are the Prompt Writer designing a multi-agent pipeline.
 
-Design a pipeline that separates incompatible cognitive modes into distinct agents with clean contexts. For each agent:
-- Name it by function, not position
-- Specify what types of thinking it handles
-- Specify what it receives as input (format matters — structured data strips cognitive mode, prose carries it)
-- Specify what it produces as output
-- Explain why it is separate (what interference it avoids)
+Read experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md and experiments/A1-legal-contract-review/original/SKILL.md.
 
-Save each agent as a separate file in experiments/A1-legal-contract-review/pipeline/
-Save a handoff-spec.md describing: the agent sequence, what structured output crosses between each stage, and what gets dropped at each boundary
-Save a design-notes.md explaining the pipeline architecture decisions
+Design a pipeline separating incompatible cognitive modes into distinct agents. For each agent: name by function, specify thinking types, input/output format, and why it is separate. Design handoffs: what structured output crosses, what gets dropped.
+
+Save each agent to experiments/A1-legal-contract-review/pipeline/ in both formats:
+- Claude Code subagent format (NAME.md with YAML: name, description, tools, model)
+- Copilot agent format (NAME.agent.md with YAML: name, description, tools array, handoffs)
+Save handoff-spec.md and design-notes.md
 ```
 
 ### Step 4: Run baseline — 3 fresh sessions (can run in parallel)
@@ -280,23 +301,28 @@ stage: 04-strategic-advisor
 Save your output to experiments/A1-legal-contract-review/pipeline-runs/run-N/04-strategic-advisor-output.md
 ```
 
-### Step 7: Evaluate blind — fresh session
+### Step 7: Evaluate blind
 
+**Preferred — using the toolkit agent:**
 ```
-Read the evaluator instructions at evaluation/evaluator-prompt.md. Read the rubric at evaluation/rubric.md. You are the independent evaluator described in those files.
+@evaluator Compare outputs for experiment A1. Baseline: experiments/A1-legal-contract-review/baseline-runs/. Optimised: experiments/A1-legal-contract-review/optimised-runs/. Pipeline final output: experiments/A1-legal-contract-review/pipeline-runs/run-N/04-strategic-advisor-output.md for each run. Add domain dimension: Risk Identification Accuracy. Save to experiments/A1-legal-contract-review/evaluation/blind-evaluation-[model-name]-[date].md
+```
 
-You are comparing three outputs for experiment A1 (legal contract review). You do not know which version is which — evaluate each independently before looking at patterns.
+**Expanded inline:**
+```
+Read evaluation/evaluator-prompt.md and evaluation/rubric.md. You are the independent Evaluator.
 
-The outputs to compare are:
-- Output Set 1: experiments/A1-legal-contract-review/baseline-runs/ (use the median-quality run for scoring dimensions 1,2,4,5 — score all 3 runs for dimension 3, Natural Variation)
-- Output Set 2: experiments/A1-legal-contract-review/optimised-runs/ (same approach)
-- Output Set 3: The final stage output from each pipeline run — experiments/A1-legal-contract-review/pipeline-runs/run-N/04-strategic-advisor-output.md
+Compare three output sets for experiment A1 (legal contract review). Do not identify which is which until after scoring.
 
-For this experiment, add a domain-specific dimension: Risk Identification Accuracy — did the output find the genuinely risky clauses, including ones that interact across sections?
+- Set 1: experiments/A1-legal-contract-review/baseline-runs/ (median run for dims 1,2,4,5; all runs for dim 3 Natural Variation)
+- Set 2: experiments/A1-legal-contract-review/optimised-runs/ (same)
+- Set 3: experiments/A1-legal-contract-review/pipeline-runs/run-N/04-strategic-advisor-output.md for each run
 
-Score each set independently. Produce a comparison table. State your overall preference and the magnitude. Note what the better version does that the others do not.
+Domain-specific dimension: Risk Identification Accuracy — did the output find the genuinely risky clauses, including those that interact across sections?
 
-Save your evaluation to experiments/A1-legal-contract-review/evaluation/blind-evaluation-[model-name]-[date].md
+Score each set independently. Produce a comparison table with deltas. State overall preference and whether the difference is meaningful in practice.
+
+Save to experiments/A1-legal-contract-review/evaluation/blind-evaluation-[model-name]-[date].md
 ```
 
 ---
@@ -307,48 +333,31 @@ Save your evaluation to experiments/A1-legal-contract-review/evaluation/blind-ev
 **Domain dimension**: Voice and Engagement — does it read well? Would you keep reading?
 **Pipeline stages**: Check `experiments/A2-marketing-content/pipeline/handoff-spec.md` for the exact stage sequence.
 
-### Step 1: Analyse — fresh session
+### Step 1: Analyse
 
 ```
-Read the analysis framework at toolkit/prompt-architect-agent.md and the theoretical foundation at toolkit/cognitive-stance-reference.md. You are acting as the Prompt Architect.
-
-Apply this framework to analyse experiments/A2-marketing-content/original/SKILL.md.
-
-Cover: what types of thinking the prompt requires, where modes interfere, what to look for in the output, and what to do about it. For creative work specifically, consider whether convergent constraints (voice guidelines, format requirements, SEO objectives) are suppressing or supporting the generation.
-
-Save your analysis to experiments/A2-marketing-content/analysis/prompt-architect-analysis.md
+@prompt-architect Analyse experiments/A2-marketing-content/original/SKILL.md. For creative work, note whether convergent constraints (voice guidelines, format requirements, SEO objectives) are suppressing or supporting the generation. Save to experiments/A2-marketing-content/analysis/prompt-architect-analysis.md
 ```
 
-### Step 2: Create Tier 2 (optimised) — /clear or new session
+### Step 2: Create Tier 2 (optimised)
 
 ```
-Read toolkit/prompt-writer-agent.md and toolkit/cognitive-stance-reference.md. You are the Prompt Writer.
-
-Read the architect's analysis at experiments/A2-marketing-content/analysis/prompt-architect-analysis.md and the original prompt at experiments/A2-marketing-content/original/SKILL.md.
-
-Implement prompt-level optimisations. For creative work, pay particular attention to whether constraints are functioning as seeds (constraining generation) or lenses (guiding voice without dictating output). Preserve what's working.
-
-Save the revised prompt to experiments/A2-marketing-content/optimised/SKILL.md
-Save revision notes to experiments/A2-marketing-content/optimised/revision-notes.md
+@prompt-writer Revise experiments/A2-marketing-content/original/SKILL.md based on the analysis at experiments/A2-marketing-content/analysis/prompt-architect-analysis.md. For creative work pay particular attention to seeds vs lenses — constraints that guide voice without dictating output. Save to experiments/A2-marketing-content/optimised/SKILL.md with revision notes.
 ```
 
-### Step 3: Create Tier 3 (pipeline) — /clear or new session
+### Step 3: Create Tier 3 (pipeline)
 
 ```
-Read toolkit/prompt-writer-agent.md and toolkit/cognitive-stance-reference.md. You are the Prompt Writer designing a pipeline.
-
-Read experiments/A2-marketing-content/analysis/prompt-architect-analysis.md and experiments/A2-marketing-content/original/SKILL.md.
-
-Design a pipeline for this marketing content task. Note: creative work may require different pipeline logic than analytical work — consider whether stage separation adds or removes creative coherence.
-
-Save each agent to experiments/A2-marketing-content/pipeline/
-Save handoff-spec.md (stage sequence, what crosses, what gets dropped)
-Save design-notes.md (architecture decisions, including any trade-offs for creative work)
+@prompt-writer Design a pipeline for experiments/A2-marketing-content/ based on the analysis. Note: creative work may require different pipeline logic — consider whether stage separation adds or removes creative coherence. Produce agent files in both Claude Code and Copilot formats. Save to experiments/A2-marketing-content/pipeline/ with handoff-spec.md and design-notes.md
 ```
 
 ### Steps 4–7
 
-Follow the same pattern as A1. Replace all A1 paths with A2 paths. For Step 6, check `experiments/A2-marketing-content/pipeline/handoff-spec.md` for the stage sequence and use the final stage output for evaluation. For Step 7 evaluation, use the final stage output for each pipeline run and add the domain dimension: **Voice and Engagement**.
+Follow the same pattern as A1, replacing paths. For Step 6, check `experiments/A2-marketing-content/pipeline/handoff-spec.md` for the stage sequence. For Step 7:
+
+```
+@evaluator Compare outputs for experiment A2. [paths as per A1 pattern]. Add domain dimension: Voice and Engagement — does it read well? Would you keep reading? Save to experiments/A2-marketing-content/evaluation/blind-evaluation-[model]-[date].md
+```
 
 ---
 
@@ -359,7 +368,7 @@ Follow the same pattern as A1. Replace all A1 paths with A2 paths. For Step 6, c
 **Domain dimension**: Bias and fairness — does the output avoid problematic assumptions?
 **Expected pattern**: Template generation task — calibration case for whether the pipeline adds value to constrained output
 
-Follow Steps 1–7 as per the A1 template, substituting A3 paths throughout. For Step 6, check `experiments/A3-hr-performance-review/pipeline/handoff-spec.md` for stage sequence. Use the final stage output for evaluation.
+Follow Steps 1–7 as per the A1 template, substituting A3 paths. Use `@prompt-architect`, `@prompt-writer`, and `@evaluator` for Steps 1–3 and 7. For Step 6, check `experiments/A3-hr-performance-review/pipeline/handoff-spec.md` for stage sequence. Use the final stage output for evaluation.
 
 ---
 
@@ -370,7 +379,7 @@ Follow Steps 1–7 as per the A1 template, substituting A3 paths throughout. For
 **Domain dimension**: none beyond core rubric
 **Expected pattern**: Synthesis constrained by fixed output structure — pipeline should free the synthesis to reframe rather than catalogue
 
-Follow Steps 1–7 as per the A1 template, substituting A4 paths throughout. For Step 7 evaluation, note specifically whether the output catalogues themes versus reframes them strategically.
+Follow Steps 1–7 as per the A1 template, substituting A4 paths. Use `@prompt-architect`, `@prompt-writer`, `@evaluator` for Steps 1–3 and 7. For Step 7 evaluation, note specifically whether the output catalogues themes versus reframes them strategically.
 
 ---
 
@@ -381,7 +390,7 @@ Follow Steps 1–7 as per the A1 template, substituting A4 paths throughout. For
 **Domain dimension**: Correctness — does the diagnosis and fix hold up?
 **Expected pattern**: Sequential task that may already be well-structured — calibration case
 
-Follow Steps 1–7 as per the A1 template, substituting A5 paths throughout.
+Follow Steps 1–7 as per the A1 template, substituting A5 paths. Use `@prompt-architect`, `@prompt-writer`, `@evaluator` for Steps 1–3 and 7.
 
 ---
 
@@ -392,7 +401,7 @@ Follow Steps 1–7 as per the A1 template, substituting A5 paths throughout.
 **Domain dimension**: none beyond core rubric
 **Expected pattern**: 4-mode mixing, "5 Whys" anchor — should show the largest baseline-to-pipeline gap
 
-Follow Steps 1–7 as per the A1 template, substituting A6 paths throughout. For Step 7 evaluation, note specifically whether the output is a standard incident report versus an organisational learning artifact.
+Follow Steps 1–7 as per the A1 template, substituting A6 paths. Use `@prompt-architect`, `@prompt-writer`, `@evaluator` for Steps 1–3 and 7. For Step 7 evaluation, note specifically whether the output is a standard incident report versus an organisational learning artifact.
 
 ---
 

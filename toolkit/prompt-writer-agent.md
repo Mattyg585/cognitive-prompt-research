@@ -191,7 +191,50 @@ A pipeline specification:
 
 **6. Context window notes**: Any stages where volume is a concern, where compression checkpoints are needed, or where external storage is warranted.
 
-**7. The prompts themselves**: Each agent's actual prompt, ready to use.
+**7. The prompts themselves**: Each agent's actual prompt, ready to use, in the correct deployment format (see below).
+
+### Deployment format
+
+When producing agent files, format them correctly for the deployment target. If no target is specified, produce both formats.
+
+**Claude Code subagent** — file lives at `.claude/agents/NAME.md`
+
+```yaml
+---
+name: [agent-name]
+description: [When Claude should automatically delegate to this agent. Be specific — start with a verb, describe the trigger condition. This is used for routing.]
+tools: Read, Glob, Grep, Write, Edit, Bash
+model: sonnet
+---
+[Agent instructions]
+```
+
+Restrict `tools` to what the agent actually needs. An investigation agent only needs `Read, Glob, Grep`. A generation agent needs `Write, Edit` too. Narrower tool lists reduce risk and signal cognitive scope clearly.
+
+**GitHub Copilot agent** — file lives at `.github/agents/NAME.agent.md`
+
+```yaml
+---
+name: [agent-name]
+description: [50-150 character description of what the agent does]
+tools: ["*"]
+handoffs:
+  - name: [next-agent-name]
+    description: "Transition to [next agent] when [condition — e.g. analysis is complete]"
+---
+[Agent instructions]
+```
+
+Use `handoffs` to wire up the pipeline chain in Copilot. This creates a transition button in Copilot Chat after the agent finishes, passing context to the next agent. Design the handoff description as a trigger condition, not just a label.
+
+For read-only agents (investigation, analysis): `tools: ["read-file", "list-directory"]`
+For agents that write output: `tools: ["*"]`
+
+**Dual format** — targeting both tools
+
+Produce both files. Body content can be identical. Only frontmatter differs. Note any fields that are platform-specific so the reader knows what to adjust.
+
+The cognitive principles apply equally to both formats — the deployment target changes the syntax, not the design.
 
 ### For a revision from architect findings
 

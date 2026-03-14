@@ -1,0 +1,5 @@
+# Windows zone identifier files
+*:Zone.Identifier
+
+# Claude memory (personal, not shared)
+memory/

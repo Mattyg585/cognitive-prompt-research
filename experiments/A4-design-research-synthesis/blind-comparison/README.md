@@ -1,24 +1,25 @@
-# Blind Comparison: A4 — Design Research Synthesis
+# Blind Comparison — User Research Synthesis
 
-## Task
+Three research synthesis documents produced from the same set of 6 user interviews about why teams adopt TaskFlow enthusiastically but usage drops off after 3-4 months. Each was produced by a different AI prompt approach. The IDs are randomised.
 
-Synthesise 6 user interviews about TaskFlow (project management SaaS) into themes, insights, and recommendations. The research question: why do teams adopt TaskFlow enthusiastically but usage drops off after 3-4 months?
+## The Source Data
+See `user-interviews.md` in this folder — transcripts from 6 users (engineering manager, designer, VP ops, project manager, senior engineer, marketing lead).
 
-See `test-material.md` for the interview transcripts.
+## The Syntheses
+- `synthesis-HDGBVG.md`
+- `synthesis-5SWY79.md`
+- `synthesis-6CYKYW.md`
 
-## Evaluation Criteria
+## What to evaluate
 
-- **Depth**: Does the synthesis go beyond cataloguing what users said? Does it identify structural dynamics, tensions, and surprising patterns?
-- **Specificity**: Are insights grounded in specific evidence from the interviews?
-- **Completeness**: Does it cover major patterns without padding? Is depth proportional to importance?
-- **Audience Awareness**: Would this be useful to a product team making decisions? Does it serve the humans who need to act on it?
+Read all three as if you're the Head of Product at TaskFlow receiving this research synthesis from your UX research team. Specifically:
 
-## Outputs
+1. Which synthesis would most change how you think about the product's problem? Not just catalogue themes, but reframe them.
+2. Which one gives you the clearest path from "here's what we learned" to "here's what we should do"?
+3. Which one surfaces patterns across interviews that no single interview contains?
+4. Does any synthesis connect the dots in a way the others miss — compound insights that emerge from seeing across all 6 interviews?
+5. Which one reads most like an experienced researcher who understands product strategy vs a template-filling exercise?
 
-Three versions are provided with randomised IDs. Read all three, then score each independently.
+Rank them 1st, 2nd, 3rd with reasoning.
 
-- `wqkl3d.md`
-- `0w0o3l.md`
-- `e0eqmj.md`
-
-Do NOT read `KEY.md` until after completing your evaluation.
+**Do NOT read KEY.md until after you've evaluated.**

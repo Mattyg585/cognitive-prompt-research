@@ -1,9 +1,9 @@
-# Key: A4 — Design Research Synthesis
+# Blind Comparison Key
 
-Do NOT read this file until after completing your blind evaluation.
+DO NOT READ THIS BEFORE EVALUATING.
 
 | ID | Tier |
 |----|------|
-| wqkl3d | Baseline (original prompt) |
-| 0w0o3l | Optimised (Tier 2) |
-| e0eqmj | Pipeline (Tier 3) |
+| HDGBVG | Baseline (original monolithic prompt) |
+| 5SWY79 | Pipeline (multi-stage cognitive mode separation) |
+| 6CYKYW | Optimised (prompt-level cognitive hygiene fixes) |

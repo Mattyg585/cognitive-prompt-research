@@ -100,16 +100,19 @@ Pipeline separation operates at the cognitive mode layer. Creative writing quali
 └── reference/                  # Original project context (blogs, V3/V4 comparison)
 ```
 
-### Running it yourself
+### Evaluate your own prompts
 
-The toolkit works in Claude Code (via subagents) and GitHub Copilot (via agents). See [USAGE.md](USAGE.md) for invocation details and [RUN-ALL.md](RUN-ALL.md) for the full experiment protocol.
+**[QUICK-START.md](QUICK-START.md)** — point the architect at your prompt and see what it finds. Three steps: analyse, fix, compare.
 
-Point the analysis agent at any prompt:
 ```
 Use the prompt-architect agent to analyse [your prompt file]
 ```
 
-It will identify mode interference patterns and recommend both prompt-level fixes and pipeline reconstruction.
+It identifies mode interference patterns and recommends both prompt-level fixes and pipeline reconstruction. Works with single prompts, agents with skills, and multi-agent pipelines.
+
+### Replicate the experiments
+
+See [USAGE.md](USAGE.md) for agent invocation details and [RUN-ALL.md](RUN-ALL.md) for the full experiment protocol across all six domains.
 
 ---
 

@@ -45,31 +45,57 @@ If Tier 2 improves incrementally and Tier 3 produces a qualitative leap, the fin
 │   ├── blogs/                  # Published blog posts about the CA pipeline
 │   ├── v3-v4-comparison/       # The V3→V4 prompts and outputs (strongest evidence)
 │   └── graph-tool-pipeline/    # Full production prompt set from the CA pipeline
-└── .claude/commands/           # Slash commands for running experiments
+├── .claude/
+│   ├── agents/             # Predefined subagents (prompt-architect, prompt-writer, evaluator)
+│   └── commands/           # Legacy slash commands (still work)
+├── .github/
+│   └── agents/             # Copilot Chat + CLI agents (same three agents, .agent.md format)
+├── USAGE.md                # How to invoke agents from Claude Code, Copilot Chat, Copilot CLI
+└── RUN-ALL.md              # Full experiment runner for all 6 experiments, any model
 ```
 
 ## How to Run an Experiment
 
-### 1. Analyse the original prompt
+**Full instructions**: `RUN-ALL.md` (all 6 experiments, works in Claude Code and Copilot)
+**Agent invocation reference**: `USAGE.md`
+
+### Quick version
+
+**In Claude Code** — use predefined subagents (isolated context, same as ad-hoc but pre-configured):
 ```
-/analyse-prompt experiments/A1-legal-contract-review/original/SKILL.md
+Use the prompt-architect agent to analyse experiments/A1-legal-contract-review/original/SKILL.md
+Use the prompt-writer agent to revise based on that analysis
+Use the evaluator agent to compare outputs across all three tiers
 ```
 
-### 2. Create Tier 2 (optimised) version
+**In Copilot Chat / CLI** — use @ mention:
 ```
-/write-prompt Revise based on analysis findings. Original: experiments/A1-legal-contract-review/original/SKILL.md
+@prompt-architect analyse experiments/A1-legal-contract-review/original/SKILL.md
+@prompt-writer revise based on the analysis
+@evaluator compare outputs
+```
+Copilot has handoff buttons between agents (architect → writer → evaluator). Use them — they carry structured output forward without the exploratory prose.
+
+**Legacy slash commands** (still work in Claude Code, but run in current context — less clean):
+```
+/analyse-prompt    /write-prompt    /evaluate-run
 ```
 
-### 3. Create Tier 3 (pipeline) version
-Design a pipeline that splits the prompt into cognitively scoped agents. Save each agent as a separate file in `pipeline/` with a `handoff-spec.md` describing what crosses between stages.
+### Key isolation rule
+Each pipeline stage (Tier 3, Step 6) **must** run in a completely separate session — not just `/clear`. The pipeline's whole value is clean context at each stage boundary. Contaminating it recreates the monolithic pattern you're testing against.
 
-### 4. Run baselines and comparisons
-Run each version against the same test material. Save outputs in the corresponding `*-runs/` directories.
+### Agent files
+```
+.claude/agents/          ← Claude Code subagents (predefined isolated agents)
+.github/agents/          ← Copilot Chat + CLI agents (same agents, different format)
+toolkit/                 ← Full framework files loaded by both
+.claude/commands/        ← Legacy slash commands (still work, less preferred)
+```
 
-### 5. Evaluate blind
-```
-/evaluate-run Compare outputs for experiment A1
-```
+### What "subagent" means here
+A `.claude/agents/` file is a saved version of the ad-hoc subagents you spin up in conversation. Same isolation mechanism — fresh context window — just pre-configured with a system prompt and tool restrictions so you don't have to re-specify every time. Invoke with "Use the X agent to..." and Claude handles the rest.
+
+**Handoffs are Copilot-only** (UI buttons between agents). In Claude Code, the orchestration is conversational — you pass the structured output from one agent to the next manually. Same isolation, different mechanism.
 
 ## Key Conventions
 

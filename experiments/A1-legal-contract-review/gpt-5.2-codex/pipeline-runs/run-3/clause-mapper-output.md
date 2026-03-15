@@ -1,0 +1,336 @@
+---
+model: GPT-5.2-Codex
+date: 2026-03-15
+experiment: A1
+tier: pipeline
+run: 3
+stage: clause-mapper
+---
+
+## Contract Snapshot
+**Document**: Common Paper Cloud Service Agreement — Standard Terms Version 2.1 (variables set in Cover Page/Order Form)
+**Parties**: Provider and Customer (Customer Affiliates may contract separately via Order Forms)
+**Your Side**: Customer (buyer)
+**Contract Type**: Cloud service / SaaS subscription framework with Order Forms
+
+## Clause Map (Descriptive)
+- [1.1] Access and Use
+  - Summary: Grants Customer internal-use access to the Cloud Service and limited copying of Software/Documentation; affiliates can sign separate Order Forms that are independent.
+  - Key obligations/rights: Customer use limited to internal business purposes; affiliate agreements are separate; Customer not responsible for affiliate agreements.
+  - Dependencies: Subscription Period, Order Form, Definitions.
+  - Excerpt: "Customer may (a) access and use the Cloud Service... for its internal business purposes."
+- [1.2] Support
+  - Summary: Provider supplies technical support as specified in the Order Form.
+  - Key obligations/rights: Provider support obligations are defined externally.
+  - Dependencies: Order Form.
+  - Excerpt: "Provider will provide Technical Support as described in the Order Form."
+- [1.3] User Accounts
+  - Summary: Customer is responsible for user actions and credential security and must notify Provider of suspected fraud/compromise.
+  - Key obligations/rights: Customer ensures user compliance and credential protection; duty to notify.
+  - Dependencies: Users definition.
+  - Excerpt: "Customer is responsible for all actions on Users' accounts..."
+- [1.4] Feedback and Usage Data
+  - Summary: Feedback is provided as-is; Provider may use feedback freely and collect/use Usage Data, disclosing only in aggregated, non-identifying form.
+  - Key obligations/rights: Provider broad use rights; disclosure limits for Usage Data.
+  - Dependencies: Definitions of Feedback and Usage Data.
+  - Excerpt: "Provider may use all Feedback freely..."
+- [1.5] Customer Content
+  - Summary: Provider may copy/display/modify Customer Content only to provide/maintain the Product; Customer is responsible for content accuracy.
+  - Key obligations/rights: Limited license to Provider; Customer responsibility for content.
+  - Dependencies: Definitions; Product scope.
+  - Excerpt: "Provider may copy, display, modify, and use Customer Content only as needed..."
+- [1.6] Machine Learning
+  - Summary: Provider may use aggregated/de-identified Usage Data and Customer Content to train AI/ML models (including third-party components) with de-identification obligations; personal data obligations preserved.
+  - Key obligations/rights: Customer authorizes processing for ML; Provider must aggregate and de-identify; AI outputs may be inaccurate.
+  - Dependencies: Usage Data, Customer Content, Applicable Data Protection Laws.
+  - Excerpt: "Usage Data and Customer Content may be used to develop, train, or enhance..."
+- [2.1] Restrictions on Customer
+  - Summary: Prohibits reverse engineering, sharing, tampering, security testing, unauthorized access, competitive use, high-risk use, unlawful use, and improper content rights; requires compliance with Documentation and Use Limitations.
+  - Key obligations/rights: Customer must comply with usage restrictions and documentation.
+  - Dependencies: Documentation, Use Limitations, Applicable Laws.
+  - Excerpt: "Customer will not... reverse engineer..." 
+- [2.2] Suspension
+  - Summary: Provider may suspend access for overdue undisputed balances, breach of restrictions, or harmful use; will try to inform when practical and reinstate after resolution.
+  - Key obligations/rights: Provider suspension right; Customer cure to reinstate.
+  - Dependencies: Payment status, Section 2.1 compliance.
+  - Excerpt: "Provider may temporarily suspend Customer's access..."
+- [3.1] Personal Data
+  - Summary: GDPR personal data requires a DPA; DPA terms control if conflicts with Agreement.
+  - Key obligations/rights: DPA execution and compliance.
+  - Dependencies: DPA, Applicable Data Protection Laws.
+  - Excerpt: "Customer must enter into a data processing agreement..."
+- [3.2] Prohibited Data
+  - Summary: Customer must not submit Prohibited Data unless authorized in Order Form or Key Terms.
+  - Key obligations/rights: Data submission restriction.
+  - Dependencies: Prohibited Data definition; Order Form/Key Terms.
+  - Excerpt: "Customer will not... submit Prohibited Data..."
+- [4.1] Fees
+  - Summary: Fees in USD, exclusive of taxes, generally non-refundable except prorated termination rights.
+  - Key obligations/rights: Customer payment obligation; limited refunds.
+  - Dependencies: Order Form; termination rights.
+  - Excerpt: "Fees are non-refundable."
+- [4.2] Invoicing
+  - Summary: Usage fees billed in arrears; other fees billed in advance, per Payment Process.
+  - Key obligations/rights: Billing timing per process.
+  - Dependencies: Payment Process.
+  - Excerpt: "Provider will send invoices... in arrears and... in advance..."
+- [4.3] Automatic Payment
+  - Summary: Provider auto-charges payment method; Customer authorizes charges; billing history available.
+  - Key obligations/rights: Authorization to charge.
+  - Dependencies: Payment Process.
+  - Excerpt: "Provider will automatically charge..."
+- [4.4] Taxes
+  - Summary: Customer pays applicable taxes except Provider income taxes.
+  - Key obligations/rights: Tax responsibility allocation.
+  - Dependencies: Invoicing.
+  - Excerpt: "Customer is responsible for all duties, taxes..."
+- [4.5] Payment
+  - Summary: Customer pays Fees and taxes in USD per Payment Process unless Order Form specifies otherwise.
+  - Key obligations/rights: Payment timing and currency.
+  - Dependencies: Order Form; Payment Process.
+  - Excerpt: "Customer will pay Provider Fees and taxes..."
+- [4.6] Payment Dispute
+  - Summary: Customer must notify disputes promptly and pay undisputed amounts; parties resolve within 15 days or pursue remedies.
+  - Key obligations/rights: Notice and cooperation obligations.
+  - Dependencies: Payment Process; Applicable Laws.
+  - Excerpt: "Customer must notify Provider about the dispute..."
+- [5.1] Order Form and Agreement
+  - Summary: Each Order Form begins on Order Date, runs through Subscription Period, and auto-renews unless timely non-renewal notice.
+  - Key obligations/rights: Renewal mechanism and notice requirement.
+  - Dependencies: Order Form; Non-Renewal Notice Date.
+  - Excerpt: "automatically renew for additional Subscription Periods..."
+- [5.2] Framework Terms
+  - Summary: Framework Terms run from Effective Date for at least one year or until all Order Forms end.
+  - Key obligations/rights: Overall term for framework.
+  - Dependencies: Effective Date; Order Forms.
+  - Excerpt: "These Framework Terms will start..."
+- [5.3] Termination
+  - Summary: Immediate termination for uncured material breach after 30 days notice, or for incurable breach, dissolution, assignment for benefit of creditors, or insolvency >60 days.
+  - Key obligations/rights: Termination triggers and notice.
+  - Dependencies: Framework Terms; Order Forms.
+  - Excerpt: "Either party may terminate..."
+- [5.4] Force Majeure
+  - Summary: If force majeure prevents material operation for 30+ days, affected Order Form may be terminated with prorated refund; Customer must pay accrued fees.
+  - Key obligations/rights: Termination right and refund in FM.
+  - Dependencies: Force Majeure definition; Fees.
+  - Excerpt: "Provider will pay to Customer a prorated refund..."
+- [5.5] Effect of Termination
+  - Summary: Access ends; Provider deletes Customer Content within 60 days upon request; confidential info returned/destroyed; final invoices due.
+  - Key obligations/rights: Post-termination actions and payments.
+  - Dependencies: Confidentiality; Fees.
+  - Excerpt: "Upon Customer's request, Provider will delete Customer Content within 60 days."
+- [5.6] Survival
+  - Summary: Enumerated sections survive; confidentiality may continue for retained backups per retention policies and law.
+  - Key obligations/rights: Ongoing obligations after termination.
+  - Dependencies: Listed sections; retention policies.
+  - Excerpt: "The following sections will survive..."
+- [6.1] Mutual Representations & Warranties
+  - Summary: Each party has authority, good standing, and will comply with laws and additional warranties.
+  - Key obligations/rights: Compliance and authority commitments.
+  - Dependencies: Additional Warranties.
+  - Excerpt: "Each party represents and warrants..."
+- [6.2] Customer Representations
+  - Summary: Customer and Users have rights to submit Customer Content and allow its use.
+  - Key obligations/rights: Customer content rights warranty.
+  - Dependencies: Customer Content.
+  - Excerpt: "Customer represents and warrants that it... has all rights..."
+- [6.3] Provider Warranty
+  - Summary: Provider will not materially reduce general functionality during the Subscription Period.
+  - Key obligations/rights: Functionality warranty.
+  - Dependencies: Subscription Period.
+  - Excerpt: "Provider... will not materially reduce the general functionality..."
+- [6.4] Provider Warranty Remedy
+  - Summary: Customer must notify within 45 days; Provider attempts to restore within 45 days; if not resolved, Customer can terminate affected Order Form with prorated refund.
+  - Key obligations/rights: Notice window and remedy.
+  - Dependencies: Section 6.3; Order Form.
+  - Excerpt: "Customer must give Provider notice within 45 days..."
+- [7.1] Disclaimer of Warranties
+  - Summary: Product may not be safe/secure/error-free; all other warranties disclaimed except Section 6.
+  - Key obligations/rights: Warranty disclaimers.
+  - Dependencies: Section 6.
+  - Excerpt: "Provider makes no guarantees that the Product will always be safe, secure, or error-free..."
+- [8.1] Liability Caps
+  - Summary: Total cumulative liability capped at General Cap Amount; Increased Claims capped at Increased Cap Amount.
+  - Key obligations/rights: Liability caps by claim category.
+  - Dependencies: Definitions of cap amounts; Increased Claims.
+  - Excerpt: "total cumulative liability... will not be more than..."
+- [8.2] Damages Waiver
+  - Summary: No liability for lost profits or consequential/special/punitive damages.
+  - Key obligations/rights: Damages exclusions.
+  - Dependencies: Section 8.4 exceptions.
+  - Excerpt: "Neither party will be liable for lost profits..."
+- [8.3] Applicability
+  - Summary: Limitations apply to all liability theories.
+  - Key obligations/rights: Scope of limitations.
+  - Dependencies: Sections 8.1–8.2.
+  - Excerpt: "The limitations apply to all liability..."
+- [8.4] Exceptions
+  - Summary: Cap exceptions for Increased Claims and Unlimited Claims; damages waiver does not apply to Increased Claims or confidentiality breaches.
+  - Key obligations/rights: Carve-outs.
+  - Dependencies: Definitions of Increased/Unlimited Claims; Section 10.
+  - Excerpt: "Section 8.2 does not apply to Increased Claims or breach of Section 10..."
+- [9.1] Provider Indemnification
+  - Summary: Provider indemnifies Customer for Provider Covered Claims and related costs.
+  - Key obligations/rights: Defense and indemnity obligations.
+  - Dependencies: Covered Claims definition; procedures.
+  - Excerpt: "Provider will indemnify, defend, and hold harmless Customer..."
+- [9.2] Customer Indemnification
+  - Summary: Customer indemnifies Provider for Customer Covered Claims and related costs.
+  - Key obligations/rights: Defense and indemnity obligations.
+  - Dependencies: Covered Claims definition; procedures.
+  - Excerpt: "Customer will indemnify, defend, and hold harmless Provider..."
+- [9.3] Procedure
+  - Summary: Requires prompt notice, reasonable assistance, and defense control; no settlements with admissions without consent.
+  - Key obligations/rights: Process requirements for indemnity.
+  - Dependencies: Indemnifying/Protected Parties.
+  - Excerpt: "The Indemnifying Party may not agree to settlements..."
+- [9.4] Changes to Product
+  - Summary: Provider may obtain rights, replace/modify, or terminate/refund if required by settlement or court order.
+  - Key obligations/rights: Remedial options.
+  - Dependencies: Section 9.
+  - Excerpt: "Provider may... replace or modify... or terminate and refund."
+- [9.5] Exclusions
+  - Summary: Provider not liable for claims from unauthorized modifications/use, combinations, or old versions; Customer not liable for unauthorized use of Customer Content.
+  - Key obligations/rights: Indemnity carve-outs.
+  - Dependencies: Covered Claims.
+  - Excerpt: "Provider's obligations don't apply to claims from unauthorized modifications..."
+- [9.6] Exclusive Remedy
+  - Summary: Indemnity and termination rights are exclusive remedies for Covered Claims.
+  - Key obligations/rights: Remedy limitation.
+  - Dependencies: Section 9; termination rights.
+  - Excerpt: "Section 9... describes exclusive remedies..."
+- [10.1] Non-Use and Non-Disclosure
+  - Summary: Recipient must not use or disclose Discloser confidential information except as authorized or needed.
+  - Key obligations/rights: Confidentiality duties.
+  - Dependencies: Confidential Information definition.
+  - Excerpt: "Recipient will not use or disclose..."
+- [10.2] Exclusions
+  - Summary: Information already known, public, independently developed, or received from authorized third parties is excluded.
+  - Key obligations/rights: Confidentiality carve-outs.
+  - Dependencies: Confidential Information definition.
+  - Excerpt: "Information that was previously known..."
+- [10.3] Required Disclosures
+  - Summary: Recipient may disclose if required by law with reasonable advance notice.
+  - Key obligations/rights: Legal disclosure process.
+  - Dependencies: Applicable Laws.
+  - Excerpt: "Recipient may disclose as required by law..."
+- [10.4] Permitted Disclosures
+  - Summary: Disclosures to employees/advisors/contractors with need-to-know and equivalent confidentiality obligations.
+  - Key obligations/rights: Permitted internal sharing.
+  - Dependencies: Confidentiality obligations.
+  - Excerpt: "Recipient may disclose to employees, advisors, contractors..."
+- [11.1] Reservation of Rights
+  - Summary: Provider retains rights in Product; Customer retains rights in Customer Content subject to licenses in 1.5 and 1.6.
+  - Key obligations/rights: IP ownership allocation.
+  - Dependencies: Sections 1.5–1.6.
+  - Excerpt: "Provider retains all rights in the Product."
+- [12.1] Entire Agreement
+  - Summary: Agreement supersedes prior statements; Provider rejects Customer purchase order terms.
+  - Key obligations/rights: Integration clause; PO rejection.
+  - Dependencies: None.
+  - Excerpt: "Provider rejects terms in Customer's purchase orders."
+- [12.2] Modifications
+  - Summary: Changes require written agreement signed by both parties.
+  - Key obligations/rights: Formal amendment requirement.
+  - Dependencies: None.
+  - Excerpt: "Changes require writing signed by each party."
+- [12.3] Governing Law
+  - Summary: Governing Law applies; Chosen Courts have exclusive jurisdiction.
+  - Key obligations/rights: Forum and law selection.
+  - Dependencies: Governing Law/Chosen Courts variables.
+  - Excerpt: "Chosen Courts have exclusive jurisdiction."
+- [12.4] Injunctive Relief
+  - Summary: Breach of confidentiality or IP rights may warrant injunctive relief without bond.
+  - Key obligations/rights: Equitable remedies.
+  - Dependencies: Confidentiality/IP rights.
+  - Excerpt: "may warrant injunctive relief without bond."
+- [12.5] Non-Exhaustive Remedies
+  - Summary: Seeking one remedy does not preclude others except where exclusive.
+  - Key obligations/rights: Cumulative remedies.
+  - Dependencies: Exclusive remedy clauses.
+  - Excerpt: "Seeking one remedy doesn't limit others..."
+- [12.6] Assignment
+  - Summary: No assignment without consent, except in merger/acquisition/change of control.
+  - Key obligations/rights: Transfer restrictions and exceptions.
+  - Dependencies: Change of control.
+  - Excerpt: "No assignment without consent..."
+- [12.7] Beta Products
+  - Summary: Beta Products are provided as-is with no warranty.
+  - Key obligations/rights: Beta disclaimer.
+  - Dependencies: Beta Product definition.
+  - Excerpt: "Beta Products are 'AS IS' with no warranty."
+- [12.8] Logo Rights
+  - Summary: Provider may use Customer's name and logo in marketing.
+  - Key obligations/rights: Marketing use permission.
+  - Dependencies: None.
+  - Excerpt: "Provider may use Customer's name and logo in marketing."
+- [12.9] Notices
+  - Summary: Notices must be written to Notice Address; deemed delivered on confirmed delivery or two days after mailing.
+  - Key obligations/rights: Notice mechanics.
+  - Dependencies: Notice Address.
+  - Excerpt: "Written notices to the Notice Address."
+- [12.10] Independent Contractors
+  - Summary: Parties are independent contractors; no partnership or agency implied.
+  - Key obligations/rights: Relationship clarification.
+  - Dependencies: None.
+  - Excerpt: "The parties are independent contractors."
+- [12.11] No Third-Party Beneficiary
+  - Summary: No third-party beneficiary rights.
+  - Key obligations/rights: Limits on third-party claims.
+  - Dependencies: None.
+  - Excerpt: "No Third-Party Beneficiary."
+- [12.12] Force Majeure
+  - Summary: Neither party liable for delays due to force majeure; Customer payment obligations continue.
+  - Key obligations/rights: Delay excuse with payment carve-out.
+  - Dependencies: Force Majeure definition.
+  - Excerpt: "Neither party liable for delays..."
+- [12.13] Export Controls
+  - Summary: Customer must comply with export control laws.
+  - Key obligations/rights: Compliance obligation.
+  - Dependencies: Applicable Laws.
+  - Excerpt: "Customer compliance with export laws required."
+- [12.14] Government Rights
+  - Summary: Product is a commercial item under FAR/DFAR.
+  - Key obligations/rights: Government rights classification.
+  - Dependencies: None.
+  - Excerpt: "Product deemed 'commercial items' under FAR/DFAR."
+- [12.15] Anti-Bribery
+  - Summary: Compliance with anti-corruption laws.
+  - Key obligations/rights: Legal compliance.
+  - Dependencies: Applicable Laws.
+  - Excerpt: "Compliance with anti-corruption laws required."
+- [12.16] Titles and Interpretation
+  - Summary: Section titles are for convenience; "including" is non-exhaustive; UN CISG and UCITA excluded.
+  - Key obligations/rights: Interpretation rules.
+  - Dependencies: None.
+  - Excerpt: "UN CISG and UCITA do not apply."
+- [12.17] Signature
+  - Summary: Agreement may be signed in counterparts, including electronically.
+  - Key obligations/rights: Execution mechanics.
+  - Dependencies: None.
+  - Excerpt: "May be signed in counterparts including electronic."
+- [13.1] Definitions
+  - Summary: Variables defined on Cover Page; key defined terms listed.
+  - Key obligations/rights: Definitions govern interpretation.
+  - Dependencies: Cover Page/Key Terms.
+  - Excerpt: "Variables have meanings given on the Cover Page..."
+
+## Nonstandard / Bespoke Provisions
+- Customer Content and Usage Data may be used to develop and train AI/ML models (including third-party components) subject to aggregation and de-identification requirements.
+- Provider may use Customer's name and logo for marketing without further approval.
+- Provider may suspend access for overdue undisputed balances or certain breaches, with or without notice.
+- Provider has broad rights to use Feedback and Usage Data for product improvement and promotion.
+- Default auto-renewal of Subscription Periods absent timely non-renewal notice.
+
+## Missing but Expected Clauses
+- Specific security measures/controls and incident or breach notification timelines (beyond DPA placeholder).
+- Service level commitments, uptime targets, and service credits.
+- Data return format/assistance and portability obligations on exit (beyond deletion on request).
+- Audit rights or compliance reporting for data protection/security.
+- Limits on price increases or renewal pricing mechanics.
+- Explicit IP infringement warranty/indemnity scope for the Cloud Service.
+
+## Questions / Assumptions (if needed)
+- Assumes Cover Page/Order Form define Fees, caps, Non-Renewal Notice Date, Payment Process, Notice Address, Key Terms, and any Additional Warranties.
+- Assumes a DPA is executed if GDPR-governed Personal Data is processed.
+- Assumes support response times, SLAs, and any data security addenda are set in the Order Form or Key Terms.

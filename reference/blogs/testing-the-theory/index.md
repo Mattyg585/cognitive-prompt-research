@@ -54,6 +54,12 @@ When you put a quality-checking section in the same context as a synthesis task,
 
 This reframe matters because it sidesteps the mechanistic objection. "LLMs don't have working memory or task-set inertia or cognitive modes." Fine. They don't need to. They need to have learned the language that those mechanisms produce — which they have, because that's what the training data is.
 
+But it also matters for a practical reason that I think is underappreciated: **cognitive science isn't for the model. It's for the person writing the prompt.**
+
+When you write a prompt with evaluative framing — severity ratings, classification criteria, compliance checklists — you're not triggering cognition in the AI. You're shaping the distributional patterns the model will follow. Knowing how human cognitive modes map to language patterns is practically useful because it tells you what you're *actually doing* when you choose one word over another. "Observation" and "finding" are both English words. They activate different distributional patterns. One opens exploration, the other triggers judgment. Cognitive science tells you *why* — and linguistics tells you *how it shows up in the text the model processes*.
+
+This means that cognitive science, linguistics, rhetoric, creativity research — fields the AI industry has largely ignored when thinking about prompt design — actually matter. Not because AI thinks like a human, but because the training data is human language, and those fields are the ones that understand how thinking gets encoded in language.
+
 The output still looks fine. Competent, thorough, professional. Good output hides great output. The gap only appears when you separate the modes and compare.
 
 ---
@@ -167,15 +173,27 @@ For those tasks, the monolithic prompt appears to be a ceiling, not a floor. The
 
 ---
 
+## A Note on Skills, Plugins, and Where This Leads
+
+I want to be clear: I'm not arguing that skills are bad. Skills that add domain knowledge or tool access without carrying a strong cognitive posture are fine. Skills that share a compatible thinking mode with the base agent are fine. The issue is specifically when skills carry *incompatible* cognitive postures into the same context — an investigation agent loading an evaluation skill, for example. That's where the distributional interference kicks in.
+
+What I think is more interesting is the direction the tooling is already heading. GitHub Copilot now has custom agents with handoff mechanisms — one agent finishes, a transition button appears, and structured output carries to the next agent's fresh context. That's almost exactly the pipeline architecture this research advocates for. Claude Code has subagents that spawn with isolated contexts. The infrastructure for cognitively scoped pipelines exists today.
+
+The practical implication: a plugin doesn't have to be a single prompt. It can be a wrapper around a pipeline. The user invokes the plugin the same way. What changes is what happens inside it — sequential agents with clean handoffs instead of one big context window accumulating interference. Same UX, different cognitive architecture underneath. The legal contract review plugin could internally run a Contract Reader → Playbook Comparator → Redline Writer → Strategic Advisor pipeline, with the user seeing only the final output. No change to the interface. Significant change to the quality.
+
+The argument isn't skills versus no skills. It's: for complex multi-mode tasks, the evidence says scoped agents with deliberate handoffs produce qualitatively better output than monolithic contexts. The tooling already supports this. The principled argument for *why* it works is what this research provides.
+
+---
+
 ## What's Next
 
 The full research — all six experiments, all outputs, all evaluations, the theoretical framework, and the toolkit — is [on GitHub](https://github.com/Mattyg585/cognitive-prompt-research). MIT licence. Do whatever you want with it.
 
-The toolkit includes a prompt analysis agent that you can point at any prompt. It identifies mode interference patterns and recommends both prompt-level fixes and pipeline reconstruction. It works in Claude Code and GitHub Copilot.
+The toolkit includes a prompt analysis agent that you can point at any prompt. It identifies mode interference patterns and recommends both prompt-level fixes and pipeline reconstruction. It works in Claude Code and GitHub Copilot. The agents encode the theory — you don't need to understand cognitive linguistics to use them. Point the architect at your prompt, read what it says, decide if the fixes are worth it.
 
-What I'm planning: external blind evaluations on A4 and A6 (the most interesting analytical results), a pure creative writing experiment to test the boundary condition properly, cross-model testing with GPT-5 and Gemini, and — the one that would actually matter — getting domain experts to evaluate. A lawyer reviewing A1. An engineer reviewing A5. A UX researcher reviewing A4.
+What I'm planning: cross-model testing with GPT-5 and Gemini (if the distributional interference framing is right, it should hold across models, because all of them learned from the same human language patterns), a pure creative writing experiment to test the boundary condition properly, and skills composition testing to measure whether loading multiple skills into one context degrades each skill's output.
 
-If the distributional interference framing is right, it should hold across models, because all of them learned from the same human language patterns. If it's wrong, cross-model testing will show it. Either way, I'd rather know.
+But the thing that would actually matter most: **domain expert review**. I'm not a lawyer. I'm not a UX researcher. I'm not a security operations engineer. The experiment outputs are in the repo. If you work in one of these domains and you have twenty minutes, read the three versions (baseline, optimised, pipeline) for the experiment in your field and tell me whether the pipeline version is genuinely better or whether I'm measuring something that doesn't matter in practice. That's the evidence I can't generate from inside.
 
 This started as a side project about Conditional Access policies. It turned into something I didn't expect — a question about whether the way we build AI prompts is leaving quality on the table in a way that's invisible from inside. Six experiments later, I think the answer is yes for analytical work, probably not for creative work, and worth investigating further either way.
 

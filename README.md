@@ -134,11 +134,11 @@ What would strengthen this: independent replication, domain expert evaluation, c
 
 This research grew out of a side project — seven months of building an AI pipeline for Microsoft Conditional Access policy analysis. The full story is in the blog series:
 
-1. [I Built an AI Tool That Does My Job Better Than Me](https://grahams.au/blog/what-i-learned-building-ai-tools-that-actually-think/) — The project and what it produced
-2. [Why Good Prompting Wasn't Enough](https://grahams.au/blog/why-good-prompting-wasnt-enough/) — Seven months of wrong turns and the architecture that fell out
-3. [Context Carries Cognitive Mode](https://grahams.au/blog/context-carries-cognitive-mode/) — The evidence for mode separation
-4. [Evidence & Methods](https://grahams.au/blog/the-evidence-for-thinking-in-modes-evidence/) — Full experiment designs and claims tables
-5. [Testing the Theory](https://grahams.au/blog/testing-the-theory/) — Six experiments against production prompts (this research)
+1. [I Built an AI Tool That Does My Job Better Than Me](https://thegrahams.au/blog/what-i-learned-building-ai-tools-that-actually-think/) — The project and what it produced
+2. [Why Good Prompting Wasn't Enough](https://thegrahams.au/blog/why-good-prompting-wasnt-enough/) — Seven months of wrong turns and the architecture that fell out
+3. [Context Carries Cognitive Mode](https://thegrahams.au/blog/context-carries-cognitive-mode/) — The evidence for mode separation
+4. [Evidence & Methods](https://thegrahams.au/blog/the-evidence-for-thinking-in-modes-evidence/) — Full experiment designs and claims tables
+5. [Testing the Theory](https://thegrahams.au/blog/testing-the-theory/) — Six experiments against production prompts (this research)
 
 The key experiment from the original project: removing a quality-checking section from a synthesis prompt — making it *smaller* — produced deeper output with zero losses. Same model, same data, 70% of the context window unused. Not a capacity problem. A contamination problem.
 

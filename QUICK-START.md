@@ -2,6 +2,22 @@
 
 You have a prompt (or an agent with skills, or a pipeline). You want to know if it's fighting itself and what to do about it.
 
+## Just want the toolkit?
+
+If you're cloning this repo to analyse and improve your own prompts (not to look at the research), you only need:
+
+```
+.claude/agents/          # Claude Code subagents (architect + writer)
+.github/agents/          # Copilot agents (same two, different format)
+toolkit/                 # Framework files loaded by the agents
+  ├── prompt-architect-agent.md
+  ├── prompt-writer-agent.md
+  └── cognitive-stance-reference.md
+CLAUDE.md                # Project context
+```
+
+Everything else — `experiments/`, `reference/`, `evaluation/`, `findings.md` — is the research behind the toolkit. Useful context but not needed to run the agents.
+
 ---
 
 ## 1. Analyse
@@ -78,15 +94,15 @@ The writer designs a multi-agent pipeline — one agent per thinking type, struc
 
 ---
 
-## 3. Compare (optional but recommended)
+## 3. Test it yourself
 
-Run your original prompt and the revised version(s) against the same input. Use the evaluator for blind comparison:
+Run your original prompt and the revised version(s) against the same input. Compare the outputs. You're the domain expert — you'll know whether the revision is better for your use case.
 
-```
-Use the evaluator agent to compare the outputs in output-a.md and output-b.md
-```
-
-The evaluator scores both without knowing which is which, using a 5-dimension rubric (depth, specificity, natural variation, completeness, audience awareness).
+What to look for:
+- Does the revised version find things the original missed?
+- Does the pipeline version produce a qualitatively different *kind* of output (not just more, but different)?
+- Is the output variation healthy? (Simple inputs should get concise output, complex inputs should get deep output)
+- For creative work: does the revision improve or flatten the voice?
 
 ---
 

@@ -117,21 +117,36 @@ Source: [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowle
 | A5 | Engineering | `/debug` | Clean 4-step sequence — may already be well-structured (calibration) | Medium |
 | A6 | SecOps | `/incident-response` | 4-mode mixing; "5 Whys" forces exactly 5 depth levels | High |
 
+### B-Series: Benchmark Validation
+
+Can cognitive mode separation move the needle on established benchmarks? The A-series tested knowledge-worker plugins with qualitative scoring. The B-series tests the same principles against benchmarks with objective/expert-rubric scoring.
+
+**Key difference**: A-series asks "is the output better?" (subjective). B-series asks "does it pass?" or "does it score higher on expert rubrics?" (objective).
+
+| # | Benchmark | Domain | Scoring | Why |
+|---|-----------|--------|---------|-----|
+| B1 | SWE-bench Verified | Code (real GitHub issues) | Pass/fail on gold tests | Industry-standard coding benchmark; scaffold differences account for 10-25pp; Arize showed +10% from CLAUDE.md alone |
+| B2 | PRBench (Scale AI) | Law & Finance | Expert rubric (11 dimensions) | Top models at 37-39% on hard set; benchmark's own paper documents "correct conclusions through opaque reasoning" — our exact phenomenon |
+
+**Prior art**: Arize AI achieved +10% on SWE-bench via automated prompt optimization. Aider's Architect mode (cognitive split: reasoning vs editing) produced SOTA results. Agentless (pipeline: localize → repair → validate) outperformed agent approaches at 1/10th the cost. These teams accidentally discovered what our theory predicts — nobody has done it systematically.
+
 ### Future: Independent Validation
 
 | # | Domain | Source | Why |
 |---|--------|--------|-----|
 | O1 | Code review | PR-Agent (Qodo) | Real-world, high-usage tool with investigation + evaluation mixing |
 | O2 | Vulnerability discovery | Vulnhuntr | Multi-step investigation → synthesis → evaluation |
-| B1 | Creative writing | TBD | Boundary test — where mode separation might hurt |
+| C1 | Creative writing | TBD | Boundary test — where mode separation might hurt |
 
 ### Priority Order
 
-1. **A1 (Legal)** — richest test case, genuine interleaving of investigation + evaluation + generation
-2. **A6 (SecOps)** — 4-mode mixing, numeric anchor ("5 Whys"), adjacent to original project domain
-3. **A2 (Marketing)** — creative generation domain, tests template anchor suppression
-4. **B1 (Creative)** — boundary test, most theoretically interesting
-5. Remaining as capacity allows
+1. **A1 (Legal)** — richest test case, genuine interleaving of investigation + evaluation + generation (DONE)
+2. **A6 (SecOps)** — 4-mode mixing, numeric anchor ("5 Whys"), adjacent to original project domain (DONE)
+3. **A2 (Marketing)** — creative generation domain, tests template anchor suppression (DONE)
+4. **B1 (SWE-bench)** — objective pass/fail scoring on industry benchmark
+5. **B2 (PRBench)** — expert rubric scoring on professional reasoning benchmark
+6. **C1 (Creative)** — boundary test, most theoretically interesting
+7. Remaining as capacity allows
 
 ---
 

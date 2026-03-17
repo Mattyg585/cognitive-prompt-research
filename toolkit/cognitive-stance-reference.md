@@ -285,6 +285,39 @@ But not all mixing is harmful:
 
 **The principle**: if both types of thinking benefit from the same posture (both convergent, or light structuring over divergent), they can coexist. If they pull in opposite directions (one needs open exploration, the other needs pinning down), they interfere.
 
+### Voice-continuity tasks: when separation breaks what it's trying to protect
+
+Not all divergent work benefits from pipeline separation equally. **Voice-building tasks** — creative writing, narrative content, persuasive prose — have a property that analytical tasks don't: **voice is cumulative**. It builds through sustained engagement with the material and strengthens through the act of writing.
+
+In analytical work, you can safely separate investigation from synthesis, compressing findings into structured form between them. The structured handoff strips cognitive mode without losing anything important — the analysis doesn't need to "sound like" the investigation.
+
+In voice-building work, the investigation IS the voice-finding process. The writer discovers the voice by engaging with the product, the audience, the emotional territory. When you break this into Explorer → Architect → Writer, the Writer receives a *plan about voice* ("direct, confident, slightly witty") rather than having *developed voice* through engaging with the material. The plan describes the voice; the exploration embodies it.
+
+**Evidence**: In the A2 marketing content experiment, Tier 2 (single context with scope boundaries) produced stronger voice than Tier 3 (four-agent pipeline), despite Tier 3 scoring higher on technical dimensions (specificity, data interpretation, SEO). The pipeline's clean context boundaries also cleaned the voice — each agent started fresh, so the voice had to be reconstructed from descriptions rather than carried forward as lived experience.
+
+**The diagnostic question**: Is the quality of this output primarily about *what it says* (analytical accuracy, completeness, insight) or *how it says it* (voice, tone, sustained authorial presence)? If the former, standard pipeline separation applies. If the latter, voice continuity may require:
+
+- **Fewer pipeline stages** — combine investigation and generation into a single agent that explores AND writes, so voice emerges from exploration rather than being reconstructed from a plan
+- **Voice samples in handoffs** — if stages must be separate, carry actual prose fragments that demonstrate the discovered voice, not just structured descriptions of it
+- **The split should be content/craft vs compliance** — separate the creative work (investigation + writing) from the editorial work (SEO, formatting, channel compliance), not the thinking from the writing
+
+This doesn't contradict the core theory — it refines it. Investigation + evaluation is still toxic. But investigation + generation, which is listed as an incompatible pair for analytical work (the model skips findings it can't fix), may be a *compatible* pair for creative work where the "fix" IS the writing itself. The investigation doesn't funnel toward solutions — it funnels toward expression.
+
+### Data stance: how handoff design shapes what downstream agents can discover
+
+Mode contamination doesn't only happen through agent prompts. **The data passed between agents carries a cognitive stance** that shapes what the receiving agent can do with it.
+
+- **Descriptive data** (raw extractions, what's there): opens the widest space for downstream processing
+- **Classified data** (organised by categories, grouped by type): useful but constrains — the next agent sees through the classification's lens
+- **Evaluated data** (judged, scored, filtered): most constrained — downstream agents inherit the evaluation and can only work within its boundaries
+- **Exploratory data** (threads followed, patterns noticed): carries investigative momentum but may bias the receiver toward continued exploration
+
+When an investigative agent receives already-evaluated data, its investigation is pre-shaped by the evaluation. It only investigates things the previous evaluation surfaced. This is mode interference, but it's not prompt interference — it's **data interference**. The data's stance has already narrowed the space before the agent begins.
+
+**The design implication**: When traceability matters — when later agents might need to "pull on a thread" back to source material — preserve access to lower-stance data alongside higher-stance summaries. An investigation agent should receive both the raw material AND the structured summary, so it can follow threads the summariser didn't anticipate. If you only pass the summary, you've made the summariser's cognitive choices the ceiling for every downstream agent.
+
+**Agent mode + data stance = processing quality.** Getting either one right isn't enough. An investigative agent with clean prompting but pre-evaluated data will produce investigation-shaped evaluation. A generation agent with creative prompting but template-structured input will produce creative-sounding template completion. The pair must be aligned.
+
 ### Output structure carries mode too
 
 It's not just the prompt that carries cognitive mode — the **output format** does too. Required database fields, template slots, structured sections — these all push toward convergent completion behaviour. "Fill in all the boxes" is a convergent posture regardless of what the boxes are about.

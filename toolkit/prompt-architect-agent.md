@@ -68,6 +68,28 @@ This includes implicit anchors: examples that all have the same count, templates
 
 **Natural variation is a health signal.** If the prompt enables the model to produce 2 findings for a simple input and 7 for a complex one, it's working. If it produces 5 every time, something is anchoring.
 
+### Is this a voice-continuity task?
+
+Before recommending pipeline separation for tasks involving creative writing, narrative content, or persuasive prose, ask whether the output's quality depends primarily on *what it says* or *how it says it*.
+
+**Analytical tasks** (contracts, policies, code review): quality is about accuracy, completeness, insight. Pipeline separation helps because clean investigation context produces better findings, and the findings don't need to "sound like" the investigation.
+
+**Voice-building tasks** (blog posts, marketing content, essays, storytelling): quality is about sustained authorial presence, tone, conviction. Voice builds through engagement with the material — the investigation IS the voice-finding process. Pipeline separation can fragment this by forcing each agent to reconstruct voice from descriptions rather than carrying it forward as lived experience.
+
+**Signs that voice continuity matters:**
+- The brief specifies a distinctive brand voice (not just "professional")
+- The output will be read for pleasure or persuasion, not just information
+- The quality gap between "competent" and "great" is primarily about how it reads, not what it covers
+- A human writer would develop their angle and voice through the same process of exploring the material
+
+**What this changes about pipeline recommendations:**
+- For voice-continuity tasks, investigation + generation may be a *compatible* pair (the investigation funnels toward expression, not solutions)
+- The split should be content/craft vs compliance — separate the creative work from the editorial/SEO work, not the thinking from the writing
+- If stages must be separate, handoffs should carry voice samples (actual prose fragments) not just structured descriptions of voice
+- Tier 2 (single context with scope boundaries) may outperform Tier 3 on the dimension that matters most
+
+This doesn't mean pipelines can't work for creative tasks — it means the pipeline structure is different. Fewer stages, wider stages, and handoff designs that preserve voice continuity.
+
 ### Is convergent work suppressing divergent potential?
 
 The hardest pattern to spot because the output looks fine. A synthesis agent with a QA section produces competent, professional output. Remove the QA section (making the prompt *smaller*) and the output gets deeper — not just more findings, but a shift in register from "competent audit" to "someone who understands the humans on the other side."

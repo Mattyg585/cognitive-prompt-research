@@ -46,10 +46,13 @@ Most briefs involve two to four of these. The question is whether they can coexi
 
 **Incompatible combinations** — need separation:
 - Investigation + evaluation (evaluation pre-filters investigation)
-- Investigation + generation (only investigates things it can fix)
+- Investigation + generation *for analytical tasks* (only investigates things it can fix)
 - Synthesis during investigation (premature narrative commitment)
 - Reframing before evaluation (simplifies before understanding)
 - Orchestration + any content work (coordinator goes down rabbit holes)
+
+**Context-dependent compatibility — voice-building tasks:**
+- Investigation + generation *for creative/narrative tasks* can be **compatible**. When the output's quality depends on voice, tone, and sustained authorial presence (blog posts, marketing content, essays), investigation funnels toward expression rather than solutions. The exploration IS the voice-finding process. Separating them forces the writer to reconstruct voice from descriptions rather than carrying it forward from discovery. Tier 2 may outperform Tier 3 on the dimension that matters most (voice) even if Tier 3 scores higher on technical dimensions.
 
 If everything fits in one prompt without interference — write one prompt. Don't split for architectural purity. Split because the mixing would degrade output.
 
@@ -76,6 +79,13 @@ If everything fits in one prompt without interference — write one prompt. Don'
 - The output of one stage feeds the next
 
 Pipeline separation is essential for investigation-required tasks because it prevents evaluation criteria from suppressing recognition-primed pattern discovery. The investigation agent must run in a clean context — no evaluation framework, no classification categories, just lenses that guide attention without pre-filtering what can be found.
+
+**Voice-continuity pipelines** (creative writing, narrative content, persuasive prose):
+When the task is voice-building — where quality depends on sustained authorial presence, not just analytical accuracy — the pipeline structure should be different:
+- **Fewer, wider stages.** Combine investigation and generation into a single agent that explores AND writes. Voice builds through engagement; separating them fragments it.
+- **The split is content/craft vs compliance.** Separate creative work (exploration + writing) from editorial work (SEO, formatting, channel conventions). This is the productive separation — not thinking vs writing, but creating vs polishing.
+- **Handoffs carry voice samples.** If stages must be separate, pass actual prose fragments that demonstrate the discovered voice, not just structured descriptions of it ("direct, slightly witty" is a description; a paragraph that IS direct and slightly witty is a sample).
+- **Tier 2 is a strong contender.** For voice-continuity tasks, single-context with scope boundaries may outperform a pipeline on the dimension that matters most. Test both — but don't assume pipeline is always better.
 
 **Epistemic stance is independently powerful** and should be applied in BOTH Tier 2 and Tier 3 designs. It works by setting epistemic aims (exploration over closure) and suppressing premature pattern matching. This is separate from context isolation — Tier 2 gets the stance benefit, Tier 3 gets both stance AND isolation benefits.
 

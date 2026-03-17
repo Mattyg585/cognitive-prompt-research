@@ -6,11 +6,15 @@ This repo documents an empirical discovery: that the language patterns in an AI 
 
 The research started with a single question — why does removing a QA section from a synthesis prompt produce *better* output? — and has evolved through eight months of experiments into something broader: a design methodology for AI systems that work on complex analytical tasks, grounded in cognitive science rather than engineering intuition.
 
-**Two findings, different weights:**
+### Where this stands
 
-1. **Cognitive hygiene works universally.** Setting the epistemic stance ("explore the landscape before reaching conclusions") in a single prompt improved professional reasoning output from 0.76 to 0.95 on expert-scored benchmarks (PRBench, 26 criteria, rubrics by 182 domain professionals). This works across all models tested. It's lightweight, zero-risk, and immediately applicable to any complex prompt.
+The theory holds — language carries cognitive mode, and intervening deliberately improves output. But its application turned out to be more interesting than "pipelines beat monolithic prompts."
 
-2. **Pipeline separation works specifically.** Splitting prompts into cognitively scoped stages with structured handoffs produces qualitative leaps — but only when the task involves investigating external data the model hasn't seen before. On knowledge-based reasoning (however complex), the pipeline's information loss exceeds its mode-separation benefit. On data-intensive investigation tasks (the original CA policy pipeline), the pipeline is essential because it protects genuine discovery from evaluative pre-filtering.
+**The lightweight intervention appears universal.** Setting the epistemic stance — one sentence like "explore the analytical landscape before reaching conclusions" — improved professional reasoning from 0.76 to 0.95 on expert-scored benchmarks (PRBench, 26 criteria, rubrics by 182 domain professionals). Works across all models tested. Zero risk. Immediately applicable.
+
+**The heavyweight intervention is an amplifier.** Splitting into cognitively scoped pipeline stages can turn good output into qualitatively different output — the kind that makes evaluators say "this would change how I make decisions." But when the conditions are wrong (knowledge-based reasoning, weaker models), the same architecture produces information loss or catastrophic failures. When it's good, it's great. When it's bad, it's worse than the baseline.
+
+The lightweight finding is ready. The heavyweight finding has real signal but fuzzy edges — I know the conditions where it works (novel data, genuine investigation, strong models) but can't yet predict the boundary precisely. There's something here and I'm interested in more eyes on it. See [THINKING.md](THINKING.md) for the open threads.
 
 ---
 

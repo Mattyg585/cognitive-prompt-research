@@ -6,6 +6,18 @@ Last updated: 17 March 2026
 
 ---
 
+## Where we are (the honest version)
+
+I had a theory about cognition and AI — that language carries cognitive mode, and managing it deliberately improves output. The theory holds. But its application is more interesting than I expected.
+
+**The lightweight intervention (cognitive hygiene) appears universal.** Setting the epistemic stance — "explore the landscape before reaching conclusions" — improves output on every complex task we've tested, across every model. It's one sentence in a system prompt. No architectural change. No risk of making things worse.
+
+**The heavyweight intervention (pipeline separation) is an amplifier.** When the conditions are right (strong model, novel data to investigate, genuine discovery needed), it turns good output into qualitatively different output — the kind that changes how you think about the problem. When the conditions are wrong (knowledge-based reasoning, weaker models, over-engineered handoffs), it can be catastrophic — information loss, wrong artifacts, introduced bias.
+
+The theory is validated. The lightweight application is ready to share. The heavyweight application has fuzzy edges I can't yet pin down. There's something here but I need help teasing it out.
+
+---
+
 ## What we know (solid ground)
 
 **The cognitive stack is real and useful.** Intervening at the epistemic stance level ("explore before concluding") cascades through everything below. 0.76 to 0.95 on expert-scored benchmarks from a single system prompt. This works across models, across domains, and costs nothing architecturally. If you take one thing from this research, this is it.

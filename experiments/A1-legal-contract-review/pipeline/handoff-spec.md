@@ -13,18 +13,20 @@ The original monolithic prompt fuses four incompatible types of thinking into a 
 3. **Generation** — write redline language for deviations
 4. **Synthesis + Reframing** — craft negotiation strategy, model the counterparty
 
-The core interference: the playbook's evaluation criteria (~120 lines of specific elements and named issues) are in context while the model reads the contract, making evaluation a pre-filter on investigation. The model reads *through* the framework, finding what matches the 12 categories and missing what doesn't. Downstream, accumulated evaluative and generative residue suppresses genuine strategic reasoning — the negotiation strategy restates the tier classifications rather than engaging in independent strategic thinking about the deal.
+The core interference: the playbook's evaluation criteria (~120 lines of specific elements and named issues) are in context while the model reads the contract, making evaluation a pre-filter on investigation. The model reads *through* the framework, finding what matches the 12 categories and missing what doesn't. The mechanism is a decision architecture switch (Klein's RPD): evaluation criteria shift investigation from recognition-primed pattern discovery to criterion-referenced checking — a qualitatively different degradation, not just overload.
 
-Prompt-level fixes (scope boundaries, anchor removal, seed-to-lens conversion) improve the margins but can't eliminate the core interference. The investigation and evaluation criteria share a context. The pipeline separates them into clean contexts with compressed handoffs.
+Downstream, accumulated evaluative and generative residue suppresses genuine strategic reasoning — the negotiation strategy restates the tier classifications rather than engaging in independent strategic thinking about the deal. This is proactive interference: earlier context actively degrades processing of later tasks, compounding as the context grows. By the final stage, the model is reasoning through the cognitive residue of every prior stage simultaneously.
+
+Prompt-level fixes (scope boundaries, anchor removal, seed-to-lens conversion) improve the margins but can't eliminate either mechanism. Scope boundaries partially address attentional residue; they cannot address proactive interference, which is a structural working-memory limitation not remediated by instruction. The pipeline separates investigation and evaluation into clean contexts, eliminating the decision architecture switch, and gives each subsequent stage a fresh context free from accumulated residue.
 
 ## Agent Map
 
 | Agent | Thinking Type | Receives | Produces | Why Separate |
 |-------|--------------|----------|----------|-------------|
-| **Contract Reader** | Investigation | Contract text, user's side, contract type | Structured clause summary | Investigation must be free from evaluation criteria — the playbook pre-filters what the reader notices |
-| **Playbook Comparator** | Evaluation | Clause summary + playbook | Classified deviation list | Evaluation is legitimate convergent work (seeds are appropriate here), but must not carry investigative prose into its context |
-| **Redline Writer** | Generation | Deviation list + contract text + business context | Redline proposals with rationale | Generation needs the deal's relationship dynamics, not evaluative residue — otherwise redlines default to boilerplate "standard market position" language |
-| **Strategic Advisor** | Synthesis + Reframing | Deviation list + redlines + business context | Negotiation strategy | Synthesis over structured inputs, not accumulated cognitive slurry — produces genuine strategic reasoning rather than restating the classification |
+| **Contract Reader** | Investigation (knowledge-transformation) | Contract text, user's side, contract type | Structured clause summary with deal's commercial logic | Deliberate situation modeling — RPD Variation 2/3 task. Evaluation criteria in context switch decision architecture from recognition-primed to criterion-referenced, suppressing discovery of provisions outside the 12 standard categories |
+| **Playbook Comparator** | Evaluation (pattern-matching against stable criteria) | Clause summary + playbook | Classified deviation list | Evaluation is legitimate convergent work here — stable regularities (playbook positions) + opportunity to learn them. Seeds are appropriate for convergent work. Must not carry investigative prose into context. |
+| **Redline Writer** | Generation | Deviation list + contract text + business context | Redline proposals with rationale | Generation needs deal dynamics and generative epistemic stance — evaluative residue constrains drafting toward boilerplate "standard market position" language rather than language calibrated to the specific deal |
+| **Strategic Advisor** | Synthesis + Reframing | Deviation list + redlines + business context | Negotiation strategy | Explicit epistemic stance shift from clause-level analysis to whole-deal strategic reasoning. Works from clean structured inputs — no accumulated cognitive residue from prior stages — enabling genuine counterparty modeling and strategic synthesis |
 
 ## Execution Order
 

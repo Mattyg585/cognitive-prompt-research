@@ -586,6 +586,8 @@ These papers collectively demonstrate that cognitive science frameworks are not 
 | Task switching / attentional residue | Strong | Directly modeled in LLM cognitive load benchmarks; behavioral parallels confirmed; n-2 repetition costs have pipeline design implications |
 | Metacognition (object/meta levels) | Strong | Meta-R1 applies this directly to LLM reasoning with measurable improvements in both accuracy and efficiency |
 | Guilford's multi-operation model | Moderate-strong | Kramer (2025) applies full SOI to prompt engineering with 16.6 percentage point performance gain |
+| Klein's RPD model | Strong (predictive) | Directly predicts when pipeline separation helps (Variation 2/3) vs hurts (Variation 1); best single framework for the boundary condition |
+| Kahneman-Klein boundary conditions | Strong (predictive) | Two conditions for valid intuition map directly to "does the task match training regularities?"; predicts Tier 2 vs Tier 3 outcomes |
 
 ### Reasonable analogies (structurally sound but mechanistically different)
 
@@ -594,6 +596,9 @@ These papers collectively demonstrate that cognitive science frameworks are not 
 | CTA for pipeline decomposition | Moderate-novel | Legitimate methodology extension; appears to be a novel application; needs empirical validation that human cognitive mode boundaries are optimal for AI pipeline boundaries |
 | Double Diamond cycling | Moderate | Good structural analogy for pipeline design; practitioner's pattern is an inverted Double Diamond; shared principle that modes must not be mixed within phases |
 | Stanovich's tripartite mind / Sternberg's multi-dimensional styles | Moderate | Supports "more than two modes" argument; provides theoretical legitimacy for multi-stance frameworks; doesn't directly map to LLM architecture |
+| Bereiter & Scardamalia (knowledge-telling vs transformation) | Moderate-strong | Monolithic prompts enable knowledge-telling; pipeline forces knowledge-transformation. Predicts when each is appropriate |
+| Epistemic cognition (Chinn et al.) | Moderate-strong | Epistemic stance intervention maps directly to epistemic aims and virtues; discourse-theoretic view explains mechanism of "context carries mode" |
+| Spiro's Cognitive Flexibility Theory | Moderate | Predicts pipeline value in ill-structured domains; reductive bias as failure mode of monolithic prompting; well-structured domains don't benefit |
 
 ### Stretches (use with caveats)
 
@@ -613,6 +618,36 @@ The practitioner's core insight -- **"context carries cognitive mode"** -- is be
 3. **Proactive interference in working memory** (demonstrated in LLMs by the PI-LLM paper): earlier contextual framing actively degrades processing of subsequent material, with log-linear decay, and this cannot be overcome by prompting for "forgetting"
 
 Each theory alone would be an analogy. Together, they converge on the same prediction from different angles: **mixing cognitive modes in the same processing context will degrade output, and the degradation is not a matter of running out of space but of active interference between incompatible framings**.
+
+### The deeper convergence: seven frameworks, one boundary condition
+
+With the addition of Klein's RPD, Kahneman-Klein, Bereiter & Scardamalia, Epistemic Cognition, Spiro's CFT, and the Dreyfus/situated cognition frameworks, the convergence extends far beyond the original three theories. Seven independent cognitive science frameworks now converge on **the same boundary condition from different angles**:
+
+| Framework | What it predicts about when pipeline separation helps |
+|-----------|------------------------------------------------------|
+| **Klein's RPD** | Helps at Variation 2/3 (novel situation requiring deliberate situation modeling), not Variation 1 (familiar pattern recognition) |
+| **Kahneman-Klein** | Helps when the environment lacks learnable regularities the model has trained on; hurts when training matches the task's regularities |
+| **Cognitive Load Theory** | Helps when mixed modes create extraneous load that exceeds the fragility tipping point; unnecessary when modes are compatible |
+| **Cognitive Flexibility Theory** | Helps in ill-structured domains with irregular concept-to-case mappings; unnecessary in well-structured domains where schemas transfer cleanly |
+| **Epistemic Cognition** | Helps when the task requires exploratory epistemic aims; unnecessary when closure-seeking aims are appropriate |
+| **Bereiter & Scardamalia** | Helps when knowledge-transformation is needed (novel data requiring restructured understanding); unnecessary when knowledge-telling is appropriate (applying known frameworks) |
+| **Situated Cognition / Dreyfus** | Helps when the task exceeds the model's "expertise" (training coverage); unnecessary when the model operates within well-trained domains |
+
+All seven converge on the same fundamental variable: **the critical factor is whether the task requires discovering patterns from novel input data, or applying known frameworks from training knowledge.**
+
+### The recommended reframe
+
+The original formulation of this boundary used "adaptive vs routine expertise" (from Hatano and Inagaki), which describes **expert types** rather than task types. The cognitive science convergence suggests a more precise and actionable framing:
+
+**"Recognition-primed vs investigation-required tasks"**
+
+- **Recognition-primed tasks**: The input data matches patterns the model has already learned from training. The model's pattern recognition is valid (Kahneman-Klein conditions met). The task is well-structured (Spiro). Knowledge-telling is appropriate (Bereiter & Scardamalia). The situation is familiar (Klein Variation 1). Pipeline separation adds overhead without benefit. Tier 2 (optimised prompt) is sufficient.
+
+- **Investigation-required tasks**: The input contains patterns that must be discovered rather than recognized. The model's training priors are unreliable guides (Kahneman-Klein conditions not met). The domain is ill-structured (Spiro). Knowledge-transformation is needed (Bereiter & Scardamalia). The situation is novel (Klein Variation 2/3). Pipeline separation forces the deliberate investigation that the model would otherwise skip. Tier 3 (pipeline reconstruction) earns its cost.
+
+This reframe shifts the decision criterion from "what kind of expert is the model?" (which is hard to assess) to "what kind of task is this?" (which is assessable from the task description and input data). It makes the boundary condition actionable for prompt architecture decisions.
+
+### The stance taxonomy
 
 The practitioner's discovery of 6-7 distinct stances is not directly derived from any single cognitive science framework, but it is most consistent with Guilford's five operations (1956) -- which is ironic, since it's the oldest framework in this list and the one whose richness has been most obscured by popular oversimplification. The novel contribution is using CTA to identify these stances empirically from expert AI pipeline work and then using the interference research to justify why they must be separated into distinct contexts.
 
@@ -652,3 +687,25 @@ The practitioner's discovery of 6-7 distinct stances is not directly derived fro
 
 **Cognitive Design Patterns for AI:**
 - [Wray, Kirk, Laird (2025) - Cognitive Design Patterns for LLM Agents (arXiv:2505.07087)](https://arxiv.org/html/2505.07087v2)
+
+**Recognition-Primed Decision Making:**
+- Klein, G. (1999). *Sources of Power: How People Make Decisions*. MIT Press.
+- Klein, G., Calderwood, R., & Clinton-Cirocco, A. (1986). Rapid decision making on the fire ground. *Proceedings of the Human Factors Society*, 30, 576-580.
+
+**Boundary Conditions for Intuitive Expertise:**
+- Kahneman, D. & Klein, G. (2009). Conditions for intuitive expertise: A failure to disagree. *American Psychologist*, 64(6), 515-526.
+
+**Knowledge-Telling vs Knowledge-Transformation:**
+- Bereiter, C. & Scardamalia, M. (1993). *Surpassing Ourselves: An Inquiry into the Nature and Implications of Expertise*. Open Court Publishing.
+
+**Epistemic Cognition:**
+- Chinn, C. A., Buckland, L. A., & Samarapungavan, A. (2011). Expanding the dimensions of epistemic cognition. *Educational Psychologist*, 46(3), 141-167.
+
+**Cognitive Flexibility Theory:**
+- Spiro, R. J., Feltovich, P. J., Jacobson, M. J., & Coulson, R. L. (1992). Cognitive flexibility, constructivism, and hypertext. In Duffy & Jonassen (Eds.), *Constructivism and the technology of instruction*. Lawrence Erlbaum Associates.
+
+**Recent LLM + Cognitive Science (2024-2026):**
+- Dual-process theory and decision-making in large language models (2025). *Nature Reviews Psychology*.
+- Cognitive Load Limits in LLMs (arXiv:2509.19517, 2025).
+- Unable to Forget: Proactive Interference (arXiv:2506.08184, 2025).
+- United Minds or Isolated Agents? (arXiv:2506.06843, 2025).

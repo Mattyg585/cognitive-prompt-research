@@ -135,6 +135,42 @@ When designing prompts or pipeline stages, ask: at what level of the stack am I 
 
 ---
 
+## Epistemic Stance as Independent Variable
+
+Epistemic stance — the top of the cognitive stack — is not just the most powerful intervention point. It's an **independently powerful mechanism** that produces most of the improvement from Tier 1 (original) to Tier 2 (optimised), regardless of whether pipeline separation is also used.
+
+### The mechanism
+
+Per Chinn et al.'s Epistemic Cognition framework, epistemic stance works by setting three things simultaneously:
+
+- **Epistemic aims**: what the thinker is trying to achieve with respect to knowledge. "Explore before concluding" sets an aim of exploration over closure. "Discover what's here" sets an aim of understanding over judgment.
+- **Epistemic virtues**: dispositions that support good epistemic practice. Exploration aims activate thoroughness, intellectual humility, willingness to follow threads, tolerance for ambiguity. These are virtues the model has learned from training on exploratory human writing.
+- **Epistemic vices suppressed**: premature certainty, closure-seeking, confirmation bias, framework-first thinking. An explicit exploratory stance suppresses the distributional patterns associated with these vices — the model is less likely to commit early, less likely to force findings into pre-existing categories.
+
+This explains why a single sentence like "you are discovering what's here — observations, not findings" can transform output quality. It's not a mode assignment ("investigate"). It's an epistemic stance that cascades through every layer of the cognitive stack: intent shifts from judging to understanding, posture shifts from auditor to explorer, cognitive mode shifts from evaluative to investigative, register shifts from committed to hedged, and the resulting language patterns produce fundamentally different token distributions.
+
+### Two independent mechanisms
+
+The research shows that Tier 2 and Tier 3 improvements come from two distinct, separable mechanisms:
+
+1. **Epistemic stance (Tier 2)**: Changes HOW the model approaches the task — explore vs conclude, discover vs judge. This is the primary source of Tier 1 → Tier 2 improvement. It works within a monolithic prompt because it reshapes the model's entire cognitive posture from the top of the stack down.
+
+2. **Context isolation (Tier 3)**: Changes WHAT the model can discover — prevents evaluation criteria from pre-filtering investigation. This is the source of Tier 2 → Tier 3 improvement, when it appears. It works by giving recognition-primed investigation a clean context free of criterion-referenced framing.
+
+These mechanisms are independent. You can have epistemic stance without context isolation (Tier 2). You can have context isolation without proper epistemic stance (a poorly designed pipeline). The strongest results come from both: pipeline stages with explicit epistemic stances at each stage boundary.
+
+### Practical implications
+
+- **Tier 2 is primarily an epistemic stance intervention.** When you optimise a monolithic prompt and see improvement, most of that improvement comes from setting the right epistemic stance — not from removing numeric anchors, not from replacing seeds with lenses (though those help), but from telling the model HOW to relate to the knowledge it's producing.
+
+- **Tier 3's additional value is context isolation.** When pipeline separation produces a qualitative leap beyond Tier 2, it's because the clean context enables recognition-primed discovery that epistemic stance alone cannot protect from criterion-referenced contamination. The stance says "explore" but the evaluation criteria in context still bias what the model notices.
+
+- **When Tier 3 shows no improvement over Tier 2**, it's often because the task is recognition-primed (see [The Recognition-Primed vs Investigation-Required Boundary](#the-recognition-primed-vs-investigation-required-boundary)) — epistemic stance was the binding constraint, and context isolation has nothing additional to contribute.
+
+- **When designing pipeline stages**, set epistemic stance explicitly at each stage. Don't just assign tasks ("Stage 1: investigate"). Set the epistemic relationship to knowledge ("Stage 1: you are discovering what's here — observations that may or may not matter, patterns that may or may not hold. Explore before concluding."). The stance cascades; the task assignment doesn't.
+
+---
+
 ## The Trust Chain
 
 In a multi-agent pipeline, each layer builds on the cognitive quality of the layer below it. This maps directly to the cognitive stack — and the cascade works in both directions.

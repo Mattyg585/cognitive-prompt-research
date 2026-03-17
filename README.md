@@ -1,107 +1,109 @@
 # Cognitive Prompt Research
 
-**What if the monolithic prompt is the ceiling, not the floor?**
+**Language carries cognitive mode. Intervening at the right level changes everything.**
 
-This repo tests a theory: that mixing incompatible types of thinking in the same AI context window degrades output — and that splitting prompts into cognitively scoped pipelines produces measurably better results.
+This repo documents an empirical discovery: that the language patterns in an AI prompt carry cognitive mode, and that deliberately managing those patterns improves output on complex tasks. The improvement is measurable on externally-scored benchmarks and consistent across models.
 
-I tested this against [Anthropic's knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) across six domains: legal, marketing, HR, design research, engineering, and security operations. The pipeline produced qualitatively different output in 5 of 6 domains. The exception — creative writing — turned out to be the most interesting finding.
+The research started with a single question — why does removing a QA section from a synthesis prompt produce *better* output? — and has evolved through eight months of experiments into something broader: a design methodology for AI systems that work on complex analytical tasks, grounded in cognitive science rather than engineering intuition.
+
+**Two findings, different weights:**
+
+1. **Cognitive hygiene works universally.** Setting the epistemic stance ("explore the landscape before reaching conclusions") in a single prompt improved professional reasoning output from 0.76 to 0.95 on expert-scored benchmarks (PRBench, 26 criteria, rubrics by 182 domain professionals). This works across all models tested. It's lightweight, zero-risk, and immediately applicable to any complex prompt.
+
+2. **Pipeline separation works specifically.** Splitting prompts into cognitively scoped stages with structured handoffs produces qualitative leaps — but only when the task involves investigating external data the model hasn't seen before. On knowledge-based reasoning (however complex), the pipeline's information loss exceeds its mode-separation benefit. On data-intensive investigation tasks (the original CA policy pipeline), the pipeline is essential because it protects genuine discovery from evaluative pre-filtering.
 
 ---
 
-## The Core Bet
+## The Theory
 
 LLMs are language models. Language is the only medium they process. And **language carries the cognitive mode of the person who produced it**.
 
-When a human writes in exploratory mode, the text has different statistical properties than when they write in evaluative mode — different sentence structures, hedging patterns, transition words, levels of commitment. An LLM trained on billions of words has learned these distributions.
+Different types of human thinking produce different patterns of language. LLMs learned those patterns. The patterns in the context window influence what the model generates next. Mixing incompatible patterns creates distributional interference that degrades output. The output still looks fine — **good output hides great output** — and the gap only appears when you separate the modes and compare.
 
-**I am not claiming LLMs have cognition.** The claim is that:
+**I am not claiming LLMs have cognition.** The claim is about distributional interference in the statistical patterns the model learned from human writing.
 
-1. Different types of human thinking produce different patterns of language
-2. LLMs learned those patterns from training data
-3. The patterns in the context window influence what the model generates next
-4. Mixing incompatible patterns (from incompatible cognitive modes) creates distributional interference that degrades output
+### The cognitive stack
 
-When you put a quality-checking section (evaluative, criteria-referencing language) in the same context as a synthesis task (exploratory, thread-following language), you're not creating "cognitive interference" in the model's mind. You're creating **distributional interference** — the statistical patterns of evaluative language pull the generation away from the patterns associated with exploratory synthesis. The model does what it always does: predicts what comes next given what came before. And what came before is now carrying evaluative framing.
-
-The output still looks fine. It's competent, thorough, professional. **Good output hides great output.** The gap only appears when you separate the modes and compare.
-
-### Why this matters
-
-The entire industry trend is toward bigger, more comprehensive single prompts. Skills, plugins, progressive loading — these are mechanisms to make prompts effectively longer without hitting token limits. The assumption is: more context = better output.
-
-The hypothesis: **for complex tasks, that assumption may be backwards.**
-
-More context means more cognitive mode mixing. More instructions means more distributional interference between incompatible types of thinking. Skills loaded on demand don't just add capabilities — they contaminate the context with whatever language patterns they carry. And the contamination is invisible because the output is still... fine.
-
----
-
-## The Experiment
-
-I took production prompts from Anthropic's knowledge-work-plugins and tested three tiers of intervention:
-
-1. **Baseline** — the original prompt, unchanged
-2. **Optimised** — same structure, better cognitive hygiene (remove numeric anchors, replace content prescription with analytical lenses, add scope boundaries between thinking modes)
-3. **Pipeline** — split into multiple agents, each doing one type of thinking in a clean context, with structured handoffs that strip cognitive residue between stages
-
-### Results — Claude (Opus 4.6)
-
-| Experiment | Domain | Baseline | Optimised | Pipeline | External Validation |
-|---|---|---|---|---|---|
-| A1 | Legal contract review | 3rd | 2nd | **1st** | Claude + Gemini: unanimous |
-| A2 | Marketing content | 3rd | **1st/2nd** | **1st/2nd** | Split — creative boundary condition |
-| A3 | HR performance review | 3rd | 2nd | **1st** | Internal |
-| A4 | Design research synthesis | 3rd | 2nd | **1st** | Claude + Gemini: unanimous |
-| A5 | Engineering debug | 3rd | 2nd | **1st** | Internal |
-| A6 | SecOps incident response | 3rd | 2nd | **1st** | Internal |
-
-Pipeline won 5 of 6 on Claude, with the creative writing boundary condition (A2) as the exception.
-
-### Cross-model testing — the picture gets more interesting
-
-The same experiments were re-run across four additional models via GitHub Copilot CLI:
-
-| Model | Pipeline Wins | Pipeline Fails | Key Finding |
-|---|---|---|---|
-| GPT-5.3-Codex | **6/6** | 0 | Mirrors Claude — pipeline consistently best |
-| GPT-5.2 | 2/6 | 0 | Optimised was the safe bet |
-| GPT-5.2-Codex | 2/6 | **3 catastrophic** | Pipeline produced wrong artifact types |
-| Gemini 3 Pro | 2/6 | 2 serious | Pipeline introduced bias and missed critical findings |
-
-**Pipeline is an amplifier, not a guarantee.** On models that handle it well, the qualitative leaps are real. On models that don't, it produces output *worse than the baseline* — wrong artifact types, introduced gender bias, missing critical compliance findings. The pipeline doesn't add quality. It creates the conditions for quality. Whether the model fills those conditions depends on the model.
-
-**Tier 2 (prompt-level optimisation) is the universally safe improvement.** It helped across every model tested without risk of catastrophic failure.
-
-The pipeline failures are themselves evidence for the theory: the trust chain predicted that a break at one stage would cascade through the pipeline. That's exactly what happened — and predicting how something fails is harder to fake than claiming it works. See [findings.md](findings.md) for the full cross-model analysis.
-
-### What the improvements look like
-
-These aren't marginal score differences. The pipeline produces **qualitatively different documents**:
-
-**Legal (A1)**: The baseline review lists clause deviations. The pipeline version identifies compound interactions between clauses (ML training + survival + no data export = a single structural risk), scripts the negotiation move-by-move, and predicts what the counterparty's responses will reveal about their organisation. Two independent models with zero project context both called it: *"treats the contract as a deal, not a document."*
-
-**Design Research (A4)**: The baseline catalogues interview themes. The pipeline version surfaces compound insights no single interview contains — *"workarounds are specifications written in behaviour"* and *"partial adoption produces negative value, not partial value."* Both evaluators: *"would actually change how I make decisions"* vs *"template faithfully executed."*
-
-**SecOps (A6)**: The baseline produces a standard postmortem with a mechanical 5 Whys analysis. The pipeline version reframes: *"confidence accumulates across checkpoints without coverage expanding"* and *"multiple overlapping checks can produce less safety than one well-scoped check."* Organisational learning vs compliance document.
-
-### Validation approach
-
-For A1, A2, and A4, I ran blind evaluations with Claude (web, no project context) and Google Gemini. The evaluators received randomised IDs — they didn't know which output came from which tier. They invented their own vocabulary for what they saw. The rankings converged independently.
-
----
-
-## The Boundary Condition
-
-Creative writing (A2) is where the pattern changes. Claude Web ranked the optimised version first; Gemini ranked the pipeline first; the human author preferred the optimised version. The pipeline produces better *process* (editorial reasoning, SEO strategy) but the optimised version produces better *prose* (voice, rhythm, naturalness).
-
-For a blog post, prose wins. For a legal brief, process wins.
-
-This maps to where the improvement lives in the **cognitive stack**:
+The key framework: language patterns are shaped by layers of human cognition, and **higher-layer interventions cascade further**.
 
 ```
 Epistemic stance  →  Intent  →  Expertise  →  Cognitive mode  →  Register  →  Language patterns  →  Tokens
 ```
 
-Pipeline separation operates at the cognitive mode layer. Creative writing quality lives at the register layer. For analytical work, freeing the cognitive mode cascades down and improves everything. For creative work, the pipeline's structured handoffs may disrupt the register-level flow. The right intervention for creative work may be Tier 2 (fix the register) rather than Tier 3 (separate the modes).
+Changing a single word at the epistemic level ("observation" vs "finding") cascades through mode, register, and language patterns to produce fundamentally different output. This is why the Tier 2 intervention works so well — setting "explore the landscape before reaching conclusions" intervenes at the top of the stack and everything below follows.
+
+### Two weights of intervention
+
+**Tier 2 (cognitive hygiene):** Set the epistemic stance. Add scope boundaries. Replace seeds with lenses. One prompt, no architectural change. Works universally on complex analytical tasks. The lightweight tool.
+
+**Tier 3 (pipeline separation):** Split into cognitively scoped stages with structured handoffs. Each stage gets its own clean context and explicit epistemic stance. The handoff schema strips cognitive residue — information crosses the boundary, but the thinking style that produced it does not. The heavyweight tool — powerful when the conditions are right, overcooked when they're not.
+
+---
+
+## The Experiments
+
+### A-Series: Knowledge-work prompts (6 domains)
+
+Tested Anthropic's [knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) across legal, marketing, HR, design research, engineering, and security operations.
+
+**On Claude (Opus 4.6):** Pipeline won 5/6. Creative writing (A2) was the boundary — pipeline improves process but disrupts prose.
+
+**Cross-model (Copilot CLI):** GPT-5.3-Codex mirrored Claude (6/6). GPT-5.2 favoured Tier 2. GPT-5.2-Codex and Gemini 3 Pro had catastrophic pipeline failures. **Tier 2 was the universally safe improvement across all models.** See [findings.md](findings.md).
+
+### B-Series: External benchmarks
+
+**B1 (SWE-bench):** Dropped. Baseline passed all coding tasks. Convergent work is resilient to mode contamination.
+
+**B2 (PRBench):** Tested on expert-scored professional reasoning (rubrics by 182 domain professionals, not created by us):
+
+| Tier | Score | Criteria Met |
+|------|-------|-------------|
+| Baseline | 0.759 | 20/26 |
+| Pipeline (Tier 3) | 0.849 | 22/26 |
+| **Optimised (Tier 2)** | **0.950** | **25/26** |
+
+Tier 2 beat the pipeline. The epistemic stance intervention in a single prompt captured nearly all the improvement. The pipeline lost procedural details in its structured handoffs. See [experiments/B2-prbench/FINDINGS.md](experiments/B2-prbench/FINDINGS.md).
+
+### What the A-series improvements look like
+
+On models that handle the pipeline well, it produces **qualitatively different documents**:
+
+**Legal (A1)**: Baseline lists clause deviations. Pipeline identifies compound clause interactions, scripts negotiation moves, predicts what counterparty responses reveal. Independent evaluators: *"treats the contract as a deal, not a document."*
+
+**Design Research (A4)**: Baseline catalogues themes. Pipeline surfaces compound insights — *"workarounds are specifications written in behaviour."* Evaluators: *"would actually change how I make decisions"* vs *"template faithfully executed."*
+
+**SecOps (A6)**: Baseline produces a standard postmortem. Pipeline reframes: *"confidence accumulates across checkpoints without coverage expanding."* Organisational learning vs compliance document.
+
+---
+
+## When to Use What
+
+The framework forming through trial and error:
+
+**Always use Tier 2 (cognitive hygiene).** Set the epistemic stance. Add scope boundaries. Replace seeds with lenses. This works on every complex task, every model, with zero risk. It's a system prompt — not a redesign.
+
+**Consider Tier 3 (pipeline) when:**
+- The model must investigate **external data it hasn't seen before** (not reason from training knowledge)
+- Data volume exceeds what one context can hold
+- The investigation + evaluation toxic pair operates on **discovered** information
+- The pipeline runs repeatedly, amortizing design cost
+- The task requires what we're calling "adaptive expertise" — building novel understanding from unfamiliar data
+
+**Don't use Tier 3 when:**
+- The task is knowledge-based reasoning (however complex) — Tier 2 is sufficient and better
+- The question is answerable in one thorough pass
+- Procedural details matter and might not map to handoff schema fields
+
+**Boundary conditions:**
+- Creative writing — pipeline improves process, Tier 2 preserves prose register
+- Convergent work (coding, domain accuracy) — unaffected by any intervention
+- Model-dependent — pipeline requires models capable of reconstructing intent across structured handoffs
+
+### The open question
+
+There's something we're still circling. The pipeline's strongest results (the original CA policy pipeline, the A-series qualitative leaps) involved what we're calling "adaptive expertise" — the ability to investigate unfamiliar data, discover patterns nobody predicted, and build novel understanding. This is the work of a consultant who walks into a new environment and sees things the people inside can't see. It's different from answering a hard question from knowledge (which is what PRBench tests, and where Tier 2 is sufficient).
+
+We think this is the high-value niche — and we think nobody in AI is specifically benchmarking or optimizing for it. But we haven't fully defined the boundary yet. See [experiments/B2-prbench/FINDINGS.md](experiments/B2-prbench/FINDINGS.md) for more on what we know and don't know.
 
 ---
 
@@ -137,14 +139,14 @@ See [USAGE.md](USAGE.md) for agent invocation details and [RUN-ALL.md](RUN-ALL.m
 
 This is early-stage research from one practitioner, built in stolen evenings and weekends. Hold it lightly.
 
-- **Pipeline is fragile.** Cross-model testing showed pipeline producing catastrophic failures (wrong artifact types, introduced bias) on some models. The pipeline design was created by Claude, for Claude, and was not tuned for other models. Tier 2 optimisation is the universally safe intervention.
-- **Process, not polish.** The pipeline stages, handoff specs, and automation were thrown together quickly. The cross-model failures likely reflect implementation fragility as much as fundamental limits. Someone spending more time on the handoff design would likely get better results.
-- **LLM-as-judge bias.** The evaluators may prefer longer, more structured output. External blind evaluations (A1, A2, A4) partially control for this, but domain expert evaluation would be stronger.
-- **Single runs for A3-A6.** A1 and A2 had 3 runs per tier. A3-A6 had 1. The consistency across experiments partially compensates, but individual results should be held carefully.
-- **Pipeline cost.** A pipeline uses 4-12x more tokens than a single prompt. For a legal brief where the pipeline catches compound clause interactions your lawyer missed, the trade-off isn't close. For a quick internal summary, a single prompt is fine.
-- **Single researcher.** All design, execution, and evaluation orchestrated by one person. This is a side project, not a funded research programme. There are likely flaws in places that can be tightened up.
+- **Tier 2 is the safe bet. Pipeline is not.** Cross-model testing showed pipeline producing catastrophic failures on some models. B2 showed pipeline underperforming Tier 2 on knowledge-based reasoning. The pipeline is a powerful tool for specific conditions, not a universal upgrade.
+- **B2 used Claude judging Claude.** PRBench validated with o4-mini. We used Sonnet. Binary per-criterion scoring against specific expert-written criteria reduces subjectivity, but self-preference risk exists. The rubrics themselves are external (182 domain experts).
+- **Single runs.** A1/A2 had 3 runs per tier. Everything else had 1. These are directional findings, not statistically powered studies.
+- **Pipeline cost.** 4-12x more tokens than a single prompt. Only justified when the quality improvement justifies the cost — and B2 showed that for knowledge-based reasoning, it doesn't.
+- **Single researcher.** Side project, not funded research. There are likely flaws.
+- **The pipeline was v0.1.** The B2 pipeline's handoff schemas were not iterated. Better schema design might reduce information loss. But that iteration cost is itself part of the argument for Tier 2's practicality.
 
-What would strengthen this: independent replication, domain expert evaluation, model-specific pipeline tuning, and someone with more time than weekends.
+What would strengthen this: independent replication, domain expert evaluation, testing Tier 2 across the full PRBench benchmark, and someone who can articulate the adaptive expertise boundary more precisely than we currently can.
 
 ---
 

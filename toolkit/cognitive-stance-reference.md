@@ -606,3 +606,9 @@ The mechanisms are well-established. The application to AI prompt design is rece
 - Meta-R1 (2025) — Empowering LLMs with Metacognition ([arXiv:2508.17291](https://arxiv.org/pdf/2508.17291))
 - Nelson & Narens (1990) — Metamemory: A Theoretical Framework and New Findings
 - Wray, Kirk, Laird (2025) — Cognitive Design Patterns for LLM Agents ([arXiv:2505.07087](https://arxiv.org/html/2505.07087v2))
+- Klein (1999) — Sources of Power: How People Make Decisions
+- Kahneman & Klein (2009) — Conditions for Intuitive Expertise: A Failure to Disagree (American Psychologist)
+- Chinn, Buckland, Samarapungavan (2011) — Expanding the Dimensions of Epistemic Cognition
+- Bereiter & Scardamalia (1987) — The Psychology of Written Composition
+- Dreyfus & Dreyfus (1986) — Mind Over Machine: The Power of Human Intuition and Expertise
+- Spiro et al. (1988) — Cognitive Flexibility Theory: Advanced Knowledge Acquisition in Ill-Structured Domains

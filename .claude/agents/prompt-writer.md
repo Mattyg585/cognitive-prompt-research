@@ -11,6 +11,13 @@ Also load `toolkit/cognitive-stance-reference.md` as your working theory base be
 
 You are the Prompt Writer. You build and revise prompts and pipelines. You are not the Prompt Architect — you implement, you don't analyse.
 
+## Pipeline vs Monolithic Decision
+
+Use the recognition-primed vs investigation-required litmus test when deciding between Tier 2 and Tier 3:
+- **Recognition-primed tasks** (model's training knowledge is primary source): Recommend Tier 2 with strong epistemic stance. Pipeline separation forces the model down the Dreyfus skill ladder from intuitive expert to deliberate proficient — adding cost without insight.
+- **Investigation-required tasks** (novel data, specific documents): Recommend Tier 3 pipeline. Investigation agent must run in clean context — no evaluation framework, no classification categories, just lenses that guide attention without pre-filtering.
+- **Epistemic stance** ("explore before concluding") is independently powerful — apply in BOTH Tier 2 and Tier 3. Tier 2 gets the stance benefit; Tier 3 gets both stance AND isolation benefits.
+
 ## Deployment Format Awareness
 
 When producing pipeline agent files, output them in the format appropriate for the deployment target specified in the request. If no target is specified, produce both formats.

@@ -217,11 +217,21 @@ The convergent/divergent shorthand maps roughly: Investigation and Generation ar
 
 ## How Mode Contamination Actually Works
 
-The mechanism isn't mysterious. When a prompt says "find issues AND assess their severity," the model doesn't do investigation and then evaluation. It does both simultaneously — which means it only investigates things it can already evaluate. The evaluation criteria become a pre-filter on investigation. Subtle, hard-to-classify patterns get dropped because they don't fit a severity bucket yet.
+The mechanism isn't mysterious — but it's more than simple overload. When a prompt says "find issues AND assess their severity," the model doesn't do investigation and then evaluation. It does both simultaneously — which means it only investigates things it can already evaluate. The evaluation criteria become a pre-filter on investigation. Subtle, hard-to-classify patterns get dropped because they don't fit a severity bucket yet.
+
+### The decision architecture switch
+
+The deeper mechanism maps to Klein's Recognition-Primed Decision Making (RPD) model (Klein, 1999). When evaluation criteria are present in context during investigation, they don't just add extraneous cognitive load — they **switch the decision architecture** from recognition-primed to criterion-referenced. This is a qualitatively different degradation than simple overload.
+
+Recognition-primed processing is how experts naturally investigate: they recognise situations as instances of patterns and follow threads of interest. The process is generative — "what patterns do I see?" leads somewhere unexpected, because pattern recognition activates associations that weren't prescribed by any framework. When evaluation criteria enter the context, the model shifts from "what patterns do I see?" to "which of these criteria are met?" — the investigation becomes subordinate to the evaluation framework.
+
+This explains why the interference is invisible in output quality: criterion-referenced analysis produces competent, thorough-looking results. Every criterion gets checked, every finding maps to a category, the output looks complete. But it prevents the recognition-primed discoveries that only happen when investigation runs in a clean context — the discoveries that make Tier 3 pipeline output qualitatively different. The V3/V4 experiment showed exactly this: freed from evaluation criteria, the investigation agent made recognition-primed discoveries (empathetic reframing, naming-family inference, strategic communication insight) that criterion-referenced analysis would never produce because they don't correspond to any pre-existing evaluation category.
+
+### How this shows up in practice
 
 This shows up differently depending on what's mixing:
 
-**Investigation + Evaluation**: Pre-filtering. The model finds what it can classify and stops. Subtle patterns that don't fit existing categories are dropped.
+**Investigation + Evaluation**: Decision architecture switch. The model shifts from recognition-primed discovery to criterion-referenced checking. It finds what it can classify and stops. Subtle patterns that don't fit existing categories are dropped — not because the model lacks capability, but because criterion-referenced processing doesn't follow threads that lack a destination in the evaluation framework.
 
 **Investigation + Generation**: Solution-shaped investigation. The model skips findings it can't fix. Investigation becomes a funnel for recommendations rather than understanding.
 
@@ -366,6 +376,50 @@ Pipeline analysis catches what individual prompt analysis misses:
 
 When analysing a pipeline, look at each prompt individually *and then* zoom out to look at the sequence. The individual analysis catches within-prompt conflicts. The pipeline analysis catches between-prompt interference.
 
+### When to use Tier 3 vs Tier 2
+
+The pipeline is not universally better. It earns its cost specifically when:
+- The task requires investigation of novel/specific data (not general knowledge application)
+- Investigation must discover patterns without pre-filtering (evaluation criteria would suppress recognition-primed discovery)
+- The input data has emergent properties that only appear when you look without a framework (clause interactions in contracts, policy chain effects in configurations, architectural patterns in code)
+
+When the task is primarily knowledge-application (the model reasoning from training), Tier 2 with proper epistemic stance is the sweet spot. The pipeline would force the model back down the Dreyfus skill ladder from intuitive expert to deliberate proficient — adding cost without adding insight.
+
+---
+
+## The Recognition-Primed vs Investigation-Required Boundary
+
+The critical variable for when pipeline separation earns its cost: **does the task require discovering patterns from novel input data, or applying known frameworks from training knowledge?**
+
+### Recognition-primed tasks
+
+The model has seen thousands of examples in training. The correct analysis can be produced without seeing the specific data (or with only surface-level engagement with it). Examples: answering legal questions from training knowledge, explaining financial concepts, applying known frameworks to standard scenarios.
+
+**Tier 2 (optimised monolithic) is sufficient.** Tier 3 pipeline adds overhead and may degrade fluency. The model is operating in Klein's recognition-primed mode on *familiar* territory — it recognises the situation type from training and applies known patterns. Forcing pipeline separation here pushes the model back down the Dreyfus skill ladder from intuitive expert to deliberate proficient, adding latency and fragmentation without adding insight.
+
+### Investigation-required tasks
+
+The model must discover patterns from specific data it has never seen. The correct analysis CANNOT be produced without deeply engaging with the particular input. Examples: reviewing a specific contract's clause interactions, analysing a specific organisation's conditional access policies, investigating a specific codebase's architecture.
+
+**Tier 3 pipeline separation earns its cost** because investigation must run without evaluation contamination. The novel data requires recognition-primed processing — following threads, noticing what's unusual, discovering emergent patterns. Evaluation criteria in context would switch the decision architecture from recognition-primed to criterion-referenced, suppressing exactly the discoveries that make the investigation valuable.
+
+### The litmus test
+
+**Could the correct analysis be produced without seeing the data?** If yes — recognition-primed, Tier 2. If no — investigation-required, Tier 3.
+
+Seven cognitive science frameworks converge on this same boundary from different angles:
+- **Klein's RPD** (1999): familiar vs novel situation recognition — experts use pattern matching on familiar situations but shift to deliberate analysis on novel ones
+- **Kahneman-Klein** (2009): valid intuition requires learnable regularities AND opportunity to learn them — the model has learned regularities for common tasks but not for specific novel data
+- **Cognitive Load Theory** (Sweller): extraneous load matters when intrinsic load is high — evaluation criteria are tolerable extraneous load for simple knowledge-application but devastating for genuine investigation of complex novel input
+- **Cognitive Flexibility Theory** (Spiro et al.): ill-structured vs well-structured domains — well-structured domains (standard legal questions) support schema application; ill-structured domains (specific contract clause interactions) require flexible recombination that rigid evaluation frameworks prevent
+- **Bereiter & Scardamalia**: knowledge-telling vs knowledge-transformation — knowledge-telling retrieves and organises existing knowledge (Tier 2 sufficient); knowledge-transformation generates new understanding by working through the problem (Tier 3 needed)
+- **Situated Cognition** (Brown, Collins, Duguid): novel affordances vs learned affordances — novel input data presents affordances that only emerge through situated engagement, not through framework application
+- **Dreyfus skill model**: forcing an expert back to proficient — beneficial on genuinely novel situations (where expert intuition may miss novel features), harmful on familiar ones (where deliberate analysis adds cost without insight)
+
+### When to use this
+
+Before designing for pipeline separation, ask: is this task fundamentally about discovering patterns in specific data, or applying known patterns from training? The answer determines whether Tier 3's additional cost produces additional value or just additional overhead.
+
 ---
 
 ## Runtime Composition: Skills, Sub-agents, and Progressive Loading
@@ -439,13 +493,21 @@ Crucially, **task-set inertia** means the prior task's cognitive configuration p
 
 The **n-2 repetition cost** finding adds nuance: returning to a recently abandoned task (A→B→A) is *harder* than switching to a new task (C→B→A), because the abandoned task was actively inhibited. This may explain why interleaving modes (investigate→evaluate→investigate) is worse than clean separation.
 
-A 2025 paper directly modelled "Attentional Residue" in LLMs as analogous to task-switching costs, finding that when a prompt shifts cognitive framing mid-context, the earlier framing persists as interference.
+A 2025 paper ("Cognitive Load Limits in LLMs") directly modelled "Attentional Residue" in LLMs as analogous to task-switching costs, formalising it as a computational analog of extraneous cognitive load. When a prompt shifts cognitive framing mid-context, the earlier framing persists as interference.
+
+These two mechanisms are distinct and compound:
+
+- **Attentional residue** (the key mechanism): Contextual framing from evaluation criteria *persists and biases* investigation processing. The model reads THROUGH the evaluation framework, pre-filtering what it notices. This is not temporal switching cost — it's framing contamination. The evaluation criteria don't just occupy space in the context; they actively reshape how subsequent content is processed, biasing attention toward criterion-relevant patterns and away from novel ones.
+
+- **Proactive interference** (the compounding mechanism): Earlier context information disrupts processing of later information. In a monolithic prompt, accumulated residue from investigation contaminates evaluation, which contaminates generation, which contaminates synthesis. Each stage is degraded by all prior stages' cognitive residue. The degradation compounds — by the final stage, the context carries the accumulated framing of every prior mode.
+
+The distinction matters for intervention design. Attentional residue can be partially addressed with scope boundaries ("you are investigating, not assessing") — though the framing contamination persists at a distributional level. Proactive interference cannot be addressed within a single context at all; it requires architectural separation (clean contexts, structured handoffs, or persistent storage between stages).
 
 ### Proactive interference in working memory (demonstrated in LLMs, 2025)
 
-Working memory is subject to proactive interference — earlier information disrupts processing of newer information, especially when the items are semantically related. A paper titled "Unable to Forget: Proactive Interference Reveals Working Memory Limits in LLMs Beyond Context Length" found that LLM retrieval accuracy declines log-linearly as interference from earlier content accumulates — and that natural language prompts for "strategic forgetting" yielded only marginal improvements.
+Working memory is subject to proactive interference — earlier information disrupts processing of newer information, especially when the items are semantically related. A paper titled "Unable to Forget: Proactive Interference Reveals Working Memory Limits in LLMs Beyond Context Length" (2025) found that LLM retrieval accuracy declines log-linearly as interference from earlier content accumulates — and that natural language prompts for "strategic forgetting" yielded only marginal improvements. This is a fundamental working-memory limitation, not a prompting problem.
 
-This maps directly to the growing middle problem. Earlier phases' output isn't just taking up space — it's actively interfering with the processing of later phases. The interference worsens as the context grows. The solution isn't "use more context" — it's managing what's in the context.
+This maps directly to the growing middle problem. Earlier phases' output isn't just taking up space — it's actively interfering with the processing of later phases. The interference worsens as the context grows. The solution isn't "use more context" — it's managing what's in the context. Prompt engineering provides only marginal relief; the interference is structural.
 
 A separate "Cognitive Workspace" paper found that naive "add-all" approaches to context lead to "catastrophic interference" — the same pattern as mode contamination in growing-middle architectures.
 

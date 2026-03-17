@@ -260,6 +260,18 @@ The **n-2 repetition cost** finding is interesting for pipeline design: if you s
 
 The **mixing costs** finding is relevant to prompts that say something like "investigate this, but also keep in mind that we'll need to evaluate the findings." Even this anticipatory framing may degrade the investigation -- the mere awareness that evaluation will follow changes how the model investigates.
 
+### Attentional residue as a distinct construct
+
+The task-switching literature contains three related but distinct phenomena that are often conflated. Separating them clarifies which aspects of mode-mixing map cleanly to LLMs and which do not:
+
+- **Switch costs** (Monsell, 2003): The temporal reconfiguration overhead when switching between tasks -- the measurable delay and accuracy drop on the first trial after a switch. This involves updating working memory contents with new goals and enabling new stimulus-response mappings while disabling old ones. **LLM mapping: weak.** There is no temporal switching in a single forward pass. The model processes the entire context in parallel, not sequentially.
+
+- **Attentional residue** (Leroy, 2009; applied to LLMs in "Cognitive Load Limits" arXiv:2509.19517, 2025): The contextual framing from a prior task *persists and biases* subsequent processing, even after the nominal task switch. This is not about reconfiguration time -- it is about the prior frame continuing to exert influence on the current task. **LLM mapping: very strong.** Evaluation criteria present earlier in the context actively bias investigation toward pre-filtered pattern matching. The prior framing does not decay -- it remains in the context window and continues to shape attention patterns throughout.
+
+- **Proactive interference** ("Unable to Forget", arXiv:2506.08184, 2025): Earlier information in context disrupts retrieval and processing of later updates. This is a fundamental working-memory limitation, not a task-switching artifact. Prompt engineering provides only marginal relief -- you cannot instruct the model to "forget" earlier context. **LLM mapping: very strong.** Demonstrated empirically with log-linear decay patterns that parallel human working memory interference.
+
+The key insight is that attentional residue from evaluation criteria doesn't just add extraneous load -- it **switches the decision architecture** from recognition-primed (pattern discovery) to criterion-referenced (pattern matching against known standards). This is a qualitatively different degradation than simple overload. The model is not merely "distracted" by evaluation framing -- it is operating in a fundamentally different cognitive mode, one that pre-filters investigation toward confirming or denying predefined categories rather than discovering emergent patterns in the data.
+
 ### Where the mapping breaks down
 
 Human task-switching costs involve **temporal reconfiguration** of attentional control settings -- it takes time to shift from one task set to another, and the old set decays gradually. LLMs process the entire context in parallel during a forward pass. There is no temporal sequence of "first process the investigation part, then switch to the evaluation part."

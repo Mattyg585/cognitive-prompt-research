@@ -55,16 +55,29 @@ If everything fits in one prompt without interference — write one prompt. Don'
 
 ### Is this one prompt or a pipeline?
 
+**The recognition-primed vs investigation-required litmus test**: Ask: "Could the correct analysis be produced without seeing the specific data?" If yes — the task applies known frameworks from training knowledge (recognition-primed) — Tier 2 with proper epistemic stance is usually sufficient. If no — the task requires discovering patterns from novel/specific data (investigation-required) — Tier 3 pipeline with clean context separation between investigation and evaluation is essential.
+
 **One prompt** when:
 - The task needs one or two compatible types of thinking
 - The input is manageable (not hundreds of items to process)
 - The output doesn't need to feed another AI step
 
-**A pipeline** when:
-- The task needs incompatible types of thinking
+**Optimised monolithic (Tier 2)** when:
+- The task is recognition-primed — the model's training knowledge is the primary source
+- Pipeline separation would force the model back down the Dreyfus skill ladder from intuitive expert to deliberate proficient, adding latency and cost without adding insight
+- Proper epistemic stance ("explore before concluding") and scope boundaries are sufficient to prevent mode contamination
+
+**A pipeline (Tier 3)** when:
+- The task is investigation-required — novel data, specific documents, unfamiliar configurations
+- Investigation must run in clean context without evaluation criteria, classification categories, or predetermined frameworks — just lenses that guide attention without pre-filtering what can be found
+- The task needs incompatible types of thinking (especially investigation + evaluation)
 - The input volume requires chunking (too much for one context)
 - Different stages need different context (investigation shouldn't see evaluation criteria)
 - The output of one stage feeds the next
+
+Pipeline separation is essential for investigation-required tasks because it prevents evaluation criteria from suppressing recognition-primed pattern discovery. The investigation agent must run in a clean context — no evaluation framework, no classification categories, just lenses that guide attention without pre-filtering what can be found.
+
+**Epistemic stance is independently powerful** and should be applied in BOTH Tier 2 and Tier 3 designs. It works by setting epistemic aims (exploration over closure) and suppressing premature pattern matching. This is separate from context isolation — Tier 2 gets the stance benefit, Tier 3 gets both stance AND isolation benefits.
 
 When it's a pipeline, the design questions become: how many agents, what order, what crosses between them, and how to execute.
 

@@ -60,14 +60,20 @@ The playbook should define:
 
 ### Step 4: Read and Understand the Contract
 
-Before evaluating against the playbook, read the contract as a whole document. Understand:
+Before evaluating against the playbook, read the contract as a whole document. You are building a mental model of what this contract is actually doing — not cataloguing what it contains.
 
-- What is the contract trying to accomplish commercially?
-- How is risk allocated between the parties?
-- What is the overall structure and how do provisions interact with each other?
-- What is unusual, notable, or unexpected — including provisions that don't fit standard categories?
+Work toward an understanding you could express in your own words, without reference to any framework:
 
-You are reading to understand, not to evaluate. Evaluation against the playbook is a separate step. The goal here is to understand the contract on its own terms — its commercial purpose, its structure, and anything that stands out — before applying any framework to it.
+- What is this deal? What commercial outcome is it trying to create, and for whom?
+- Who bears the risk if the deal goes wrong, and in what sequence?
+- How do the provisions interact with each other — where does one clause's scope depend on another?
+- What is unusual, absent, or unexpected — including things that don't fit standard categories?
+
+This step ends when you have a working theory of the contract's logic — not just its contents. A clause inventory is not enough. You are trying to understand the contract well enough that you could explain its commercial structure to someone who hasn't read it, including its idiosyncrasies.
+
+You are reading to understand, not to evaluate. Evaluation against the playbook hasn't started yet. Until your mental model of the contract is complete, hold the playbook in the background — it will shape what you look for next, but it should not filter what you notice now.
+
+**Transition**: Before moving to Step 5, pause and state your working theory of the contract: what it's trying to accomplish, how risk flows between the parties, and anything that stands out as structurally significant. This is the foundation for everything that follows.
 
 ### Step 5: Clause-by-Clause Analysis
 
@@ -215,7 +221,7 @@ Provide a summary covering:
 
 - **Overall risk assessment**: High-level view of the contract's risk profile.
 - **Key findings**: The most important issues to address — as many or as few as the contract warrants. A simple agreement may have one critical issue; a complex one may have many.
-- **Negotiation strategy**: Model the counterparty's likely positions. Consider the deal dynamics, relationship context, and leverage points. Recommend which issues to lead with, which to concede, and how to sequence the conversation. This is strategic advice, not a restatement of the deviation classifications.
+- **Negotiation strategy**: Approach this from a different posture than the deviation analysis. The deviation analysis was evaluative — it judged the contract against a standard. Strategy is reframing: step outside the framework and think about this deal as a negotiation between two parties with interests, constraints, and leverage dynamics. Model the counterparty's situation — what do they need, what are they protecting, what is their likely BATNA? Then reason about sequencing, concession strategy, and how to sequence asks to create room for movement on what matters most. This section should read as counsel preparing for a conversation, not as a summary of what needs to change.
 - **Timeline considerations**: Any urgency factors affecting the negotiation approach.
 
 #### Negotiation Priority
@@ -272,9 +278,13 @@ Don't give every clause the same structural weight.
 
 ## Negotiation Strategy
 
-[Strategic advice: model the counterparty's likely positions, identify leverage points,
-recommend sequencing. This should read as counsel preparing for a negotiation, not as
-a summary of the deviations above.]
+[Written from a reframing posture, not an evaluative one. Set aside the deviation
+framework and think about this deal: what does each party need, what are they
+protecting, where is there room to move? Model the counterparty's constraints and
+likely priorities. Reason about sequencing — which asks to lead with, what to hold
+back, what to concede strategically to secure movement on what matters. This section
+should read as counsel who has thought about the other side of the table, not as a
+reorganised list of redlines.]
 
 ## Next Steps
 

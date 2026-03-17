@@ -78,6 +78,103 @@ Each agent does one type of thinking. The database between stages strips cogniti
 
 ---
 
+## Data Stance: How Information Carries Cognitive Posture Through Pipelines
+
+The trust chain describes how cognitive quality cascades between agents. But there's a related phenomenon that operates at the data level rather than the agent level: **the information passed between agents carries a cognitive stance that shapes what the receiving agent can discover**.
+
+This emerged from two observations:
+1. The CA pipeline's architecture — where the investigation agent receives both raw per-policy extractions (descriptive data) AND story groupings (classified data) — works because the investigator can follow threads the classifier didn't anticipate. If only the classified data were passed, the classifier's cognitive choices would become the ceiling for every downstream agent.
+2. The A2 marketing content experiment — where the 4-stage pipeline produced technically superior output but the voice was fragmented because each agent received structured plans *about* the material rather than the material itself in its raw, engagement-inviting form.
+
+### What data stance is
+
+Every piece of data passed between pipeline stages has a cognitive stance — not just content, but a posture that shapes how the next agent relates to it:
+
+| Data stance | What it looks like | What it enables downstream | What it constrains |
+|------------|-------------------|--------------------------|-------------------|
+| **Descriptive** | Raw extractions, observations, "what's there" | Widest downstream space — any agent can discover patterns | Nothing constraining; may overwhelm with volume |
+| **Classified** | Organised by category, grouped by type, labelled | Pattern recognition within categories, cross-category comparison | Constrains to the classifier's lens — patterns that don't fit categories get dropped |
+| **Evaluated** | Scored, judged, filtered, ranked | Efficient downstream processing — evaluation work already done | Most constraining — downstream agents inherit the evaluation and can only work within its boundaries |
+| **Exploratory** | Threads followed, patterns noticed, tentative connections | Carries investigative momentum, may inspire further exploration | Biases receiver toward continued exploration; may carry premature commitments |
+| **Generative** | Draft prose, creative artifacts, voice samples | Carries voice, tone, authorial presence | Carries the generative posture — may suppress analytical processing |
+
+### The key insight: agent mode + data stance = processing quality
+
+Getting either one right isn't enough:
+- An investigative agent with clean prompting but **pre-evaluated data** will produce investigation-shaped evaluation (it only investigates what the evaluator already surfaced)
+- A generation agent with creative prompting but **template-structured input** will produce creative-sounding template completion
+- A synthesis agent with proper scope boundaries but **exploratory data** will be pulled into continued exploration rather than committing to a narrative
+
+The pair must be aligned. The agent's cognitive mode determines *how* it processes. The data's cognitive stance determines *what space it has to process in*.
+
+### How this shows up in the CA pipeline
+
+The CA pipeline implicitly manages data stance at every boundary:
+
+1. **L1 per-policy extraction** produces **descriptive data** (what each policy configures — observations, not findings)
+2. **Story grouping** produces **classified data** (policies organised by intent — "these three policies form a guest access story")
+3. **Framework assessment** produces **evaluated data** (maturity mapping against the NIST/Zero Trust framework)
+4. **Investigation** receives descriptive + classified data, producing **exploratory data** (threads followed, patterns noticed, emergent connections)
+5. **Synthesis** receives compressed exploratory data, producing **committed narrative** (the landscape model)
+
+Crucially, the investigation agent (step 4) receives BOTH the raw per-policy extractions (descriptive) AND the story groupings (classified). This means it can follow threads the classifier didn't anticipate — it's not limited to the classification's lens. If only the classified data were passed, the investigation would be bounded by the classifier's categories. The raw data preserves access to lower-stance information alongside higher-stance summaries.
+
+The traceability built into the system — where every claim traces back through the chain to source JSON — is a data stance mechanism. It means later agents can "pull on a thread" all the way back to descriptive data when the higher-stance summaries don't contain what they need.
+
+### Connection to RAG and data processing
+
+This theory extends naturally to how AI systems process, retrieve, and summarise data more broadly:
+
+**Current RAG treats processing as cognitively neutral.** Chunking, embedding, retrieval, and generation happen in sequence, but nobody asks what cognitive stance each step imposes on the data. A summarisation step that asks the model to both describe (what's there) and compress (what matters) produces evaluated data — the summary carries the evaluator's judgments about importance. Every downstream step inherits those judgments.
+
+**Evidence that this matters:**
+- A 2025 study found LLMs overgeneralise in 26-73% of summaries, even when prompted for accuracy. This is mode contamination in data processing — the compression operation activates evaluative patterns that reshape descriptive content. Newer models were worse, not better. ([Royal Society Open Science, 2025](https://royalsocietypublishing.org/doi/10.1098/rsos.241776))
+- Two-stage retrieval (retrieve broadly, then rerank for relevance) consistently outperforms single-stage retrieval. This is implicitly separating "find things" (descriptive stance) from "judge things" (evaluative stance). ([Pinecone rerankers guide](https://www.pinecone.io/learn/series/rag/rerankers/))
+- Microsoft's GraphRAG separates entity extraction → community detection → per-community answers → final synthesis, producing "substantial improvements in comprehensiveness and diversity." Each stage operates in a different stance. ([Microsoft Research, 2024](https://arxiv.org/abs/2404.16130))
+- The "lost in the middle" problem — where LLMs lose accuracy on information in the middle of long contexts — may be partly a data stance issue. As context grows, the model is simultaneously retrieving, evaluating, and preparing to generate. These stances interfere with each other, with the evaluative stance dominating and suppressing retrieval of information that doesn't match the emerging evaluation. ([Liu et al., 2024](https://arxiv.org/abs/2307.03172))
+
+**What a cognitively informed data pipeline would look like:**
+
+Instead of: chunk → embed → retrieve → generate (stances mixed within each step)
+
+Separate by stance:
+1. **Structural chunking** (descriptive) — break text into coherent units, no relevance assessment
+2. **Descriptive indexing** (descriptive) — what is each chunk about? Entity extraction, topic labelling. No evaluation of importance
+3. **Query decomposition** (investigative) — what are we looking for? Clean context, no source material yet
+4. **Broad retrieval** (descriptive/mechanical) — cast wide net, no relevance filtering
+5. **Relevance assessment** (evaluative) — now and only now, judge what matters. Clear criteria
+6. **Synthesis** (integrative) — connect across retained chunks. Clean context
+7. **Generation** (generative) — produce output from synthesis
+
+The handoff between each stage strips cognitive stance — structured chunk metadata (not prose summaries) between chunking and indexing, ranked lists (not explanatory text) between retrieval and relevance, filtered chunks with structured annotations (not evaluative prose) between relevance and synthesis.
+
+### What this predicts
+
+If data stance matters:
+- **Higher recall in retrieval** when investigation mode doesn't pre-filter (retrieval in descriptive stance, not evaluative)
+- **More faithful summaries** when descriptive mode is maintained (describe what's here, don't assess what matters)
+- **Better synthesis** when integrative mode operates on clean inputs (not pre-evaluated fragments)
+- **The gap should be largest on complex, ambiguous datasets** where stance contamination has the most room to operate
+
+### Open experiment: mode-controlled summarisation
+
+The cleanest test of whether data stance affects downstream processing: give the same model the same data, but explicitly control the summarisation mode:
+- **Descriptive-only**: "Report what is in this text. Do not assess importance or relevance."
+- **Evaluative-only**: "What in this text is most important? Rank by significance."
+- **Mixed** (typical): "Summarise this text."
+
+Then use each summary as input to a downstream analytical task. If the descriptive summary produces different (and potentially richer) downstream analysis than the evaluative summary, data stance is a real variable — not just a reframing of "garbage in, garbage out" but a specific, predictable, controllable property of pipeline design.
+
+This experiment doesn't require building a full RAG system. It can be run with any substantial text and any downstream analytical task. It tests the core mechanism: does the cognitive stance of data processing affect what downstream agents can discover?
+
+### Relationship to the trust chain
+
+Data stance is the trust chain operating at the information level rather than the agent level. The trust chain says: each agent's cognitive quality cascades to agents above and below it. Data stance says: each processing step's cognitive stance cascades to every step that receives its output. They're the same mechanism viewed from two angles — one looking at the agents, one looking at the data flowing between them.
+
+The practical implication: when designing a pipeline, you need to think about both the agent's mode (how it processes) AND the data's stance (what it receives). A well-designed pipeline aligns these at every boundary.
+
+---
+
 ## The Three-Tier Experiment Model
 
 When testing whether cognitive mode principles improve a prompt, we test three levels of intervention:
@@ -148,12 +245,16 @@ The cognitive science explains *why humans write differently in different modes*
 ## What We Don't Know
 
 - Whether the convergent/divergent labels are the right granularity, or whether finer distinctions matter
-- Whether creative work has a fundamentally different relationship with mode tension (the boundary test)
+- Whether creative work has a fundamentally different relationship with mode tension (the boundary test — A2 is testing this)
+- Whether voice-continuity tasks require fundamentally different pipeline architectures than analytical tasks (A2 v2 testing 2-stage vs 4-stage)
 - Whether the improvements we've seen in one domain (security policy analysis) generalise across domains
 - Whether "more detail" alone (without mode separation) explains the same improvements
 - Whether the cognitive stack model has predictive power beyond what simpler "focus your prompt" advice provides
 - What the right intervention level is for different types of tasks (some may need only Tier 2, others need Tier 3)
 - Whether the effects are model-dependent or hold across different LLMs
+- Whether data stance is a real, controllable variable in pipeline design or just a reframing of existing data quality concerns
+- Whether mode-controlled summarisation (descriptive-only vs evaluative-only vs mixed) produces measurably different downstream analysis
+- Whether the "lost in the middle" problem is partly a data stance phenomenon (mode interference during long-context processing) rather than purely architectural
 
 These are what the experiments are designed to answer.
 

@@ -1,0 +1,187 @@
+{
+  "task_id": "1c6172a292d883c8524b367c",
+  "title": "",
+  "field": "Legal",
+  "topic": "Real Estate & Property Law",
+  "turns_count": 1,
+  "difficulty": "medium",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "I have been in dispute with my landlord regarding the terms of our contract, and now they are taking me to court, but I do not believe I did anything wrong, as I have always paid my rent on time and fulfilled my tenant obligations. What can I do to prove that I am not in the wrong, and what sort of evidence should I show? Are there any legal consequences on the landlord if it is proven i was wrongly accused in english law?"
+    }
+  ],
+  "rubric": [
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user.",
+      "criteria_category": "Procedural Correctness",
+      "weight_class": "important",
+      "weight": 6,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user.",
+      "criteria_category": "Procedural Correctness",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user.",
+      "criteria_category": "Practical Utility",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Practical Utility",
+      "weight_class": "important",
+      "weight": 6,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Practical Utility",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 8,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "The model should ask more about the specifics of the case it would allow for a more relevant and valuable answer.",
+      "criteria_category": "Handling Uncertainty",
+      "weight_class": "important",
+      "weight": 5,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Practical Utility",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 9,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Application of Law to the Facts",
+      "weight_class": "critically important",
+      "weight": 8,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user.",
+      "criteria_category": "Supplemental Insight",
+      "weight_class": "critically important",
+      "weight": 9,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 8,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 9,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is crucial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 9,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "It is beneficial for the model to add this as it is central to the request of the prompt, and thus will ensure that is is relevant and valuable to the user. This would provide a more well-rounded answer.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "important",
+      "weight": 6,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "Does not add any relevant information to the user.",
+      "criteria_category": "Risk & Ethical Disclosure",
+      "weight_class": "critically detrimental",
+      "weight": -8,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "Although application is limited, knowledge of the landlord's right to levy on a tenant's goods is a point of property risk planning that should be considered by the tenant.",
+      "criteria_category": "Supplemental Insight",
+      "weight_class": "critically important",
+      "weight": 9,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "This point shows additional knowledge of the landlord's compliance obligations under data protection law but is not central to the tenant's immediate legal defense.",
+      "criteria_category": "Supplemental Insight",
+      "weight_class": "critically important",
+      "weight": 8,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "This clarification ensures the tenant understands the limits of their long-term property rights in a short-term tenancy.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "Isolates the specific statutory duty for the exterior water management systems.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 8,
+      "field_for_category": "legal"
+    },
+    {
+      "criteria_description": "Isolates the specific statutory duty for the essential utilities and internal services.",
+      "criteria_category": "Legal Accuracy",
+      "weight_class": "critically important",
+      "weight": 9,
+      "field_for_category": "legal"
+    }
+  ],
+  "num_criteria": 24,
+  "num_categories": 7,
+  "scratchpad": "The model should start by outlining that the landlord should have first attempted to resolve the dispute through ADR before starting the procedure of a court case.\nIf this has occurred with no resolution, the model should inform the user that they must gather all the evidence. This can include the contract, communications between the tenant and the landlord, and bank account statements. This would help in disproving any of the claims made by the landlord if the user believes them to be untrue.\n\nThe model should mention that if the court decides in your favour, the landlord would have to pay their/your court fees, and you could potentially sue the landlord based on the grounds of harassment. The landlord could also face criminal charges based on the serious of their conduct.\n\nThe model should answer using simple language as it can be inferred from the prompt that the user is a model."
+}

@@ -1,0 +1,131 @@
+{
+  "task_id": "f7ebc3860e344d78e2e801d6",
+  "title": "",
+  "field": "Finance",
+  "topic": "Market Microstructure, Trading & Liquidity",
+  "turns_count": 1,
+  "difficulty": "easy",
+  "conversation": [
+    {
+      "role": "user",
+      "content": "Can you help me compile a report that compares the liquidity and trading efficiency of U.S. equities in three environments? I need to analyze pre-Reg NMS (2004), post-Reg NMS (2010), and the current high-frequency trading era. Be sure to address how order routing, maker-taker fees, and dark pools have influenced different metrics such as bid-ask spreads, market depth, and price discovery.\n\nInclude a recommended structure for institutional investors who want to minimize execution costs and information leakage."
+    }
+  ],
+  "rubric": [
+    {
+      "criteria_description": "Provides factual baseline to anchor comparisons.",
+      "criteria_category": "Supplemental Insight",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Fact check",
+      "criteria_category": "Financial Accuracy",
+      "weight_class": "important",
+      "weight": 5,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Ensures the response has a micro-level comprehension of incentives.",
+      "criteria_category": "Instruction Following",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Ensures the response can clearly separate cost drivers.",
+      "criteria_category": "Process Transparency & Auditability",
+      "weight_class": "critically important",
+      "weight": 10,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Ensures the response links theory with trading tools.",
+      "criteria_category": "Practical Utility",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Confirms the response is aware of potential bias.",
+      "criteria_category": "Handling Uncertainty",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Confirms awareness of evolving venue landscape.",
+      "criteria_category": "Financial Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Confirms awareness of evolving venue landscape.",
+      "criteria_category": "Financial Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Confirms awareness of evolving venue landscape.",
+      "criteria_category": "Financial Accuracy",
+      "weight_class": "important",
+      "weight": 7,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Adds microstructure context beyond regulation alone.",
+      "criteria_category": "Supplemental Insight",
+      "weight_class": "critically important",
+      "weight": 10,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Captures core structural evolution.",
+      "criteria_category": "Instruction Following",
+      "weight_class": "critically important",
+      "weight": 10,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Verifiable regulatory mechanisms.",
+      "criteria_category": "Risk & Regulatory Disclosure",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Checks understanding of fragmentation effects.",
+      "criteria_category": "Financial Accuracy",
+      "weight_class": "important",
+      "weight": 5,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Explains microstructure mechanics.",
+      "criteria_category": "Financial Accuracy",
+      "weight_class": "important",
+      "weight": 5,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Ensures actionable advice.",
+      "criteria_category": "Practical Utility",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    },
+    {
+      "criteria_description": "Requires strategic reasoning tied to metrics.",
+      "criteria_category": "Supplemental Insight",
+      "weight_class": "slightly important",
+      "weight": 2,
+      "field_for_category": "finance"
+    }
+  ],
+  "num_criteria": 16,
+  "num_categories": 7,
+  "scratchpad": "First, gives a brief definition of market microstructure and why it matters for execution quality and liquidity\n\nAnalysis on:\n- Pre-Reg NMS (2004)\n- Post-Reg NMS (2010)\n- HFT Era (now)\n\nWalk through key mechanisms of: order routing incentives, maker-taker pricing, and dark pools/off-exchange trading\n\nMetrics:\n- compare bid-ask spreads\n- compare market depth\n- compre trade impact costs\n\nProvide a recommendation - \n- Identify which structure best serves institutionals\n-justify using evidence (research)"
+}

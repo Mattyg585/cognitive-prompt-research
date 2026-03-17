@@ -97,6 +97,76 @@ This is preferable to structural separation for interactive work because:
 
 ---
 
+## The Cognitive Stack
+
+Language patterns don't appear from nowhere. They're shaped by layers of human cognition, each one influencing the layers below it. When designing prompts, you can intervene at any layer — and **higher-layer interventions cascade further**.
+
+```
+Epistemic stance    →  How the writer relates to knowledge ("I'm discovering" vs "I know")
+    ↓
+Intent / goals      →  What the writer is trying to achieve ("understand" vs "judge")
+    ↓
+Expertise / posture →  Who the writer is in relation to the work ("consultant" vs "auditor")
+    ↓
+Cognitive mode      →  What type of thinking is active (investigating vs evaluating)
+    ↓
+Register            →  How the writer writes (hedging, commitment, vocabulary choices)
+    ↓
+Language patterns   →  Statistical regularities the LLM learned
+    ↓
+Tokens              →  What the LLM actually processes
+```
+
+Each layer shapes the one below it. Changing a single word at the epistemic layer cascades through mode, register, and language patterns to produce fundamentally different output. Empirically: the word "observation" produced exploratory output, "finding" produced judgmental output, from the same model on the same data.
+
+### Practical implications for prompt design
+
+- **Token/pattern level** (removing numeric anchors, word choice): Easy, predictable, limited scope
+- **Register level** (seeds vs lenses, instruction style): Moderate effort, shapes whole sections
+- **Cognitive mode level** (mode separation, context isolation): Architectural, high impact
+- **Expertise/posture level** (CTA, role framing): Largest unlock — "four principles on a page" in the original project
+- **Epistemic/intent level** ("observation" vs "finding", "not a verdict"): Subtle but pervasive
+
+**When designing pipeline stages**, intervene at the epistemic stance level, not just the mode level. "Stage 1: investigate" assigns a task. "Stage 1: you are discovering what's here — observations, not findings" sets an epistemic stance that cascades through everything below it. The latter produces fundamentally different output because it shapes mode, register, and language patterns simultaneously.
+
+### When to use this
+
+When designing prompts or pipeline stages, ask: at what level of the stack am I intervening? If you're only assigning tasks (mode level), you're leaving the higher layers unset — and the model will fill them from whatever's in the context. Set the epistemic stance explicitly and the lower layers follow.
+
+---
+
+## The Trust Chain
+
+In a multi-agent pipeline, each layer builds on the cognitive quality of the layer below it. This maps directly to the cognitive stack — and the cascade works in both directions.
+
+**Upward**: If a lower layer uses evaluative language ("finding", "critical", severity ratings), that register propagates upward. Investigation pre-filters because the input already carries evaluative mode. Synthesis compresses prematurely because the investigation output already carries commitment.
+
+**Downward**: If the synthesis layer is contaminated (e.g. QA mixed with synthesis), the handover sets a different tone for everything that follows. Each downstream consumer inherits that tone.
+
+### The schema as cognitive boundary
+
+Structured handoffs strip cognitive mode. A structured record doesn't carry the exploratory tone of the investigation that produced it. A database row, a JSON object, a schema-bound handoff document — these force compression into defined fields. The fields carry information but not the cognitive posture that produced the information.
+
+**The schema IS the cognitive boundary.** Designing the handoff schema is designing the trust chain. What crosses between stages — and in what form — determines whether cognitive quality cascades cleanly or contaminates.
+
+### The compression-expansion chain
+
+The strongest pipeline pattern:
+
+```
+convergent compression → preserves relationships → makes emergent patterns visible
+    → divergent stage recognises those patterns AND generates novel framings
+    → convergent compression → next divergent stage
+```
+
+Emergence is the precondition. Divergence is what you do with emergent patterns once they're visible. Convergent compression enables divergent reasoning, not the other way around.
+
+### When to use this
+
+When designing pipelines, ask: what is the trust chain? Trace how cognitive quality flows between stages. If Stage 1 outputs exploratory prose and Stage 2 receives it raw, Stage 2's context is already biased regardless of its own prompt. If Stage 1 outputs a structured schema, Stage 2 receives information without cognitive residue. Design the handoff to be the cognitive boundary.
+
+---
+
 ## Convergent and Divergent: A Useful Shorthand
 
 These labels are imprecise. They may be pointing at something real without naming it precisely — possibly "scope control" is the deeper mechanism. But they're useful for seeing patterns.

@@ -123,10 +123,12 @@ Can cognitive mode separation move the needle on established benchmarks? The A-s
 
 **Key difference**: A-series asks "is the output better?" (subjective). B-series asks "does it pass?" or "does it score higher on expert rubrics?" (objective).
 
-| # | Benchmark | Domain | Scoring | Why |
-|---|-----------|--------|---------|-----|
-| B1 | SWE-bench Verified | Code (real GitHub issues) | Pass/fail on gold tests | Industry-standard coding benchmark; scaffold differences account for 10-25pp; Arize showed +10% from CLAUDE.md alone |
-| B2 | PRBench (Scale AI) | Law & Finance | Expert rubric (11 dimensions) | Top models at 37-39% on hard set; benchmark's own paper documents "correct conclusions through opaque reasoning" — our exact phenomenon |
+| # | Benchmark | Domain | Scoring | Why | Status |
+|---|-----------|--------|---------|-----|--------|
+| ~~B1~~ | ~~SWE-bench Verified~~ | ~~Code (real GitHub issues)~~ | ~~Pass/fail on gold tests~~ | ~~Industry-standard coding benchmark~~ | **Dropped** — baseline passed all tasks (easy/medium/hard). Binary pass/fail on convergent coding tasks leaves no room for prompt architecture to differentiate. Coding benchmarks are saturated for this research question. |
+| B2 | PRBench (Scale AI) | Law & Finance | Expert rubric (11 dimensions) | Top models at 37-39% on hard set; benchmark's own paper documents "correct conclusions through opaque reasoning" — our exact phenomenon | **Active** — thesis pre-registered, testing complex analytical judgment |
+
+**B1 finding**: Cognitive mode separation does not measurably improve convergent, deterministic tasks where the baseline already succeeds. The Anthropic SWE-bench scaffold (minimal 5-step prompt) produced correct fixes matching gold patches on all three tasks (scikit-learn easy, django medium, sympy hard). This is itself a useful result — it narrows the theory to tasks requiring divergent analytical judgment, not convergent problem-solving.
 
 **Prior art**: Arize AI achieved +10% on SWE-bench via automated prompt optimization. Aider's Architect mode (cognitive split: reasoning vs editing) produced SOTA results. Agentless (pipeline: localize → repair → validate) outperformed agent approaches at 1/10th the cost. These teams accidentally discovered what our theory predicts — nobody has done it systematically.
 
@@ -143,8 +145,8 @@ Can cognitive mode separation move the needle on established benchmarks? The A-s
 1. **A1 (Legal)** — richest test case, genuine interleaving of investigation + evaluation + generation (DONE)
 2. **A6 (SecOps)** — 4-mode mixing, numeric anchor ("5 Whys"), adjacent to original project domain (DONE)
 3. **A2 (Marketing)** — creative generation domain, tests template anchor suppression (DONE)
-4. **B1 (SWE-bench)** — objective pass/fail scoring on industry benchmark
-5. **B2 (PRBench)** — expert rubric scoring on professional reasoning benchmark
+4. ~~**B1 (SWE-bench)**~~ — dropped: baseline saturated, binary scoring can't differentiate
+5. **B2 (PRBench)** — expert rubric scoring on professional reasoning benchmark (active)
 6. **C1 (Creative)** — boundary test, most theoretically interesting
 7. Remaining as capacity allows
 

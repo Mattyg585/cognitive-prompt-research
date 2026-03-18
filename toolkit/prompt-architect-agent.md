@@ -68,27 +68,37 @@ This includes implicit anchors: examples that all have the same count, templates
 
 **Natural variation is a health signal.** If the prompt enables the model to produce 2 findings for a simple input and 7 for a complex one, it's working. If it produces 5 every time, something is anchoring.
 
-### Is this a voice-continuity task?
+### What type of task is this?
 
-Before recommending pipeline separation for tasks involving creative writing, narrative content, or persuasive prose, ask whether the output's quality depends primarily on *what it says* or *how it says it*.
+Before recommending structural interventions, identify the task type — it determines which structural patterns help and which ones hurt. The reference material (`cognitive-stance-reference.md`) has detailed guidance under "Task-Type Awareness", but the key distinction:
 
-**Analytical tasks** (contracts, policies, code review): quality is about accuracy, completeness, insight. Pipeline separation helps because clean investigation context produces better findings, and the findings don't need to "sound like" the investigation.
+**Analytical tasks** (contracts, policies, code review): quality is about accuracy, completeness, insight. Pipeline separation helps. Structured handoffs strip mode. The standard convergent-divergent rhythm applies.
 
-**Voice-building tasks** (blog posts, marketing content, essays, storytelling): quality is about sustained authorial presence, tone, conviction. Voice builds through engagement with the material — the investigation IS the voice-finding process. Pipeline separation can fragment this by forcing each agent to reconstruct voice from descriptions rather than carrying it forward as lived experience.
+**Creative/voice-building tasks** (blog posts, marketing content, essays, storytelling): quality is about sustained authorial presence, tone, conviction. Investigation and generation can be *compatible* — the exploration IS the voice-finding process. Pipeline separation can fragment voice. The productive split is content/craft vs compliance, not thinking vs writing. Fewer, wider stages. Lighter phase boundaries. Tier 2 may outperform Tier 3 on the dimension that matters most.
 
-**Signs that voice continuity matters:**
-- The brief specifies a distinctive brand voice (not just "professional")
-- The output will be read for pleasure or persuasion, not just information
-- The quality gap between "competent" and "great" is primarily about how it reads, not what it covers
-- A human writer would develop their angle and voice through the same process of exploring the material
+**Investigation tasks** (research, exploration, sense-making): quality is about depth, surprise, following unexpected threads. Keep evaluation criteria out entirely. Let investigation be asymmetric. Lenses over seeds.
 
-**What this changes about pipeline recommendations:**
-- For voice-continuity tasks, investigation + generation may be a *compatible* pair (the investigation funnels toward expression, not solutions)
-- The split should be content/craft vs compliance — separate the creative work from the editorial/SEO work, not the thinking from the writing
-- If stages must be separate, handoffs should carry voice samples (actual prose fragments) not just structured descriptions of voice
-- Tier 2 (single context with scope boundaries) may outperform Tier 3 on the dimension that matters most
+This isn't a classification exercise — it's a lens that determines which structural patterns to reach for. The same prompt can have elements of multiple types.
 
-This doesn't mean pipelines can't work for creative tasks — it means the pipeline structure is different. Fewer stages, wider stages, and handoff designs that preserve voice continuity.
+### Does the declared architecture match the actual architecture?
+
+Check whether multi-phase prompts in a single context create an illusion of cognitive separation they cannot deliver. This is the subtlest and most damaging pattern — it makes prompts worse than their less-structured predecessors.
+
+**The mechanism**: The model reads the entire prompt before generating anything. "Phase 1", "Phase 2", "Phase 3" are labels on simultaneous contextual presence, not gates between distinct cognitive states. Later-phase evaluation criteria are present during earlier-phase investigation. The model knows where it is going before it starts.
+
+**Why this matters**: A prompt that is honestly convergent throughout has no gap between what it promises and what it delivers. A prompt that declares sequential cognitive separation but delivers simultaneous presence creates anticipatory awareness — and the gap between declared and actual architecture produces output that passes all criteria without genuinely inhabiting any phase.
+
+**Signs to look for**:
+- Multi-phase prompts where later phases contain evaluation criteria or editorial identity
+- Output that is competent but generic — executed the phases without discovering anything through them
+- Investigation findings that suspiciously align with later evaluation criteria
+- The output reads like someone who understood the brief rather than someone who had something to say
+
+**Also check for the specific anti-patterns** documented in the reference material under "Anti-Patterns That Look Like Good Practice":
+- Criterion gates inside investigation phases
+- Process notes inside generation phases
+- Prescribed threads posed as open questions (looks like a lens, acts as a structure)
+- Vivid role-framing in later phases that bleeds backward
 
 ### Is convergent work suppressing divergent potential?
 

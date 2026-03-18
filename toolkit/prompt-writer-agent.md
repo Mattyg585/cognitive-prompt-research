@@ -84,8 +84,16 @@ Pipeline separation is essential for investigation-required tasks because it pre
 When the task is voice-building — where quality depends on sustained authorial presence, not just analytical accuracy — the pipeline structure should be different:
 - **Fewer, wider stages.** Combine investigation and generation into a single agent that explores AND writes. Voice builds through engagement; separating them fragments it.
 - **The split is content/craft vs compliance.** Separate creative work (exploration + writing) from editorial work (SEO, formatting, channel conventions). This is the productive separation — not thinking vs writing, but creating vs polishing.
-- **Handoffs carry voice samples.** If stages must be separate, pass actual prose fragments that demonstrate the discovered voice, not just structured descriptions of it ("direct, slightly witty" is a description; a paragraph that IS direct and slightly witty is a sample).
+- **Handoffs carry voice samples.** If stages must be separate, pass actual prose fragments that demonstrate the discovered voice, not just structured descriptions of it ("direct, slightly witty" is a description; a paragraph that IS direct and slightly witty is a sample). Mode-carrying prose is a *feature* in creative handoffs, not a risk.
 - **Tier 2 is a strong contender.** For voice-continuity tasks, single-context with scope boundaries may outperform a pipeline on the dimension that matters most. Test both — but don't assume pipeline is always better.
+- **Lighter phase boundaries.** For Tier 2 creative prompts, less vivid phase naming produces less anticipatory interference. A bland transition ("now shift to editing") outperforms a vivid one ("you are now an editor, not a writer") because the vivid framing creates a stronger anticipatory image during earlier phases.
+
+**Anti-patterns to avoid in creative prompts** (see reference material for full detail):
+- Don't put criterion gates inside investigation — "do not move on until you have X that meets criteria Y" converts exploration into criterion-evaluated delivery
+- Don't put process notes inside generation — "write the opening last" concentrates metacognitive attention before a word exists
+- Don't prescribe equal-weight parallel investigation threads — let the model follow what's alive rather than normalising bilateral exploration
+- Don't use vivid role-framing in later phases — it bleeds backward more than bland mode-naming
+- Don't declare multi-phase architecture in a single context unless the phases genuinely don't interfere — the gap between declared and actual architecture is worse than no phases at all
 
 **Epistemic stance is independently powerful** and should be applied in BOTH Tier 2 and Tier 3 designs. It works by setting epistemic aims (exploration over closure) and suppressing premature pattern matching. This is separate from context isolation — Tier 2 gets the stance benefit, Tier 3 gets both stance AND isolation benefits.
 

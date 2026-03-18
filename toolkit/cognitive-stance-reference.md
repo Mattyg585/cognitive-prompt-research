@@ -97,6 +97,82 @@ This is preferable to structural separation for interactive work because:
 
 ---
 
+## Task-Type Awareness
+
+Different types of tasks need different structural approaches. The principles above are universal, but how you apply them depends on what the task is actually asking for. The model can infer task type from the prompt — the key is knowing what to do differently once the type is identified.
+
+### Analytical tasks (contracts, policies, code review, compliance)
+
+Quality is primarily about accuracy, completeness, and insight. The output is judged on *what it says*, not *how it says it*.
+
+- Pipeline separation helps because clean investigation context produces better findings
+- Handoffs should strip cognitive mode — structured data (bullets, JSON, key-value) is the right boundary
+- The convergent-divergent rhythm (compress → reason → compress → reason) applies directly
+- Investigation and evaluation are reliably incompatible — separate them
+
+### Creative and voice-building tasks (blog posts, marketing, essays, storytelling)
+
+Quality is primarily about sustained authorial presence, tone, and conviction. The output is judged on *how it reads*, not just *what it covers*.
+
+- Investigation and generation can be **compatible** — the exploration IS the voice-finding process
+- Pipeline separation can fragment voice by forcing each agent to reconstruct it from descriptions rather than carrying it forward as lived experience
+- The productive split is content/craft vs compliance — separate creative work from editorial/SEO work, not thinking from writing
+- Handoffs between creative stages should carry **voice samples** (actual prose fragments), not just structured descriptions. Mode-carrying prose is a feature here, not a risk
+- Fewer, wider stages outperform many narrow ones
+- Lighter, less vivid phase boundaries create less anticipatory interference than vivid ones (see anti-patterns below)
+- Tier 2 (single context with scope boundaries) may outperform Tier 3 on the dimension that matters most
+
+### Investigation and research tasks (exploration, fact-finding, sense-making)
+
+Quality is about depth, surprise, and following threads that weren't anticipated.
+
+- Lenses over seeds — guide how to look, not what to find
+- Let investigation be asymmetric — don't prescribe equal-weight parallel threads
+- Keep evaluation criteria out of the investigation context entirely
+- Compression between investigation and downstream reasoning is critical
+
+### The inference question
+
+The model can usually infer task type from the prompt it's reading. The architect's first move is always "what is this prompt actually asking for?" — and it gets this right. The issue is not inference accuracy. It's that after correctly inferring the task type, the agents need to reach for **different structural patterns** rather than applying the analytical-task skeleton with modifications. The guidance above provides those different patterns.
+
+---
+
+## Anti-Patterns That Look Like Good Practice
+
+These patterns appear in well-crafted prompts and feel like improvements. They produce worse output because of how they interact with the model's anticipatory processing. They were identified through empirical testing — a prompt with these patterns scored below baseline despite being structurally more sophisticated.
+
+### Declared architecture that doesn't match actual architecture
+
+A prompt names sequential phases ("Phase 1: Investigate", "Phase 2: Write", "Phase 3: Polish") but all phases exist in the same context window. The model reads the entire prompt before generating anything. Phase labels create an illusion of sequential cognitive separation that does not actually exist.
+
+**Why this is worse than no phases at all**: A prompt that is honestly convergent throughout has no gap between what it promises and what it delivers. A prompt that declares investigate → generate → edit but delivers all three simultaneously creates anticipatory awareness of later phases during earlier ones. The model investigates knowing how it will be evaluated. The gap between declared and actual architecture produces output that passes all criteria without genuinely inhabiting any phase.
+
+**Mitigation**: For analytical tasks, use actual pipeline separation. For creative tasks, use lighter phase boundaries — or remove later-phase criteria entirely and present them after the draft (two-turn interaction).
+
+### Criterion gates inside investigation
+
+"Do not move to Phase 2 until you have an angle. Choose the one that most directly addresses X and Y."
+
+This converts open investigation into criterion-evaluated delivery. The model finds things that pass the gate rather than things that are alive. It exits investigation in evaluative mode, not generative mode. The output passes the selection criteria but lacks the quality of something genuinely found.
+
+### Process notes inside generation
+
+"The opening should be written last, once you know what the piece became."
+
+Good advice for a human writer. For a model in a single-pass context, this concentrates metacognitive attention on the opening before a word of the draft exists. The model enters generation self-monitoring rather than generating. The instruction's intent is to improve the opening; the effect is to pre-load it with evaluative attention.
+
+### Prescribed threads posed as open questions
+
+"Follow two threads: Thread 1 (product) and Thread 2 (reader)."
+
+This looks like a lens — it uses exploratory language ("follow," "what's actually happening here?"). But the parallel equal-weight structure normalises bilateral investigation. Real investigation is asymmetric — sometimes one thread is everything. The anti-pattern is not the threads themselves but the equal-weight parallel framing that suppresses the follow-where-it-leads quality.
+
+### Vivid role-framing in later phases
+
+"You are an editor, not a writer" in a later phase creates a stronger anticipatory image during earlier phases than bland mode-naming would. The more vivid the later-phase identity, the more it bleeds backward. Paradoxically, less craftsmanship in phase transitions can produce cleaner cognitive separation.
+
+---
+
 ## The Cognitive Stack
 
 Language patterns don't appear from nowhere. They're shaped by layers of human cognition, each one influencing the layers below it. When designing prompts, you can intervene at any layer — and **higher-layer interventions cascade further**.

@@ -133,11 +133,77 @@ The theory (cognitive mode separation improves output) appears sound. The implem
 
 ---
 
+## v3 Agent Iteration Results (March 2026)
+
+After three iterations of the prompt-architect and prompt-writer agents, we re-ran A1 and A2 to test whether the improved agents produced better prompts and whether the findings held.
+
+### A1 (Legal Contract Review) — v3
+
+| Tier | Score (6-dim) | Key Observation |
+|------|--------------|-----------------|
+| Baseline | 17/30 | Standard clause-by-clause review. Competent, template-shaped |
+| Optimised (v3) | 23/30 | Stronger investigation, working theory, strategy posture shift |
+| Pipeline (v3, 3-stage) | 28/30 | Found 8 things Tier 2 missed: suspension compound risk, data rights cascade, post-termination ML persistence |
+
+The v3 pipeline reduced from 4 stages to 3 (folding Redline Writer into Playbook Evaluator) without quality loss. The investigation-evaluation separation — the critical boundary — was preserved. The pipeline's qualitative advantage persisted across all three agent versions: Tier 2 got incrementally better each time, but never closed the gap on compound risk discovery.
+
+### A2 (Marketing Content) — v3
+
+| Tier | Score (6-dim) | Key Observation |
+|------|--------------|-----------------|
+| Baseline | 16/30 | "How to Fix X Without Y" — formula headline, product tour structure |
+| Optimised (v3) | 23/30 | Has a thesis ("your tools are synchronous"), confident voice |
+| Pipeline (v3, 2-stage) | 28/30 | Has genuine voice — reads like someone who lived the problem |
+
+The v3 Tier 2 **reversed the v2 regression**. The v2 Tier 2 had over-engineered the creative prompt with criterion gates and declared phases, creating anticipatory interference worse than no optimisation at all. v3 went lighter — "Read the brief as a writer, not as someone filling a template" — and it worked.
+
+The pipeline headline ("You Already Know What Happened Last Night. You Just Don't Know It Yet.") was the best headline across all versions and tiers. The compliance editor's notes on the closing lines — "any editorial intervention there would be vandalism" — capture the voice gap between tiers.
+
+### Agent Iteration Findings
+
+Three versions of the agents revealed different improvement dynamics for different task types:
+
+**Analytical tasks (A1) respond to progressive refinement.** v1→v2→v3, each measurably better. More precise mode separation, cleaner lenses, stronger strategy posture shift. The agents can keep improving these prompts incrementally.
+
+**Creative tasks (A2) have an over-engineering trap.** v2 regressed because the writer added analytically-sound structures (criterion gates, declared phases) that created new interference in creative work. v3 fixed this by going lighter. The lesson: for creative tasks, the ceiling is reached by doing less, not more.
+
+**The anti-pattern vocabulary prevents regression.** Adding "criterion gates create anticipatory interference" and "declared vs actual architecture" to the agents' reference material is what prevented v3 from repeating v2's mistakes. The agents learn from documented failures.
+
+---
+
+## The Decision Heuristic
+
+The sharpest predictor of which tier earns its cost:
+
+> **Can the correct output be produced without examining the specific input data?**
+>
+> **Yes** → Recognition-primed. Tier 2 is sufficient. The model is deploying schemas from training.
+> **No** → Investigation-required. Tier 3 earns its cost. The answer lives in the data.
+> **Partially** → Fuzzy middle. Tier 2 gets you 80%. Tier 3 gets you voice/depth. Cost-benefit depends on use case.
+
+This maps to established cognitive science frameworks:
+- **Premature closure** (Croskerry, 2003): The pipeline is a forced differential before diagnosis
+- **Recognition-Primed Decision** (Klein): RPD is efficient for familiar patterns, harmful for novel situations
+- **Expertise reversal effect** (Kalyuga, 2007): Scaffolding that helps on novel tasks degrades performance on familiar ones
+- **Knowledge-telling vs knowledge-transformation** (Bereiter & Scardamalia): Monolithic prompts allow knowledge-telling; pipelines force knowledge-transformation
+
+### RAG Implication
+
+The same dynamic applies to Retrieval-Augmented Generation. Standard RAG stuffs retrieved chunks into context and generates — investigation and evaluation in the same pass. The model does RPD on the chunks, finding what it already knows how to classify.
+
+For RAG over documents the model hasn't seen before (legal discovery, medical records, financial filings, codebase Q&A), this predicts premature closure: competent-looking answers that miss what's genuinely novel in the retrieved data.
+
+A1 contract review is functionally a RAG task — the contract is the "retrieved document." The pipeline's findings that Tier 2 missed are exactly what this theory predicts. Testable with the same three-tier design applied to a RAG system.
+
+---
+
 ## Raw Data
 
 All outputs, evaluations, and pipeline artifacts are in the experiment directories:
 
 **Claude (Opus 4.6)**: `experiments/A{1-6}/` (root level — baseline-runs, optimised-runs, pipeline-runs, evaluation, blind-comparison)
+
+**v3 iterations**: `experiments/A{1,2}/baseline-runs-v3/`, `optimised-runs-v3/`, `pipeline-v3-runs/`, `evaluation/blind-evaluation-v3.md`
 
 **Cross-model**: `experiments/A{1-6}/{model-name}/` where model-name is:
 - `gpt-5.1-codex-max`

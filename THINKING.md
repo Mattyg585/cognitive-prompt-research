@@ -2,93 +2,150 @@
 
 *A working document for threads that aren't resolved yet. Not conclusions — the stuff between conclusions.*
 
-Last updated: 17 March 2026
+Last updated: 18 March 2026
 
 ---
 
 ## Where we are (the honest version)
 
-I had a theory about cognition and AI — that language carries cognitive mode, and managing it deliberately improves output. The theory holds. But its application is more interesting than I expected.
+The theory held. The agents work. The experiments confirmed the pattern across three iterations. And I'm clearer now about what this actually is — and where the edges are.
 
-**The lightweight intervention (cognitive hygiene) appears universal.** Setting the epistemic stance — "explore the landscape before reaching conclusions" — improves output on every complex task we've tested, across every model. It's one sentence in a system prompt. No architectural change. No risk of making things worse.
+**Tier 2 (cognitive hygiene) is the universal win.** Setting epistemic stance, removing anchors, replacing seeds with lenses. Works on everything. Every model. Every domain. Zero risk. 0.76 to 0.95 on expert-scored benchmarks from a single system prompt. The agents that produce these fixes are now robust — three versions in, they handle both analytical and creative tasks correctly without over-engineering. This is ready.
 
-**The heavyweight intervention (pipeline separation) is an amplifier.** When the conditions are right (strong model, novel data to investigate, genuine discovery needed), it turns good output into qualitatively different output — the kind that changes how you think about the problem. When the conditions are wrong (knowledge-based reasoning, weaker models, over-engineered handoffs), it can be catastrophic — information loss, wrong artifacts, introduced bias.
+**Tier 3 (pipeline separation) is specifically powerful.** Not universally. The boundary is sharper than it was:
 
-The theory is validated. The lightweight application is ready to share. The heavyweight application has fuzzy edges I can't yet pin down. There's something here but I need help teasing it out.
+> Can the correct output be produced without examining the specific input data?
+> If yes — recognition-primed. Tier 2 is sufficient.
+> If no — investigation-required. Tier 3 earns its cost.
 
----
+A1 (contract review) is investigation-required: the model must discover clause interactions, compound risks, and counterparty leverage from a specific document it hasn't seen. The pipeline found the suspension compound risk, the data rights cascade, the post-termination ML model persistence — across three versions of the experiment, Tier 2 never found these. The gap didn't close.
 
-## What we know (solid ground)
+B2 (PRBench/HSR law) is recognition-primed: the model is deploying legal knowledge it learned in training. The pipeline lost procedural details in handoffs. Tier 2 won.
 
-**The cognitive stack is real and useful.** Intervening at the epistemic stance level ("explore before concluding") cascades through everything below. 0.76 to 0.95 on expert-scored benchmarks from a single system prompt. This works across models, across domains, and costs nothing architecturally. If you take one thing from this research, this is it.
+A2 (marketing content) sits in the fuzzy middle: Tier 2 gets you 80% there (has a thesis, good structure), Tier 3 gets you voice (reads like someone who lived the problem, not someone who thought about it). Whether that last 20% is worth 2x the cost depends on what you're doing with the output.
 
-**Convergent work is resilient to mode contamination.** Coding benchmarks (SWE-bench) — baseline passed everything. Domain accuracy on PRBench — 1.0 across all tiers. When the task has a clear right answer and the model knows the domain, mode mixing doesn't hurt. The model compensates.
-
-**The pipeline is powerful but specific.** CA policy pipeline: massive improvement. A-series on strong models: qualitative leaps. PRBench: overcooked. Cross-model: catastrophic failures on weaker models. The pipeline isn't a universal upgrade — it's a specific tool for specific conditions.
-
----
-
-## What we think but can't yet prove
-
-**The pipeline's value tracks with "adaptive expertise."** The pattern: pipeline helps when the model must investigate data it hasn't seen before and build novel understanding. Pipeline doesn't help when the model is reasoning from training knowledge (even complex reasoning). The CA pipeline is adaptive expertise — the model discovers naming families, team patterns, policy debt from real data. PRBench is routine expertise — the model organises what it already knows about HSR law.
-
-**Nobody in AI is benchmarking adaptive expertise.** Every benchmark tests recall, accuracy, or convergent reasoning. Nobody tests "can you walk into something you've never seen and figure out what's going on?" PRBench, SWE-bench, MMLU, HELM — all routine expertise. The benchmarks that would validate the pipeline thesis don't exist yet.
-
-**The cognitive framework is actually a design methodology.** Not just theory. CTA for stage boundaries. Cognitive stack for intervention level. Trust chain for handoff design. This tells you HOW to design AI systems for novel data, which is what everyone building agents is trying to figure out through engineering iteration.
+**The agents are robust now.** Three iterations of the architect and writer, testing on both analytical (A1) and creative (A2) tasks. The v3 agents fixed the A2 Tier 2 regression — where v2 over-engineered the creative prompt with gates and declared phases that created anticipatory interference. The anti-pattern vocabulary ("criterion gates," "declared vs actual architecture") prevents the same mistake from recurring. The evaluator produces consistent blind scores across versions.
 
 ---
 
-## The threads I can't resolve yet
+## What's resolved (threads that were open, now answered)
 
-### What exactly is the pipeline's niche?
+### "What exactly is the pipeline's niche?"
 
-I keep circling this. "Data-intensive adaptive expertise" is the best label but it doesn't fully satisfy. The CA pipeline works because of: real data (50+ policies), genuine investigation (not recall), investigation + evaluation toxic pair on discovered information, repeated use (amortized design cost). PRBench fails because none of these apply. But where's the line? Is a lawyer reviewing ONE specific contract (A1) closer to CA or PRBench? A1 showed pipeline improvement, but the contract was a single document in one context — not 50 policies requiring chunking.
+**Resolved.** The niche is investigation-required tasks. Multiple cognitive science frameworks converge on the same boundary:
 
-Maybe the line isn't data volume. Maybe it's about whether the model is DISCOVERING or RECALLING. A1 discovers things about a specific contract it hasn't seen. PRBench recalls things about HSR law it's already trained on. Even though A1 has one document and PRBench has a complex question, the cognitive demand is different.
+- **Premature closure** (Croskerry, 2003, from diagnostic medicine): The single most common cognitive error — accepting a diagnosis before investigation is complete. The investigation-evaluation toxic pair IS premature closure. Medicine's intervention is the same as our pipeline: force a differential before committing. Stage 1 is a forced differential.
 
-### Why did the A-series pipeline work when PRBench didn't?
+- **Recognition-Primed Decision** (Klein): Under monolithic prompting, the model does RPD — recognizes a pattern, activates the first plausible response template. For recognition-primed tasks, RPD is efficient and appropriate (why Tier 2 works on PRBench). For investigation-required tasks, RPD forces novel situations through familiar templates.
 
-The A-series tasks HAD external data (a contract, interview transcripts, incident logs, debug output). PRBench didn't — it was pure knowledge-based reasoning. Maybe the pipeline's value isn't about data VOLUME but about whether there's external data AT ALL. Any external data creates genuine investigation. No external data means the model is organising recall, and Tier 2 is sufficient.
+- **Epistemic vs pragmatic actions** (Kirsh & Maglio, 1994): Stage 1 is an "epistemic action" — it doesn't serve the client directly, it changes the computational state available to later stages. Like rotating Tetris pieces to see how they look. The pipeline "wastes" a pass on investigation, but it changes what later stages can see.
 
-But the A-series pipelines were also v0.1 and evaluated by LLM judges. Would they have shown the same pattern against expert rubrics? Would Tier 2 have matched them on A-series with better epistemic stance prompting? We don't know because A-series Tier 2 prompts were designed before we understood that epistemic stance was the active ingredient.
+- **Expertise reversal effect** (Kalyuga, 2007): The B2 pipeline failure is literally this — scaffolding that helps novices degrades expert performance. The model was already expert at HSR law. The pipeline imposed investigative scaffolding on a task that didn't need investigation.
 
-### Is there a "Tier 2.5"?
+The reframe that works: **"Recognition-primed vs investigation-required tasks."** Adaptive expertise describes types of experts, not types of tasks. What we need is a task-level predictor. Does the task present patterns the model has already learned from training, or must new patterns be discovered from the input?
 
-The gap between Tier 2 (one prompt) and Tier 3 (full pipeline) is big. Is there something in between? Maybe: a single prompt with multiple phases that explicitly manages epistemic stance shifts within the response. Or: two stages instead of three. Or: a pipeline that passes full context (not compressed handoffs) between stages, getting clean epistemic stance at each stage without the information loss.
+### "Why did the A-series pipeline work when PRBench didn't?"
 
-The B2 pipeline's failure mode was information loss in handoffs. The Tier 2 prompt's success was holding everything in one context with an epistemic stance reset. A Tier 2.5 might be: separate sessions (clean context) but without aggressive schema compression. Each stage gets the full prior output, not a compressed handoff. You get mode separation without information loss. But then you lose the "schema strips cognitive residue" benefit. Trade-offs all the way down.
+**Resolved.** The A-series tasks had external data that required investigation. PRBench had knowledge-based questions that required recall. The pipeline's value is about whether there's genuine investigation to protect from premature closure — not about data volume, not about task complexity.
 
-### What's the thing my brother is building?
+The v3 experiments confirmed this: even with a better Tier 2 prompt (three iterations of improvement), the pipeline still found things Tier 2 missed on A1. The investigation-evaluation separation is the critical boundary, and it can't be replicated within a single context.
 
-He's working on AI that handles code it hasn't seen before. That's the same problem. The model has domain expertise (knows how to code) but must investigate unfamiliar data (a new codebase) and figure out what's going on. That's adaptive expertise. The cognitive pipeline methodology would predict: the model needs to investigate without evaluating, build understanding before committing to changes, and separate the "what's here" question from the "what should I do about it" question. Which is... kind of what good coding agents already do (explore → plan → implement → verify). But they do it through engineering intuition, not through CTA-derived cognitive mode boundaries.
+### "Is 'adaptive expertise' even the right frame?"
 
-### Is "adaptive expertise" even the right frame?
+**Partially resolved.** "Adaptive expertise" (Hatano & Inagaki) describes a real phenomenon but is academic language that doesn't land. The better frame for non-academic audiences is premature closure: "When AI must investigate something it has never seen before, mixing investigation with evaluation causes it to see only what it already knows how to classify. Separating them lets it discover what is actually there."
 
-When I try to explain this to someone who isn't in my head, "adaptive expertise" doesn't land. It's too academic. The thing I'm trying to point at is more like: the ability to figure out something you haven't seen before. A troubleshooter. A consultant. A detective. Someone who holds uncertainty while they investigate and resists the urge to pattern-match to something familiar.
+The litmus test is intuitive: **Could the correct analysis be produced without seeing the data?** If you could answer correctly from training alone, it's recognition-primed. If the answer lives in the specific data, it's investigation-required.
 
-Maybe the frame is simpler than I'm making it. Maybe it's just: **AI is great at answering questions but struggles with investigating situations.** Questions have answers. Situations have patterns that must be discovered. The pipeline protects the discovery process. The epistemic stance gives the model permission to discover. Both serve the same thing — helping the model investigate rather than just answer.
+### "Would Tier 2 have matched Tier 3 on A-series with better prompting?"
 
-### Why does nobody benchmark this?
+**Answered by v3 experiments.** No. The v3 Tier 2 prompt was three iterations better than v1. On A1, it still missed the compound risks the pipeline found. The gap is architectural, not prompt-quality. On A2 (creative), Tier 2 got much closer to pipeline quality — confirming that creative tasks are genuinely a different category where the pipeline's advantage is about voice quality, not about discovering missing information.
 
-Because it's hard to measure. "Did you find the right answer?" is easy to score. "Did you discover the interesting pattern in this unfamiliar data?" requires domain experts who can assess whether the pattern is genuine and valuable. PRBench's rubric gets close (it has "Supplemental Insight" and "Handling Uncertainty" categories) but it tests knowledge-based reasoning, not investigation of novel data.
+---
 
-To benchmark adaptive expertise, you'd need to: provide real, novel data that the model can't have trained on. Ask it to investigate. Have domain experts evaluate whether the investigation surfaced genuine, valuable patterns. That's expensive, slow, and domain-specific. Nobody funds it because it doesn't produce leaderboard numbers.
+## What's sharper (threads still open but better understood)
+
+### The Tier 2.5 question
+
+Still open, but the theory now predicts what will happen. If the investigation session receives no evaluative instructions, it's functionally Tier 3. If it gets a combined prompt with phases, it's Tier 2 with extra cost — the recognition-primed patterns still activate. The cognitive science is clear: premature closure operates at the level of what's in context, not at the level of explicit instructions. You can't instruction your way out of it; you need context isolation.
+
+The 2-stage pipeline for A2 (creative agent + compliance editor) is effectively a Tier 2.5 that works — but it works because the two stages have genuinely different cognitive modes (creative generation vs editorial compliance), not because it's a lighter pipeline. The reduction from 4 stages to 2 stages didn't lose quality because the boundary that mattered (creation vs editing) was preserved.
+
+### The agent iteration story
+
+Three versions of the agents told us something important about creative vs analytical tasks:
+
+**Analytical tasks respond to progressive refinement.** Each version of the A1 architect analysis and writer output improved incrementally. More precise diagnosis, cleaner separation, better lenses. v1→v2→v3, each measurably better.
+
+**Creative tasks have an over-engineering trap.** The v2 A2 Tier 2 prompt regressed below v1 because the writer added criterion gates, declared phases, and prescribed parallel threads. These sounded good analytically but created anticipatory interference in creative work — the model could see the evaluation criteria while trying to write, so it wrote toward the criteria instead of toward the reader. v3 fixed this by going lighter: "Read the brief as a writer, not as someone filling a template."
+
+The lesson: for creative tasks, the ceiling is reached by doing less, not more. The anti-pattern vocabulary we added to the agents ("criterion gates create anticipatory interference") is what prevented the same mistake in v3.
+
+### The RAG implication
+
+This emerged late and feels important. Standard RAG is a monolithic prompt: stuff retrieved chunks into context, ask the model to answer. The model does RPD on the retrieved data — recognizes patterns it already knows, activates familiar templates, produces a competent answer that looks like it engaged with the documents.
+
+The premature closure dynamic is identical to what we saw in A1:
+
+- **Standard RAG**: Retrieve → Generate. Investigation and evaluation in the same context. The model sees the chunks through the lens of what it already knows how to say.
+- **Tier 2 RAG**: Same architecture, better epistemic stance. "Investigate these documents" instead of "answer from these documents." Cheap improvement, same ceiling.
+- **Tier 3 RAG**: Separate investigation pass over retrieved chunks — what is actually in this data, what's surprising, what doesn't fit familiar patterns — before a second pass that synthesizes/answers. Forced differential before diagnosis.
+
+The litmus test maps directly: **Is the answer already in the model's training, with RAG just providing citation support?** Standard RAG is fine. **Must the answer be discovered from the retrieved documents?** Standard RAG causes premature closure.
+
+This matters because most production RAG is deployed on investigation-required tasks: legal discovery, medical records, financial filings, compliance review, codebase Q&A. The retrieved documents contain novel information. And every production RAG system just stuffs the chunks in and generates.
+
+research-foundations.md already has a data stance section that covers the theoretical angle. What's new here is the direct connection: our A1 contract review IS a RAG task. The contract is the "retrieved document." The pipeline's findings that Tier 2 missed are exactly what you'd predict happens in production RAG over novel documents.
+
+This is testable. Same three-tier design, applied to a RAG system over documents the model definitely hasn't memorized.
+
+### Knowledge-telling vs knowledge-transformation
+
+Bereiter & Scardamalia's framework (surfaced by the cognitive science research) sharpens something: monolithic prompts let the model knowledge-tell (dump training in order). Pipelines force knowledge-transformation (reconstruct understanding from prior stage output). Wasteful when telling is appropriate, valuable when transformation is needed.
+
+This maps perfectly to the recognition-primed / investigation-required split. Knowledge-telling is recognition-primed. Knowledge-transformation is investigation-required. The pipeline forces transformation by giving each stage the output of the previous stage, not the original training distribution.
+
+---
+
+## What's still genuinely unresolved
+
+### Where exactly does the fuzzy middle sit?
+
+Creative tasks (A2) are clearly in the fuzzy middle. What other task types live here? I suspect: tasks where the model has partial knowledge — it knows the domain but not the specific situation. Consulting engagements, code review of unfamiliar codebases, organizational assessments. The model knows HOW to do the analysis but must discover WHAT to analyze from novel data. Is this investigation-required (pipeline) or recognition-primed with some novel data (Tier 2)?
+
+The theory says investigation-required, but A2 showed that the pipeline's advantage can be about quality/voice rather than about missing findings. Maybe there's a spectrum: "how much of the answer lives in the data vs in the model's training?" The more answer-in-data, the more pipeline earns its cost.
+
+### Does the RAG prediction hold empirically?
+
+Strong theoretical case. No empirical test yet. This is probably the single most impactful next experiment — because RAG is deployed everywhere and if the premature closure dynamic applies, the implications are enormous.
+
+The experiment design is straightforward: take a document the model hasn't seen. Ask analytical questions where the answer requires genuine investigation of the document. Compare standard RAG, Tier 2 RAG (epistemic stance), and Tier 3 RAG (investigation pass then synthesis). Score with domain experts.
+
+### What's the minimal viable pipeline?
+
+For investigation-required tasks, we've shown that 3 stages works as well as 4 (A1 v3 reduced from 4 to 3 without quality loss). For creative tasks, 2 stages works (A2 creative + editor). Is there a general principle? The theory suggests: the critical boundary is investigation/evaluation. Everything else is optimization. So the minimal viable pipeline is 2 stages: investigate, then evaluate-and-act. Additional stages are warranted only when the second stage would itself contain incompatible modes.
+
+### The benchmark gap
+
+Still true: nobody benchmarks investigation of novel data. The recent papers (2024-2026) are starting to bridge cognitive science and LLMs — "Cognitive Load Limits in LLMs" (2025), "Proactive Interference" (2025), a Nature Reviews Psychology piece on dual-process theory in LLMs. The field is converging on similar ideas from different directions. But the benchmarks don't exist yet.
 
 ---
 
 ## What I'm considering doing next
 
-- **Run Tier 2 on more PRBench tasks** to confirm the improvement isn't a fluke (statistical power)
-- **Re-run A-series with the improved Tier 2 prompt** (epistemic stance framing) to see if Tier 2 would have matched Tier 3 on the original experiments
-- **Design an adaptive expertise test** — real data, genuine investigation, expert evaluation. Maybe in the CA policy domain where I already have the expertise to evaluate.
-- **Try a "Tier 2.5"** — two sessions with full context passing (not compressed handoffs) to test whether clean epistemic stance at each stage captures pipeline benefits without information loss
-- **Write up the cognitive hygiene finding** as something immediately shareable — "one prompt intervention that improves professional reasoning by 25%" is a strong standalone finding
-- **Keep thinking about what I can't name yet** — the pipeline niche, adaptive expertise, the thing about discovering vs recalling. There's something here that I haven't articulated and I think it matters.
+- **Test the RAG prediction.** Most impactful next experiment. Documents the model hasn't seen, analytical questions, three-tier comparison. If the premature closure dynamic applies to RAG, that's a finding with immediate practical implications for every production RAG system.
+- **Run Tier 2 on more PRBench tasks** to confirm statistical power.
+- **Design an investigation-required benchmark.** Novel data, genuine investigation, expert evaluation. Start in a domain where I can evaluate (CA policy, or my brother's codebase analysis space).
+- **Write up the Tier 2 finding standalone.** "One prompt intervention that improves professional reasoning by 25%" is immediately shareable and doesn't depend on the pipeline story.
+- **Let the pipeline niche percolate.** The premature closure frame is sharp. The RPD mapping is clean. The litmus test is intuitive. But I want to sit with it before committing — some things will spark new ideas, some will die off.
 
 ---
 
-## The sentence I keep coming back to
+## The sentences I keep coming back to
 
-> The AI field is optimising for routine expertise while the highest-value professional work requires adaptive expertise. The cognitive pipeline methodology enables adaptive expertise — but nobody has the benchmarks to prove it because nobody is measuring it.
+> When AI must investigate something it has never seen before, mixing investigation with evaluation causes it to see only what it already knows how to classify. Separating them lets it discover what is actually there.
 
-I don't know if this is right. But it feels like it's pointing at something.
+> Could the correct analysis be produced without seeing the data? If yes — Tier 2. If no — Tier 3.
+
+> Good output hides great output. The gap is invisible until you split and compare.
+
+> Most production RAG systems are leaving their most valuable findings on the table, and nobody knows because the output looks competent.

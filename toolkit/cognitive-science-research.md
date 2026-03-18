@@ -260,6 +260,18 @@ The **n-2 repetition cost** finding is interesting for pipeline design: if you s
 
 The **mixing costs** finding is relevant to prompts that say something like "investigate this, but also keep in mind that we'll need to evaluate the findings." Even this anticipatory framing may degrade the investigation -- the mere awareness that evaluation will follow changes how the model investigates.
 
+### Attentional residue as a distinct construct
+
+The task-switching literature contains three related but distinct phenomena that are often conflated. Separating them clarifies which aspects of mode-mixing map cleanly to LLMs and which do not:
+
+- **Switch costs** (Monsell, 2003): The temporal reconfiguration overhead when switching between tasks -- the measurable delay and accuracy drop on the first trial after a switch. This involves updating working memory contents with new goals and enabling new stimulus-response mappings while disabling old ones. **LLM mapping: weak.** There is no temporal switching in a single forward pass. The model processes the entire context in parallel, not sequentially.
+
+- **Attentional residue** (Leroy, 2009; applied to LLMs in "Cognitive Load Limits" arXiv:2509.19517, 2025): The contextual framing from a prior task *persists and biases* subsequent processing, even after the nominal task switch. This is not about reconfiguration time -- it is about the prior frame continuing to exert influence on the current task. **LLM mapping: very strong.** Evaluation criteria present earlier in the context actively bias investigation toward pre-filtered pattern matching. The prior framing does not decay -- it remains in the context window and continues to shape attention patterns throughout.
+
+- **Proactive interference** ("Unable to Forget", arXiv:2506.08184, 2025): Earlier information in context disrupts retrieval and processing of later updates. This is a fundamental working-memory limitation, not a task-switching artifact. Prompt engineering provides only marginal relief -- you cannot instruct the model to "forget" earlier context. **LLM mapping: very strong.** Demonstrated empirically with log-linear decay patterns that parallel human working memory interference.
+
+The key insight is that attentional residue from evaluation criteria doesn't just add extraneous load -- it **switches the decision architecture** from recognition-primed (pattern discovery) to criterion-referenced (pattern matching against known standards). This is a qualitatively different degradation than simple overload. The model is not merely "distracted" by evaluation framing -- it is operating in a fundamentally different cognitive mode, one that pre-filters investigation toward confirming or denying predefined categories rather than discovering emergent patterns in the data.
+
 ### Where the mapping breaks down
 
 Human task-switching costs involve **temporal reconfiguration** of attentional control settings -- it takes time to shift from one task set to another, and the old set decays gradually. LLMs process the entire context in parallel during a forward pass. There is no temporal sequence of "first process the investigation part, then switch to the evaluation part."
@@ -317,6 +329,252 @@ The conditional metacognitive knowledge -- knowing when mode separation matters 
 
 ---
 
+## 9. Klein's Recognition-Primed Decision Making (RPD)
+
+### What the science says
+
+Gary Klein's naturalistic decision making research (1986, 1999) overturned the classical model of expert decision making. Studying firefighters, military commanders, and other experts making decisions under time pressure and uncertainty, Klein found that experts in naturalistic settings **don't compare options** -- they recognise situations as instances of familiar patterns and mentally simulate the first action that comes to mind. If the simulation reveals a problem, they modify the action or consider the next most typical response. They almost never generate and compare multiple options.
+
+The RPD model has three variations on a gradient of increasing cognitive demand:
+
+- **Variation 1 (fully familiar situation)**: Immediate pattern recognition leads directly to action. The expert perceives the situation, recognises it as a familiar type, and knows what to do. No deliberation is needed -- the response is a practiced, automatic consequence of recognising the pattern.
+
+- **Variation 2 (novel situation, known repertoire)**: The situation is unfamiliar or ambiguous, but the expert has relevant methods and frameworks in their repertoire. The expert must first **diagnose the unfamiliar situation** -- building a mental model of what's happening -- before applying known methods. This requires deliberate situation modeling that Variation 1 does not.
+
+- **Variation 3 (novel situation, novel action needed)**: Both the situation and the required response are unfamiliar. The expert must **both model the situation AND construct new approaches** by adapting, combining, or inventing action sequences. This is the highest cognitive demand -- it requires genuine creative problem-solving rather than recognition or application of known methods.
+
+### How it maps to LLMs -- arguably the best single predictive framework
+
+The RPD model is arguably the best single framework for predicting **when pipeline separation helps and when it hurts**:
+
+- **Variation 1 = LLM reasoning from training knowledge.** When the task matches patterns extensively represented in training data (professional questions, known legal frameworks, standard financial analyses), the LLM's pattern recognition fires and the answer is correct. Pipeline separation in this case **interrupts fluid expert performance** -- it adds overhead, forces unnecessary decomposition, and may actually degrade output by preventing the model from leveraging its integrated knowledge.
+
+- **Variation 2 = LLM facing unfamiliar data but having relevant analytical methods in training.** The model has seen this *type* of analysis but not this specific data. Pipeline helps because it forces the "diagnose first" step -- an investigation stage builds a situation model of the novel data before an analysis stage applies known methods to that model. Without the pipeline, the model may skip the situation-modeling step and pattern-match directly from training, producing plausible but shallow analysis.
+
+- **Variation 3 = LLM needing to construct entirely new analytical approaches for novel data.** The model has neither seen this data pattern nor this analytical approach in training. Pipeline helps even more, because each stage can focus its full processing capacity on one aspect of the novel problem -- understanding the data, constructing an approach, applying and evaluating it.
+
+### The boundary condition
+
+Pipeline separation helps specifically at the **Variation 2/3 boundary** -- when the situation is novel enough that pattern recognition alone is insufficient and deliberate situation modeling is required. Below that boundary (Variation 1), pipeline adds cost without benefit. Above it (Variation 3), pipeline provides its greatest value.
+
+This predicts a non-obvious result: **the same prompt architecture that improves output on novel tasks may degrade output on familiar tasks.** There is no universally optimal level of decomposition -- the optimal architecture depends on where the task falls on the RPD gradient.
+
+### Where the mapping breaks down
+
+Klein's model describes **temporal dynamics** of expert cognition -- pattern recognition happens first, then situation assessment, then mental simulation. LLMs process in parallel within a forward pass. The "recognition → assessment → simulation" sequence in RPD is a temporal unfolding that doesn't have a direct architectural analog in transformer computation.
+
+The mapping works best as a predictor of **when decomposition adds value** rather than as a description of how the LLM processes information. RPD tells you which tasks benefit from pipeline separation; it doesn't tell you how the LLM is "thinking" about those tasks.
+
+### Key papers
+
+- Klein, G. (1999). *Sources of Power: How People Make Decisions*. MIT Press.
+- Klein, G., Calderwood, R., & Clinton-Cirocco, A. (1986). Rapid decision making on the fire ground. *Proceedings of the Human Factors Society*, 30, 576-580.
+
+---
+
+## 10. Kahneman-Klein Boundary Conditions for Valid Intuition
+
+### What the science says
+
+The Kahneman-Klein adversarial collaboration (2009) is one of the most important papers in judgment and decision making. Daniel Kahneman (skeptic of expert intuition, emphasizing biases and heuristics) and Gary Klein (champion of expert intuition, emphasizing naturalistic decision making) spent years trying to identify precisely where they disagreed. Their conclusion: they largely agreed on the **boundary conditions**.
+
+Intuitive expertise (pattern recognition that produces correct judgments without deliberate analysis) is trustworthy when **two conditions are met**:
+
+**(a) The environment has stable, learnable regularities.** The domain must have genuine patterns that connect observable cues to correct actions. Chess has this; predicting stock prices largely does not. The environment must provide valid cues that are reliably associated with outcomes.
+
+**(b) The expert has had extensive opportunity to learn those regularities.** Prolonged practice with prompt, clear feedback is necessary. The expert must have encountered enough cases to internalize the patterns. Without sufficient learning opportunity, even a regular environment won't produce valid intuition.
+
+When both conditions are met, expert pattern recognition is trustworthy. When either condition fails -- the environment is irregular (low-validity) or the expert lacks sufficient learning opportunity -- intuitive judgments are unreliable and deliberate analytical methods should be preferred.
+
+### How it maps to LLMs -- directly predictive
+
+For an LLM, **training data IS the learning opportunity**. The model's "intuitive expertise" -- its ability to pattern-match from training knowledge -- is valid precisely when:
+
+(a) The task domain has stable regularities that are well-represented in training data (legal analysis, standard financial reasoning, established scientific frameworks), AND
+
+(b) The model has encountered extensive examples of correct reasoning in that domain during training.
+
+When both conditions are met, the model's "intuitive" pattern-matching is valid -- a monolithic prompt that lets the model leverage its training knowledge will perform well, and pipeline separation adds overhead without corresponding benefit.
+
+When either condition fails -- the data is novel (an "environment" the model has NOT learned), or the domain is underrepresented in training -- then forced deliberation through pipeline separation helps by replacing unreliable pattern recognition with structured analysis.
+
+### The prediction
+
+This directly predicts a clean experimental outcome:
+
+- **Recognition-primed tasks** (matching training regularities) → Tier 2 (optimised prompt) is sufficient. The model's pattern recognition is valid for these tasks, and optimising the prompt to reduce extraneous load is all that's needed.
+
+- **Investigation-required tasks** (novel data, underrepresented domains) → Tier 3 (pipeline reconstruction) earns its cost. The model's pattern recognition is unreliable for these tasks, and forced deliberation through separate investigation and analysis stages produces qualitatively better output.
+
+### Where the mapping breaks down
+
+Kahneman and Klein were discussing **individual expertise developed through personal experience**. An LLM's "expertise" comes from statistical patterns across billions of documents -- a fundamentally different kind of learning. The model has never "practiced" in the way Klein describes -- it has never made a decision, observed the outcome, and adjusted its approach.
+
+The boundary conditions may still predict when pattern-matching works, but the *mechanism* of pattern acquisition is entirely different. Human experts develop intuition through repeated cycles of action and feedback; LLMs develop statistical associations through gradient descent on text. The behavioral predictions may transfer even though the learning mechanism does not.
+
+### Key paper
+
+- Kahneman, D. & Klein, G. (2009). Conditions for intuitive expertise: A failure to disagree. *American Psychologist*, 64(6), 515-526.
+
+---
+
+## 11. Bereiter & Scardamalia -- Knowledge-Telling vs Knowledge-Transformation
+
+### What the science says
+
+Bereiter and Scardamalia's (1993) research on expert writing revealed a counterintuitive finding: **expert writers work harder than novices, not easier.** Their model distinguishes two fundamentally different composing processes:
+
+- **Knowledge-telling**: The novice strategy. The writer retrieves relevant knowledge from memory and writes it down in roughly the order it's retrieved. The process is: get a topic cue → retrieve associated content → write it → use what was just written as the next retrieval cue → repeat. This is cognitively economical -- it requires minimal planning, restructuring, or self-monitoring. The text flows directly from memory to page with little transformation.
+
+- **Knowledge-transformation**: The expert strategy. The writer doesn't simply retrieve and record -- they actively **restructure the problem space and reconstruct their understanding** through the act of writing. The writer maintains two problem spaces simultaneously: a content space (what they know about the topic) and a rhetorical space (how to communicate effectively to the audience). The interaction between these two spaces drives genuine transformation of the writer's understanding -- writing becomes a tool for thinking, not just a record of thinking already done.
+
+The key finding: expertise in writing doesn't just produce *better* text by applying better techniques to the same process. It produces better text by engaging in a **qualitatively different cognitive process** -- one that is more effortful, more recursive, and more genuinely transformative of the writer's own understanding.
+
+### How it maps to LLMs -- the monolithic prompt problem
+
+Monolithic prompts let the LLM **knowledge-tell** -- dump training knowledge in retrieval order. The model receives a prompt, retrieves associated patterns from its training distribution, and generates text in roughly the order those patterns activate. This is the LLM equivalent of the novice writer's strategy: content flows from training to output with minimal restructuring.
+
+Pipeline separation forces **knowledge-transformation** -- each stage must reconstruct understanding from the previous stage's output rather than pattern-matching from training. When an investigation stage produces findings and a separate analysis stage must work with those findings (not with its own training priors), the analysis stage is forced into the rhetorical-content interaction that Bereiter and Scardamalia identified as the hallmark of expert processing. It must genuinely engage with the specific data rather than defaulting to generic training patterns.
+
+### The boundary condition
+
+This framework predicts when pipeline separation is **wasteful versus valuable**:
+
+- **When knowledge-telling is appropriate** -- applying known frameworks to familiar problems, answering questions with established answers, producing standard professional documents -- pipeline separation adds cognitive overhead without corresponding benefit. The LLM's retrieval-order output is correct because the task doesn't require transformation.
+
+- **When genuine knowledge transformation is needed** -- analyzing novel data that doesn't match training patterns, producing insights that require restructuring understanding, synthesizing across disparate domains -- pipeline separation forces the transformative process that a monolithic prompt allows the model to skip.
+
+### Where the mapping breaks down
+
+Bereiter and Scardamalia's model is about **learning through writing** -- the knowledge-transformation process changes the writer's understanding, and this changed understanding persists. LLMs don't learn during inference. The "transformation" in a pipeline is transformation of the output, not of the model's understanding. Each stage produces a transformed artifact, but the model itself is unchanged.
+
+The analogy is strongest for the **process structure** (retrieval-based vs. reconstructive processing) rather than for the **outcome** (learning). Pipeline separation produces output that looks like it went through knowledge-transformation, and that output may be qualitatively better, but the model hasn't actually "learned" anything in the process.
+
+### Key paper
+
+- Bereiter, C. & Scardamalia, M. (1993). *Surpassing Ourselves: An Inquiry into the Nature and Implications of Expertise*. Open Court Publishing.
+
+---
+
+## 12. Epistemic Cognition (Chinn, Buckland & Samarapungavan)
+
+### What the science says
+
+Chinn, Buckland, and Samarapungavan (2011) proposed a multi-dimensional framework for epistemic cognition that goes well beyond earlier models (like Perry's developmental scheme or Kuhn's epistemological levels). Their framework identifies five interacting components:
+
+- **Epistemic aims and values**: What the thinker is trying to achieve epistemically -- truth, understanding, explanation, certainty, simplicity, or other goals. Different aims drive fundamentally different cognitive processes.
+
+- **Structure of knowledge**: How the thinker represents knowledge -- as isolated facts, as interconnected webs, as models, as theories. The perceived structure shapes how new information is integrated.
+
+- **Sources and justification**: What counts as legitimate evidence and valid reasoning. Some thinkers rely on authority, others on empirical observation, others on logical coherence. The epistemic standards applied determine what gets accepted and what gets rejected.
+
+- **Epistemic virtues and vices**: Intellectual character traits that support or undermine good epistemic practice. Virtues include intellectual humility, thoroughness, open-mindedness, and willingness to revise. Vices include dogmatism, premature certainty, confirmation bias, and intellectual laziness.
+
+- **Reliable and unreliable processes**: The actual cognitive processes used -- some are reliably truth-conducive (careful observation, logical reasoning, systematic testing), others are unreliable (wishful thinking, reliance on anecdote, pattern-matching without verification).
+
+The discourse-theoretic view, developed by Knight and Littleton and integrated into this framework, argues that epistemic cognition is not purely internal -- **it emerges through language and discourse patterns**. The way people talk about knowledge shapes how they think about knowledge. Exploratory talk (tentative, questioning, considering alternatives) produces different epistemic cognition than disputational talk (assertive, defending positions, seeking to win).
+
+### How it maps to LLMs -- the epistemic stance intervention
+
+The "epistemic stance" intervention in the cognitive stack -- setting "explore before concluding" in the system prompt or at the beginning of a pipeline stage -- is literally an intervention at the epistemic cognition level. It operates across multiple dimensions of Chinn et al.'s framework simultaneously:
+
+- **Epistemic aims**: It sets the aim as exploration and understanding rather than closure and certainty. This changes what the model is "trying to do" at a fundamental level.
+
+- **Epistemic virtues/vices**: It activates thoroughness, intellectual humility, and willingness to consider alternatives (virtues) while suppressing premature certainty, confirmation bias, and pattern-matching without verification (vices).
+
+- **Reliable processes**: It biases toward careful observation and systematic analysis rather than rapid pattern-matching from training priors.
+
+The discourse-theoretic view is particularly relevant here: **the language of the prompt shapes the epistemic stance of the output, because stance emerges through language patterns, not despite them.** When a prompt uses tentative, exploratory language ("let's investigate," "what patterns emerge," "consider multiple interpretations"), it activates the language patterns associated with exploratory epistemic cognition. When it uses assertive, evaluative language ("assess the quality," "determine whether," "rate on a scale"), it activates the patterns associated with closure-seeking epistemic cognition.
+
+This is the mechanism by which "context carries cognitive mode" -- the epistemic stance encoded in the prompt's language patterns propagates through the model's output because the model learned the statistical associations between epistemic language patterns and the types of thinking they accompany.
+
+### Where the mapping breaks down
+
+Chinn et al.'s framework is about **genuine epistemic cognition** -- how people actually reason about knowledge, truth, and justification. LLMs produce text that *looks like* epistemic cognition but may not involve anything analogous to genuine epistemic processing. The model produces exploratory-sounding text not because it is genuinely exploring, but because the prompt activated language patterns associated with exploration.
+
+Whether this distinction matters for output quality is an empirical question. If the output produced under exploratory epistemic framing is systematically better than output produced under closure-seeking framing (which the experiments aim to test), then the mechanism may not matter -- the intervention works even if the model isn't "really" engaging in epistemic cognition.
+
+### Key paper
+
+- Chinn, C. A., Buckland, L. A., & Samarapungavan, A. (2011). Expanding the dimensions of epistemic cognition. *Educational Psychologist*, 46(3), 141-167.
+
+---
+
+## 13. Spiro's Cognitive Flexibility Theory
+
+### What the science says
+
+Spiro, Feltovich, Jacobson, and Coulson (1992) developed Cognitive Flexibility Theory (CFT) to address a specific learning problem: how people acquire and apply knowledge in **ill-structured domains** -- domains where concepts interact differently across cases, where context radically changes how principles apply, and where simple schemas don't transfer cleanly from one case to another.
+
+The core argument: learning in ill-structured domains requires **multiple representations** of the same material from different perspectives. Spiro calls this **"criss-crossing the conceptual landscape"** -- revisiting the same case or concept from different angles, highlighting different features, drawing different connections. This builds the flexible knowledge structures needed to handle novel cases where familiar concepts interact in unfamiliar ways.
+
+The primary failure mode CFT identifies is **reductive bias**: the tendency to oversimplify complex, irregular knowledge into rigid schemas that work for textbook cases but fail for novel ones. Reductive bias manifests as:
+
+- Treating complex cases as more similar to familiar cases than they actually are
+- Applying a single schema when multiple interacting schemas are needed
+- Ignoring contextual factors that change how principles apply
+- Locking onto the first interpretation retrieved rather than considering alternatives
+
+CFT distinguishes between two types of domains:
+
+- **Well-structured domains**: Rules and principles transfer consistently across cases. A schema learned from one case applies cleanly to new cases. Multiple representations add little value because the single representation transfers reliably.
+
+- **Ill-structured domains**: The same concept manifests differently across cases depending on context. Schema transfer is unreliable because contextual factors change how principles interact. Multiple representations are essential because no single representation captures the full range of concept-to-case mappings.
+
+### How it maps to LLMs -- fighting reductive bias
+
+Setting "explore before concluding" in a prompt or pipeline stage fights reductive bias directly -- it **prevents the model from locking onto the first schema retrieved** from training and instead forces consideration of multiple interpretations, alternative framings, and contextual factors that might change the analysis.
+
+Pipeline separation forces the LLM to **criss-cross the same data from different cognitive angles**: an investigation stage examines the data for emergent patterns, an analysis stage applies frameworks, a synthesis stage integrates findings across perspectives. Each stage provides a different "traversal" of the conceptual landscape represented in the data, building the kind of flexible, multi-perspectival understanding that CFT identifies as necessary for ill-structured domains.
+
+CFT predicts this matters most in **ill-structured domains with irregular concept-to-case mappings** -- precisely the domains where novel data is most likely to deviate from training patterns. Legal analysis of novel fact patterns, strategic analysis of unprecedented situations, scientific analysis of anomalous data -- these are ill-structured problems where reductive bias is most likely and where multiple perspectives add the most value.
+
+For **well-structured domains with regular rules** -- standard contract review against established legal frameworks, financial analysis using known formulas, technical documentation following templates -- multiple perspectives add little because the schema transfers cleanly. The single representation (the known framework) is sufficient.
+
+### Where the mapping breaks down
+
+CFT is fundamentally a **learning theory** -- it's about how knowledge structures are acquired and organized for future flexible application. LLMs don't acquire new knowledge structures during inference. The pipeline doesn't build "flexible knowledge" in the model -- it produces output that reflects multiple perspectives.
+
+The mapping works best as a description of **output quality**: pipeline-produced output resembles the product of cognitively flexible reasoning (multiple perspectives, contextual sensitivity, resistance to reductive bias), even though the model hasn't actually developed cognitive flexibility. Whether this difference matters depends on whether we care about the process or only the product.
+
+### Key paper
+
+- Spiro, R. J., Feltovich, P. J., Jacobson, M. J., & Coulson, R. L. (1992). Cognitive flexibility, constructivism, and hypertext: Random access instruction for advanced knowledge acquisition in ill-structured domains. In Duffy, T. M. & Jonassen, D. H. (Eds.), *Constructivism and the technology of instruction: A conversation* (pp. 57-76). Lawrence Erlbaum Associates.
+
+---
+
+## 14. Recent LLM + Cognitive Science Papers (2024-2026)
+
+A growing body of work directly bridges cognitive science frameworks and LLM behavior, moving beyond analogy to empirical testing. Key papers:
+
+### Dual-process theory applied to LLMs
+
+A 2025 paper in *Nature Reviews Psychology* ("Dual-process theory and decision-making in large language models") systematically maps the System 1/System 2 distinction to LLM prompting strategies. The paper argues that standard prompting activates System 1-like pattern matching from training, while structured prompting techniques (chain-of-thought, step-by-step reasoning) activate System 2-like deliberative processing. Importantly, the paper identifies boundary conditions for when each approach is superior -- rapid pattern matching outperforms deliberation for well-practiced tasks, while deliberation outperforms pattern matching for novel or complex reasoning. This aligns directly with the RPD framework (Section 9) and the recognition-primed vs investigation-required distinction.
+
+### Cognitive Load Limits in LLMs
+
+The "Cognitive Load Limits in LLMs" paper (arXiv:2509.19517, 2025) formalises two computational analogs of extraneous cognitive load:
+
+- **Context Saturation**: task-irrelevant information in the context window that consumes processing capacity without contributing to the target task. This is the LLM analog of extraneous cognitive load in Sweller's framework.
+
+- **Attentional Residue**: interference from task-switching within a single context -- the framing from a prior task persists and biases subsequent processing. This is the LLM analog of task-set inertia from the switching literature.
+
+The paper demonstrates that when combined load exceeds a "fragility tipping point," LLMs transition from successful reasoning to catastrophic failure -- not graceful degradation. This non-linear failure mode is particularly insidious because it means performance looks fine up until the point where it collapses entirely.
+
+### Proactive Interference in LLMs
+
+"Unable to Forget: Proactive Interference Reveals Working Memory Limits in LLMs Beyond Context Length" (arXiv:2506.08184, 2025) adapted proactive interference paradigms from cognitive psychology directly to LLMs. Key findings: LLMs exhibit proactive interference patterns that closely parallel human working memory limits. Earlier information in context disrupts retrieval of later updates, with log-linear decay. Critically, prompt-based interventions for "strategic forgetting" provided only marginal relief -- this is a fundamental architectural limitation, not a prompting problem.
+
+### Multi-agent coordination under CLT
+
+"United Minds or Isolated Agents?" (arXiv:2506.06843, 2025) applies Cognitive Load Theory directly to multi-agent LLM coordination. The paper tests whether cognitive load principles predict when multi-agent separation helps versus hurts. Key finding: maintaining complex, predefined role personas imposed more extraneous cognitive load than flexible thinking styles. Rigid persona adherence consumed processing capacity that could otherwise go to the actual task. This supports the design principle that pipeline stages should be defined by cognitive function (what type of thinking is needed) rather than by persona (who is doing the thinking).
+
+### Implications for this research
+
+These papers collectively demonstrate that cognitive science frameworks are not merely useful analogies for understanding LLM behavior -- they are **empirically predictive**. The CLT tripartite model, proactive interference from working memory research, and the System 1/System 2 distinction all generate testable predictions about LLM performance that have been confirmed experimentally. This strengthens the theoretical foundation for the mode-separation hypothesis: if cognitive load, attentional residue, and proactive interference all degrade LLM output in ways that parallel their effects on human cognition, then interventions derived from cognitive science (separating incompatible cognitive modes into distinct contexts) should produce corresponding improvements.
+
+---
+
 ## Overall Synthesis: What Holds Up and What's a Stretch
 
 ### Strongest mappings (empirically supported in AI/LLM research)
@@ -328,6 +586,8 @@ The conditional metacognitive knowledge -- knowing when mode separation matters 
 | Task switching / attentional residue | Strong | Directly modeled in LLM cognitive load benchmarks; behavioral parallels confirmed; n-2 repetition costs have pipeline design implications |
 | Metacognition (object/meta levels) | Strong | Meta-R1 applies this directly to LLM reasoning with measurable improvements in both accuracy and efficiency |
 | Guilford's multi-operation model | Moderate-strong | Kramer (2025) applies full SOI to prompt engineering with 16.6 percentage point performance gain |
+| Klein's RPD model | Strong (predictive) | Directly predicts when pipeline separation helps (Variation 2/3) vs hurts (Variation 1); best single framework for the boundary condition |
+| Kahneman-Klein boundary conditions | Strong (predictive) | Two conditions for valid intuition map directly to "does the task match training regularities?"; predicts Tier 2 vs Tier 3 outcomes |
 
 ### Reasonable analogies (structurally sound but mechanistically different)
 
@@ -336,6 +596,9 @@ The conditional metacognitive knowledge -- knowing when mode separation matters 
 | CTA for pipeline decomposition | Moderate-novel | Legitimate methodology extension; appears to be a novel application; needs empirical validation that human cognitive mode boundaries are optimal for AI pipeline boundaries |
 | Double Diamond cycling | Moderate | Good structural analogy for pipeline design; practitioner's pattern is an inverted Double Diamond; shared principle that modes must not be mixed within phases |
 | Stanovich's tripartite mind / Sternberg's multi-dimensional styles | Moderate | Supports "more than two modes" argument; provides theoretical legitimacy for multi-stance frameworks; doesn't directly map to LLM architecture |
+| Bereiter & Scardamalia (knowledge-telling vs transformation) | Moderate-strong | Monolithic prompts enable knowledge-telling; pipeline forces knowledge-transformation. Predicts when each is appropriate |
+| Epistemic cognition (Chinn et al.) | Moderate-strong | Epistemic stance intervention maps directly to epistemic aims and virtues; discourse-theoretic view explains mechanism of "context carries mode" |
+| Spiro's Cognitive Flexibility Theory | Moderate | Predicts pipeline value in ill-structured domains; reductive bias as failure mode of monolithic prompting; well-structured domains don't benefit |
 
 ### Stretches (use with caveats)
 
@@ -355,6 +618,36 @@ The practitioner's core insight -- **"context carries cognitive mode"** -- is be
 3. **Proactive interference in working memory** (demonstrated in LLMs by the PI-LLM paper): earlier contextual framing actively degrades processing of subsequent material, with log-linear decay, and this cannot be overcome by prompting for "forgetting"
 
 Each theory alone would be an analogy. Together, they converge on the same prediction from different angles: **mixing cognitive modes in the same processing context will degrade output, and the degradation is not a matter of running out of space but of active interference between incompatible framings**.
+
+### The deeper convergence: seven frameworks, one boundary condition
+
+With the addition of Klein's RPD, Kahneman-Klein, Bereiter & Scardamalia, Epistemic Cognition, Spiro's CFT, and the Dreyfus/situated cognition frameworks, the convergence extends far beyond the original three theories. Seven independent cognitive science frameworks now converge on **the same boundary condition from different angles**:
+
+| Framework | What it predicts about when pipeline separation helps |
+|-----------|------------------------------------------------------|
+| **Klein's RPD** | Helps at Variation 2/3 (novel situation requiring deliberate situation modeling), not Variation 1 (familiar pattern recognition) |
+| **Kahneman-Klein** | Helps when the environment lacks learnable regularities the model has trained on; hurts when training matches the task's regularities |
+| **Cognitive Load Theory** | Helps when mixed modes create extraneous load that exceeds the fragility tipping point; unnecessary when modes are compatible |
+| **Cognitive Flexibility Theory** | Helps in ill-structured domains with irregular concept-to-case mappings; unnecessary in well-structured domains where schemas transfer cleanly |
+| **Epistemic Cognition** | Helps when the task requires exploratory epistemic aims; unnecessary when closure-seeking aims are appropriate |
+| **Bereiter & Scardamalia** | Helps when knowledge-transformation is needed (novel data requiring restructured understanding); unnecessary when knowledge-telling is appropriate (applying known frameworks) |
+| **Situated Cognition / Dreyfus** | Helps when the task exceeds the model's "expertise" (training coverage); unnecessary when the model operates within well-trained domains |
+
+All seven converge on the same fundamental variable: **the critical factor is whether the task requires discovering patterns from novel input data, or applying known frameworks from training knowledge.**
+
+### The recommended reframe
+
+The original formulation of this boundary used "adaptive vs routine expertise" (from Hatano and Inagaki), which describes **expert types** rather than task types. The cognitive science convergence suggests a more precise and actionable framing:
+
+**"Recognition-primed vs investigation-required tasks"**
+
+- **Recognition-primed tasks**: The input data matches patterns the model has already learned from training. The model's pattern recognition is valid (Kahneman-Klein conditions met). The task is well-structured (Spiro). Knowledge-telling is appropriate (Bereiter & Scardamalia). The situation is familiar (Klein Variation 1). Pipeline separation adds overhead without benefit. Tier 2 (optimised prompt) is sufficient.
+
+- **Investigation-required tasks**: The input contains patterns that must be discovered rather than recognized. The model's training priors are unreliable guides (Kahneman-Klein conditions not met). The domain is ill-structured (Spiro). Knowledge-transformation is needed (Bereiter & Scardamalia). The situation is novel (Klein Variation 2/3). Pipeline separation forces the deliberate investigation that the model would otherwise skip. Tier 3 (pipeline reconstruction) earns its cost.
+
+This reframe shifts the decision criterion from "what kind of expert is the model?" (which is hard to assess) to "what kind of task is this?" (which is assessable from the task description and input data). It makes the boundary condition actionable for prompt architecture decisions.
+
+### The stance taxonomy
 
 The practitioner's discovery of 6-7 distinct stances is not directly derived from any single cognitive science framework, but it is most consistent with Guilford's five operations (1956) -- which is ironic, since it's the oldest framework in this list and the one whose richness has been most obscured by popular oversimplification. The novel contribution is using CTA to identify these stances empirically from expert AI pipeline work and then using the interference research to justify why they must be separated into distinct contexts.
 
@@ -394,3 +687,25 @@ The practitioner's discovery of 6-7 distinct stances is not directly derived fro
 
 **Cognitive Design Patterns for AI:**
 - [Wray, Kirk, Laird (2025) - Cognitive Design Patterns for LLM Agents (arXiv:2505.07087)](https://arxiv.org/html/2505.07087v2)
+
+**Recognition-Primed Decision Making:**
+- Klein, G. (1999). *Sources of Power: How People Make Decisions*. MIT Press.
+- Klein, G., Calderwood, R., & Clinton-Cirocco, A. (1986). Rapid decision making on the fire ground. *Proceedings of the Human Factors Society*, 30, 576-580.
+
+**Boundary Conditions for Intuitive Expertise:**
+- Kahneman, D. & Klein, G. (2009). Conditions for intuitive expertise: A failure to disagree. *American Psychologist*, 64(6), 515-526.
+
+**Knowledge-Telling vs Knowledge-Transformation:**
+- Bereiter, C. & Scardamalia, M. (1993). *Surpassing Ourselves: An Inquiry into the Nature and Implications of Expertise*. Open Court Publishing.
+
+**Epistemic Cognition:**
+- Chinn, C. A., Buckland, L. A., & Samarapungavan, A. (2011). Expanding the dimensions of epistemic cognition. *Educational Psychologist*, 46(3), 141-167.
+
+**Cognitive Flexibility Theory:**
+- Spiro, R. J., Feltovich, P. J., Jacobson, M. J., & Coulson, R. L. (1992). Cognitive flexibility, constructivism, and hypertext. In Duffy & Jonassen (Eds.), *Constructivism and the technology of instruction*. Lawrence Erlbaum Associates.
+
+**Recent LLM + Cognitive Science (2024-2026):**
+- Dual-process theory and decision-making in large language models (2025). *Nature Reviews Psychology*.
+- Cognitive Load Limits in LLMs (arXiv:2509.19517, 2025).
+- Unable to Forget: Proactive Interference (arXiv:2506.08184, 2025).
+- United Minds or Isolated Agents? (arXiv:2506.06843, 2025).

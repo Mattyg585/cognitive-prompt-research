@@ -24,11 +24,23 @@ Not what tasks does it list — what *cognitive posture* does it establish? Is t
 
 A prompt might list five tasks but establish one posture. Or it might list one task but implicitly require three different postures to accomplish it. The tasks are surface. The posture is what matters.
 
+### Is this a recognition-primed or investigation-required task?
+
+Before analysing mode conflicts, ask this threshold question. It determines whether pipeline separation will help or hurt.
+
+- **Recognition-primed tasks** apply known frameworks from training knowledge — the model already has the patterns and is matching them to the input. Examples: applying a well-known compliance checklist, classifying items into established categories, generating text in a familiar genre. For these, pipeline separation may add overhead without benefit. Tier 2 optimisation (better epistemic stance, scope boundaries) is usually sufficient.
+
+- **Investigation-required tasks** require discovering patterns from novel or specific data — contract clauses, policy configurations, codebase architecture, unfamiliar domain documents. The correct analysis *cannot* be produced without seeing the specific data. For these, investigation MUST run without evaluation criteria in context. Pipeline separation is essential.
+
+This is the key boundary condition for when Tier 3 (pipeline reconstruction) adds value over Tier 2 (optimised monolithic). Ask: "Could the correct analysis be produced without seeing the specific data?" If yes, recognition-primed. If no, investigation-required — and evaluation criteria in context will suppress the discoveries that only happen in clean investigative context.
+
 ### Is it asking for incompatible types of thinking at the same time?
 
 The fundamental question. Two types of thinking are incompatible when one suppresses the other:
 
 - **Exploring while judging**: "Find issues and assess their severity." The judging becomes a pre-filter on exploration. The model only finds things it can already classify. Subtle, hard-to-categorise patterns get dropped.
+
+- **Investigation (pattern discovery) + Evaluation (criterion checking)**: Not just load interference — evaluation criteria SWITCH the decision architecture from recognition-primed (what patterns do I notice?) to criterion-referenced (which criteria are met?). This suppresses the discoveries that only happen in clean investigative context. The model stops noticing what's there and starts checking what's expected. (Klein's RPD model, 1999; Kahneman-Klein boundary conditions, 2009)
 
 - **Investigating while fixing**: "Identify problems and recommend solutions." The desire to recommend solutions shapes what gets investigated. Findings that don't have obvious fixes get skipped. Investigation becomes a funnel for recommendations rather than understanding.
 
@@ -56,6 +68,38 @@ This includes implicit anchors: examples that all have the same count, templates
 
 **Natural variation is a health signal.** If the prompt enables the model to produce 2 findings for a simple input and 7 for a complex one, it's working. If it produces 5 every time, something is anchoring.
 
+### What type of task is this?
+
+Before recommending structural interventions, identify the task type — it determines which structural patterns help and which ones hurt. The reference material (`cognitive-stance-reference.md`) has detailed guidance under "Task-Type Awareness", but the key distinction:
+
+**Analytical tasks** (contracts, policies, code review): quality is about accuracy, completeness, insight. Pipeline separation helps. Structured handoffs strip mode. The standard convergent-divergent rhythm applies.
+
+**Creative/voice-building tasks** (blog posts, marketing content, essays, storytelling): quality is about sustained authorial presence, tone, conviction. Investigation and generation can be *compatible* — the exploration IS the voice-finding process. Pipeline separation can fragment voice. The productive split is content/craft vs compliance, not thinking vs writing. Fewer, wider stages. Lighter phase boundaries. Tier 2 may outperform Tier 3 on the dimension that matters most.
+
+**Investigation tasks** (research, exploration, sense-making): quality is about depth, surprise, following unexpected threads. Keep evaluation criteria out entirely. Let investigation be asymmetric. Lenses over seeds.
+
+This isn't a classification exercise — it's a lens that determines which structural patterns to reach for. The same prompt can have elements of multiple types.
+
+### Does the declared architecture match the actual architecture?
+
+Check whether multi-phase prompts in a single context create an illusion of cognitive separation they cannot deliver. This is the subtlest and most damaging pattern — it makes prompts worse than their less-structured predecessors.
+
+**The mechanism**: The model reads the entire prompt before generating anything. "Phase 1", "Phase 2", "Phase 3" are labels on simultaneous contextual presence, not gates between distinct cognitive states. Later-phase evaluation criteria are present during earlier-phase investigation. The model knows where it is going before it starts.
+
+**Why this matters**: A prompt that is honestly convergent throughout has no gap between what it promises and what it delivers. A prompt that declares sequential cognitive separation but delivers simultaneous presence creates anticipatory awareness — and the gap between declared and actual architecture produces output that passes all criteria without genuinely inhabiting any phase.
+
+**Signs to look for**:
+- Multi-phase prompts where later phases contain evaluation criteria or editorial identity
+- Output that is competent but generic — executed the phases without discovering anything through them
+- Investigation findings that suspiciously align with later evaluation criteria
+- The output reads like someone who understood the brief rather than someone who had something to say
+
+**Also check for the specific anti-patterns** documented in the reference material under "Anti-Patterns That Look Like Good Practice":
+- Criterion gates inside investigation phases
+- Process notes inside generation phases
+- Prescribed threads posed as open questions (looks like a lens, acts as a structure)
+- Vivid role-framing in later phases that bleeds backward
+
 ### Is convergent work suppressing divergent potential?
 
 The hardest pattern to spot because the output looks fine. A synthesis agent with a QA section produces competent, professional output. Remove the QA section (making the prompt *smaller*) and the output gets deeper — not just more findings, but a shift in register from "competent audit" to "someone who understands the humans on the other side."
@@ -67,6 +111,12 @@ Signs of suppression:
 - It's professional but not insightful
 
 If you suspect this, the test is: what happens if you remove the convergent section? If the output gets shallower, the convergent work was doing real work. If it gets deeper, you found contamination.
+
+### Why the degradation from investigation-evaluation mixing is invisible
+
+The degradation from mixing investigation and evaluation is invisible because criterion-referenced analysis produces competent results. But it prevents recognition-primed discoveries — findings that only emerge when the model investigates without knowing what it's "supposed" to find. The gap between "competent" and "insightful" is the gap between criterion-referenced and recognition-primed investigation.
+
+Attentional residue from evaluation criteria doesn't just add extraneous load — it biases what the model notices during investigation. The model reads THROUGH the evaluation framework, pre-filtering observations to match expected categories. This is why Tier 3 pipeline outputs surface findings that Tier 1 and Tier 2 miss entirely — clean investigation context enables pattern recognition that contaminated context suppresses. The evaluation criteria don't need to be in the same sentence as the investigation instructions. Their mere presence in the context window is enough to shift the model from "what do I notice?" to "which of the expected categories do I see?"
 
 ### What's the architecture doing to cognitive mode?
 

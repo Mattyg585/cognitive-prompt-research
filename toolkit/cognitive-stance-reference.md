@@ -97,6 +97,82 @@ This is preferable to structural separation for interactive work because:
 
 ---
 
+## Task-Type Awareness
+
+Different types of tasks need different structural approaches. The principles above are universal, but how you apply them depends on what the task is actually asking for. The model can infer task type from the prompt — the key is knowing what to do differently once the type is identified.
+
+### Analytical tasks (contracts, policies, code review, compliance)
+
+Quality is primarily about accuracy, completeness, and insight. The output is judged on *what it says*, not *how it says it*.
+
+- Pipeline separation helps because clean investigation context produces better findings
+- Handoffs should strip cognitive mode — structured data (bullets, JSON, key-value) is the right boundary
+- The convergent-divergent rhythm (compress → reason → compress → reason) applies directly
+- Investigation and evaluation are reliably incompatible — separate them
+
+### Creative and voice-building tasks (blog posts, marketing, essays, storytelling)
+
+Quality is primarily about sustained authorial presence, tone, and conviction. The output is judged on *how it reads*, not just *what it covers*.
+
+- Investigation and generation can be **compatible** — the exploration IS the voice-finding process
+- Pipeline separation can fragment voice by forcing each agent to reconstruct it from descriptions rather than carrying it forward as lived experience
+- The productive split is content/craft vs compliance — separate creative work from editorial/SEO work, not thinking from writing
+- Handoffs between creative stages should carry **voice samples** (actual prose fragments), not just structured descriptions. Mode-carrying prose is a feature here, not a risk
+- Fewer, wider stages outperform many narrow ones
+- Lighter, less vivid phase boundaries create less anticipatory interference than vivid ones (see anti-patterns below)
+- Tier 2 (single context with scope boundaries) may outperform Tier 3 on the dimension that matters most
+
+### Investigation and research tasks (exploration, fact-finding, sense-making)
+
+Quality is about depth, surprise, and following threads that weren't anticipated.
+
+- Lenses over seeds — guide how to look, not what to find
+- Let investigation be asymmetric — don't prescribe equal-weight parallel threads
+- Keep evaluation criteria out of the investigation context entirely
+- Compression between investigation and downstream reasoning is critical
+
+### The inference question
+
+The model can usually infer task type from the prompt it's reading. The architect's first move is always "what is this prompt actually asking for?" — and it gets this right. The issue is not inference accuracy. It's that after correctly inferring the task type, the agents need to reach for **different structural patterns** rather than applying the analytical-task skeleton with modifications. The guidance above provides those different patterns.
+
+---
+
+## Anti-Patterns That Look Like Good Practice
+
+These patterns appear in well-crafted prompts and feel like improvements. They produce worse output because of how they interact with the model's anticipatory processing. They were identified through empirical testing — a prompt with these patterns scored below baseline despite being structurally more sophisticated.
+
+### Declared architecture that doesn't match actual architecture
+
+A prompt names sequential phases ("Phase 1: Investigate", "Phase 2: Write", "Phase 3: Polish") but all phases exist in the same context window. The model reads the entire prompt before generating anything. Phase labels create an illusion of sequential cognitive separation that does not actually exist.
+
+**Why this is worse than no phases at all**: A prompt that is honestly convergent throughout has no gap between what it promises and what it delivers. A prompt that declares investigate → generate → edit but delivers all three simultaneously creates anticipatory awareness of later phases during earlier ones. The model investigates knowing how it will be evaluated. The gap between declared and actual architecture produces output that passes all criteria without genuinely inhabiting any phase.
+
+**Mitigation**: For analytical tasks, use actual pipeline separation. For creative tasks, use lighter phase boundaries — or remove later-phase criteria entirely and present them after the draft (two-turn interaction).
+
+### Criterion gates inside investigation
+
+"Do not move to Phase 2 until you have an angle. Choose the one that most directly addresses X and Y."
+
+This converts open investigation into criterion-evaluated delivery. The model finds things that pass the gate rather than things that are alive. It exits investigation in evaluative mode, not generative mode. The output passes the selection criteria but lacks the quality of something genuinely found.
+
+### Process notes inside generation
+
+"The opening should be written last, once you know what the piece became."
+
+Good advice for a human writer. For a model in a single-pass context, this concentrates metacognitive attention on the opening before a word of the draft exists. The model enters generation self-monitoring rather than generating. The instruction's intent is to improve the opening; the effect is to pre-load it with evaluative attention.
+
+### Prescribed threads posed as open questions
+
+"Follow two threads: Thread 1 (product) and Thread 2 (reader)."
+
+This looks like a lens — it uses exploratory language ("follow," "what's actually happening here?"). But the parallel equal-weight structure normalises bilateral investigation. Real investigation is asymmetric — sometimes one thread is everything. The anti-pattern is not the threads themselves but the equal-weight parallel framing that suppresses the follow-where-it-leads quality.
+
+### Vivid role-framing in later phases
+
+"You are an editor, not a writer" in a later phase creates a stronger anticipatory image during earlier phases than bland mode-naming would. The more vivid the later-phase identity, the more it bleeds backward. Paradoxically, less craftsmanship in phase transitions can produce cleaner cognitive separation.
+
+---
+
 ## The Cognitive Stack
 
 Language patterns don't appear from nowhere. They're shaped by layers of human cognition, each one influencing the layers below it. When designing prompts, you can intervene at any layer — and **higher-layer interventions cascade further**.
@@ -132,6 +208,42 @@ Each layer shapes the one below it. Changing a single word at the epistemic laye
 ### When to use this
 
 When designing prompts or pipeline stages, ask: at what level of the stack am I intervening? If you're only assigning tasks (mode level), you're leaving the higher layers unset — and the model will fill them from whatever's in the context. Set the epistemic stance explicitly and the lower layers follow.
+
+---
+
+## Epistemic Stance as Independent Variable
+
+Epistemic stance — the top of the cognitive stack — is not just the most powerful intervention point. It's an **independently powerful mechanism** that produces most of the improvement from Tier 1 (original) to Tier 2 (optimised), regardless of whether pipeline separation is also used.
+
+### The mechanism
+
+Per Chinn et al.'s Epistemic Cognition framework, epistemic stance works by setting three things simultaneously:
+
+- **Epistemic aims**: what the thinker is trying to achieve with respect to knowledge. "Explore before concluding" sets an aim of exploration over closure. "Discover what's here" sets an aim of understanding over judgment.
+- **Epistemic virtues**: dispositions that support good epistemic practice. Exploration aims activate thoroughness, intellectual humility, willingness to follow threads, tolerance for ambiguity. These are virtues the model has learned from training on exploratory human writing.
+- **Epistemic vices suppressed**: premature certainty, closure-seeking, confirmation bias, framework-first thinking. An explicit exploratory stance suppresses the distributional patterns associated with these vices — the model is less likely to commit early, less likely to force findings into pre-existing categories.
+
+This explains why a single sentence like "you are discovering what's here — observations, not findings" can transform output quality. It's not a mode assignment ("investigate"). It's an epistemic stance that cascades through every layer of the cognitive stack: intent shifts from judging to understanding, posture shifts from auditor to explorer, cognitive mode shifts from evaluative to investigative, register shifts from committed to hedged, and the resulting language patterns produce fundamentally different token distributions.
+
+### Two independent mechanisms
+
+The research shows that Tier 2 and Tier 3 improvements come from two distinct, separable mechanisms:
+
+1. **Epistemic stance (Tier 2)**: Changes HOW the model approaches the task — explore vs conclude, discover vs judge. This is the primary source of Tier 1 → Tier 2 improvement. It works within a monolithic prompt because it reshapes the model's entire cognitive posture from the top of the stack down.
+
+2. **Context isolation (Tier 3)**: Changes WHAT the model can discover — prevents evaluation criteria from pre-filtering investigation. This is the source of Tier 2 → Tier 3 improvement, when it appears. It works by giving recognition-primed investigation a clean context free of criterion-referenced framing.
+
+These mechanisms are independent. You can have epistemic stance without context isolation (Tier 2). You can have context isolation without proper epistemic stance (a poorly designed pipeline). The strongest results come from both: pipeline stages with explicit epistemic stances at each stage boundary.
+
+### Practical implications
+
+- **Tier 2 is primarily an epistemic stance intervention.** When you optimise a monolithic prompt and see improvement, most of that improvement comes from setting the right epistemic stance — not from removing numeric anchors, not from replacing seeds with lenses (though those help), but from telling the model HOW to relate to the knowledge it's producing.
+
+- **Tier 3's additional value is context isolation.** When pipeline separation produces a qualitative leap beyond Tier 2, it's because the clean context enables recognition-primed discovery that epistemic stance alone cannot protect from criterion-referenced contamination. The stance says "explore" but the evaluation criteria in context still bias what the model notices.
+
+- **When Tier 3 shows no improvement over Tier 2**, it's often because the task is recognition-primed (see [The Recognition-Primed vs Investigation-Required Boundary](#the-recognition-primed-vs-investigation-required-boundary)) — epistemic stance was the binding constraint, and context isolation has nothing additional to contribute.
+
+- **When designing pipeline stages**, set epistemic stance explicitly at each stage. Don't just assign tasks ("Stage 1: investigate"). Set the epistemic relationship to knowledge ("Stage 1: you are discovering what's here — observations that may or may not matter, patterns that may or may not hold. Explore before concluding."). The stance cascades; the task assignment doesn't.
 
 ---
 
@@ -217,11 +329,21 @@ The convergent/divergent shorthand maps roughly: Investigation and Generation ar
 
 ## How Mode Contamination Actually Works
 
-The mechanism isn't mysterious. When a prompt says "find issues AND assess their severity," the model doesn't do investigation and then evaluation. It does both simultaneously — which means it only investigates things it can already evaluate. The evaluation criteria become a pre-filter on investigation. Subtle, hard-to-classify patterns get dropped because they don't fit a severity bucket yet.
+The mechanism isn't mysterious — but it's more than simple overload. When a prompt says "find issues AND assess their severity," the model doesn't do investigation and then evaluation. It does both simultaneously — which means it only investigates things it can already evaluate. The evaluation criteria become a pre-filter on investigation. Subtle, hard-to-classify patterns get dropped because they don't fit a severity bucket yet.
+
+### The decision architecture switch
+
+The deeper mechanism maps to Klein's Recognition-Primed Decision Making (RPD) model (Klein, 1999). When evaluation criteria are present in context during investigation, they don't just add extraneous cognitive load — they **switch the decision architecture** from recognition-primed to criterion-referenced. This is a qualitatively different degradation than simple overload.
+
+Recognition-primed processing is how experts naturally investigate: they recognise situations as instances of patterns and follow threads of interest. The process is generative — "what patterns do I see?" leads somewhere unexpected, because pattern recognition activates associations that weren't prescribed by any framework. When evaluation criteria enter the context, the model shifts from "what patterns do I see?" to "which of these criteria are met?" — the investigation becomes subordinate to the evaluation framework.
+
+This explains why the interference is invisible in output quality: criterion-referenced analysis produces competent, thorough-looking results. Every criterion gets checked, every finding maps to a category, the output looks complete. But it prevents the recognition-primed discoveries that only happen when investigation runs in a clean context — the discoveries that make Tier 3 pipeline output qualitatively different. The V3/V4 experiment showed exactly this: freed from evaluation criteria, the investigation agent made recognition-primed discoveries (empathetic reframing, naming-family inference, strategic communication insight) that criterion-referenced analysis would never produce because they don't correspond to any pre-existing evaluation category.
+
+### How this shows up in practice
 
 This shows up differently depending on what's mixing:
 
-**Investigation + Evaluation**: Pre-filtering. The model finds what it can classify and stops. Subtle patterns that don't fit existing categories are dropped.
+**Investigation + Evaluation**: Decision architecture switch. The model shifts from recognition-primed discovery to criterion-referenced checking. It finds what it can classify and stops. Subtle patterns that don't fit existing categories are dropped — not because the model lacks capability, but because criterion-referenced processing doesn't follow threads that lack a destination in the evaluation framework.
 
 **Investigation + Generation**: Solution-shaped investigation. The model skips findings it can't fix. Investigation becomes a funnel for recommendations rather than understanding.
 
@@ -238,6 +360,39 @@ But not all mixing is harmful:
 **Evaluation + Synthesis**: Assess then commit is a natural progression. These can share a context productively.
 
 **The principle**: if both types of thinking benefit from the same posture (both convergent, or light structuring over divergent), they can coexist. If they pull in opposite directions (one needs open exploration, the other needs pinning down), they interfere.
+
+### Voice-continuity tasks: when separation breaks what it's trying to protect
+
+Not all divergent work benefits from pipeline separation equally. **Voice-building tasks** — creative writing, narrative content, persuasive prose — have a property that analytical tasks don't: **voice is cumulative**. It builds through sustained engagement with the material and strengthens through the act of writing.
+
+In analytical work, you can safely separate investigation from synthesis, compressing findings into structured form between them. The structured handoff strips cognitive mode without losing anything important — the analysis doesn't need to "sound like" the investigation.
+
+In voice-building work, the investigation IS the voice-finding process. The writer discovers the voice by engaging with the product, the audience, the emotional territory. When you break this into Explorer → Architect → Writer, the Writer receives a *plan about voice* ("direct, confident, slightly witty") rather than having *developed voice* through engaging with the material. The plan describes the voice; the exploration embodies it.
+
+**Evidence**: In the A2 marketing content experiment, Tier 2 (single context with scope boundaries) produced stronger voice than Tier 3 (four-agent pipeline), despite Tier 3 scoring higher on technical dimensions (specificity, data interpretation, SEO). The pipeline's clean context boundaries also cleaned the voice — each agent started fresh, so the voice had to be reconstructed from descriptions rather than carried forward as lived experience.
+
+**The diagnostic question**: Is the quality of this output primarily about *what it says* (analytical accuracy, completeness, insight) or *how it says it* (voice, tone, sustained authorial presence)? If the former, standard pipeline separation applies. If the latter, voice continuity may require:
+
+- **Fewer pipeline stages** — combine investigation and generation into a single agent that explores AND writes, so voice emerges from exploration rather than being reconstructed from a plan
+- **Voice samples in handoffs** — if stages must be separate, carry actual prose fragments that demonstrate the discovered voice, not just structured descriptions of it
+- **The split should be content/craft vs compliance** — separate the creative work (investigation + writing) from the editorial work (SEO, formatting, channel compliance), not the thinking from the writing
+
+This doesn't contradict the core theory — it refines it. Investigation + evaluation is still toxic. But investigation + generation, which is listed as an incompatible pair for analytical work (the model skips findings it can't fix), may be a *compatible* pair for creative work where the "fix" IS the writing itself. The investigation doesn't funnel toward solutions — it funnels toward expression.
+
+### Data stance: how handoff design shapes what downstream agents can discover
+
+Mode contamination doesn't only happen through agent prompts. **The data passed between agents carries a cognitive stance** that shapes what the receiving agent can do with it.
+
+- **Descriptive data** (raw extractions, what's there): opens the widest space for downstream processing
+- **Classified data** (organised by categories, grouped by type): useful but constrains — the next agent sees through the classification's lens
+- **Evaluated data** (judged, scored, filtered): most constrained — downstream agents inherit the evaluation and can only work within its boundaries
+- **Exploratory data** (threads followed, patterns noticed): carries investigative momentum but may bias the receiver toward continued exploration
+
+When an investigative agent receives already-evaluated data, its investigation is pre-shaped by the evaluation. It only investigates things the previous evaluation surfaced. This is mode interference, but it's not prompt interference — it's **data interference**. The data's stance has already narrowed the space before the agent begins.
+
+**The design implication**: When traceability matters — when later agents might need to "pull on a thread" back to source material — preserve access to lower-stance data alongside higher-stance summaries. An investigation agent should receive both the raw material AND the structured summary, so it can follow threads the summariser didn't anticipate. If you only pass the summary, you've made the summariser's cognitive choices the ceiling for every downstream agent.
+
+**Agent mode + data stance = processing quality.** Getting either one right isn't enough. An investigative agent with clean prompting but pre-evaluated data will produce investigation-shaped evaluation. A generation agent with creative prompting but template-structured input will produce creative-sounding template completion. The pair must be aligned.
 
 ### Output structure carries mode too
 
@@ -366,6 +521,50 @@ Pipeline analysis catches what individual prompt analysis misses:
 
 When analysing a pipeline, look at each prompt individually *and then* zoom out to look at the sequence. The individual analysis catches within-prompt conflicts. The pipeline analysis catches between-prompt interference.
 
+### When to use Tier 3 vs Tier 2
+
+The pipeline is not universally better. It earns its cost specifically when:
+- The task requires investigation of novel/specific data (not general knowledge application)
+- Investigation must discover patterns without pre-filtering (evaluation criteria would suppress recognition-primed discovery)
+- The input data has emergent properties that only appear when you look without a framework (clause interactions in contracts, policy chain effects in configurations, architectural patterns in code)
+
+When the task is primarily knowledge-application (the model reasoning from training), Tier 2 with proper epistemic stance is the sweet spot. The pipeline would force the model back down the Dreyfus skill ladder from intuitive expert to deliberate proficient — adding cost without adding insight.
+
+---
+
+## The Recognition-Primed vs Investigation-Required Boundary
+
+The critical variable for when pipeline separation earns its cost: **does the task require discovering patterns from novel input data, or applying known frameworks from training knowledge?**
+
+### Recognition-primed tasks
+
+The model has seen thousands of examples in training. The correct analysis can be produced without seeing the specific data (or with only surface-level engagement with it). Examples: answering legal questions from training knowledge, explaining financial concepts, applying known frameworks to standard scenarios.
+
+**Tier 2 (optimised monolithic) is sufficient.** Tier 3 pipeline adds overhead and may degrade fluency. The model is operating in Klein's recognition-primed mode on *familiar* territory — it recognises the situation type from training and applies known patterns. Forcing pipeline separation here pushes the model back down the Dreyfus skill ladder from intuitive expert to deliberate proficient, adding latency and fragmentation without adding insight.
+
+### Investigation-required tasks
+
+The model must discover patterns from specific data it has never seen. The correct analysis CANNOT be produced without deeply engaging with the particular input. Examples: reviewing a specific contract's clause interactions, analysing a specific organisation's conditional access policies, investigating a specific codebase's architecture.
+
+**Tier 3 pipeline separation earns its cost** because investigation must run without evaluation contamination. The novel data requires recognition-primed processing — following threads, noticing what's unusual, discovering emergent patterns. Evaluation criteria in context would switch the decision architecture from recognition-primed to criterion-referenced, suppressing exactly the discoveries that make the investigation valuable.
+
+### The litmus test
+
+**Could the correct analysis be produced without seeing the data?** If yes — recognition-primed, Tier 2. If no — investigation-required, Tier 3.
+
+Seven cognitive science frameworks converge on this same boundary from different angles:
+- **Klein's RPD** (1999): familiar vs novel situation recognition — experts use pattern matching on familiar situations but shift to deliberate analysis on novel ones
+- **Kahneman-Klein** (2009): valid intuition requires learnable regularities AND opportunity to learn them — the model has learned regularities for common tasks but not for specific novel data
+- **Cognitive Load Theory** (Sweller): extraneous load matters when intrinsic load is high — evaluation criteria are tolerable extraneous load for simple knowledge-application but devastating for genuine investigation of complex novel input
+- **Cognitive Flexibility Theory** (Spiro et al.): ill-structured vs well-structured domains — well-structured domains (standard legal questions) support schema application; ill-structured domains (specific contract clause interactions) require flexible recombination that rigid evaluation frameworks prevent
+- **Bereiter & Scardamalia**: knowledge-telling vs knowledge-transformation — knowledge-telling retrieves and organises existing knowledge (Tier 2 sufficient); knowledge-transformation generates new understanding by working through the problem (Tier 3 needed)
+- **Situated Cognition** (Brown, Collins, Duguid): novel affordances vs learned affordances — novel input data presents affordances that only emerge through situated engagement, not through framework application
+- **Dreyfus skill model**: forcing an expert back to proficient — beneficial on genuinely novel situations (where expert intuition may miss novel features), harmful on familiar ones (where deliberate analysis adds cost without insight)
+
+### When to use this
+
+Before designing for pipeline separation, ask: is this task fundamentally about discovering patterns in specific data, or applying known patterns from training? The answer determines whether Tier 3's additional cost produces additional value or just additional overhead.
+
 ---
 
 ## Runtime Composition: Skills, Sub-agents, and Progressive Loading
@@ -439,13 +638,21 @@ Crucially, **task-set inertia** means the prior task's cognitive configuration p
 
 The **n-2 repetition cost** finding adds nuance: returning to a recently abandoned task (A→B→A) is *harder* than switching to a new task (C→B→A), because the abandoned task was actively inhibited. This may explain why interleaving modes (investigate→evaluate→investigate) is worse than clean separation.
 
-A 2025 paper directly modelled "Attentional Residue" in LLMs as analogous to task-switching costs, finding that when a prompt shifts cognitive framing mid-context, the earlier framing persists as interference.
+A 2025 paper ("Cognitive Load Limits in LLMs") directly modelled "Attentional Residue" in LLMs as analogous to task-switching costs, formalising it as a computational analog of extraneous cognitive load. When a prompt shifts cognitive framing mid-context, the earlier framing persists as interference.
+
+These two mechanisms are distinct and compound:
+
+- **Attentional residue** (the key mechanism): Contextual framing from evaluation criteria *persists and biases* investigation processing. The model reads THROUGH the evaluation framework, pre-filtering what it notices. This is not temporal switching cost — it's framing contamination. The evaluation criteria don't just occupy space in the context; they actively reshape how subsequent content is processed, biasing attention toward criterion-relevant patterns and away from novel ones.
+
+- **Proactive interference** (the compounding mechanism): Earlier context information disrupts processing of later information. In a monolithic prompt, accumulated residue from investigation contaminates evaluation, which contaminates generation, which contaminates synthesis. Each stage is degraded by all prior stages' cognitive residue. The degradation compounds — by the final stage, the context carries the accumulated framing of every prior mode.
+
+The distinction matters for intervention design. Attentional residue can be partially addressed with scope boundaries ("you are investigating, not assessing") — though the framing contamination persists at a distributional level. Proactive interference cannot be addressed within a single context at all; it requires architectural separation (clean contexts, structured handoffs, or persistent storage between stages).
 
 ### Proactive interference in working memory (demonstrated in LLMs, 2025)
 
-Working memory is subject to proactive interference — earlier information disrupts processing of newer information, especially when the items are semantically related. A paper titled "Unable to Forget: Proactive Interference Reveals Working Memory Limits in LLMs Beyond Context Length" found that LLM retrieval accuracy declines log-linearly as interference from earlier content accumulates — and that natural language prompts for "strategic forgetting" yielded only marginal improvements.
+Working memory is subject to proactive interference — earlier information disrupts processing of newer information, especially when the items are semantically related. A paper titled "Unable to Forget: Proactive Interference Reveals Working Memory Limits in LLMs Beyond Context Length" (2025) found that LLM retrieval accuracy declines log-linearly as interference from earlier content accumulates — and that natural language prompts for "strategic forgetting" yielded only marginal improvements. This is a fundamental working-memory limitation, not a prompting problem.
 
-This maps directly to the growing middle problem. Earlier phases' output isn't just taking up space — it's actively interfering with the processing of later phases. The interference worsens as the context grows. The solution isn't "use more context" — it's managing what's in the context.
+This maps directly to the growing middle problem. Earlier phases' output isn't just taking up space — it's actively interfering with the processing of later phases. The interference worsens as the context grows. The solution isn't "use more context" — it's managing what's in the context. Prompt engineering provides only marginal relief; the interference is structural.
 
 A separate "Cognitive Workspace" paper found that naive "add-all" approaches to context lead to "catastrophic interference" — the same pattern as mode contamination in growing-middle architectures.
 
@@ -508,3 +715,9 @@ The mechanisms are well-established. The application to AI prompt design is rece
 - Meta-R1 (2025) — Empowering LLMs with Metacognition ([arXiv:2508.17291](https://arxiv.org/pdf/2508.17291))
 - Nelson & Narens (1990) — Metamemory: A Theoretical Framework and New Findings
 - Wray, Kirk, Laird (2025) — Cognitive Design Patterns for LLM Agents ([arXiv:2505.07087](https://arxiv.org/html/2505.07087v2))
+- Klein (1999) — Sources of Power: How People Make Decisions
+- Kahneman & Klein (2009) — Conditions for Intuitive Expertise: A Failure to Disagree (American Psychologist)
+- Chinn, Buckland, Samarapungavan (2011) — Expanding the Dimensions of Epistemic Cognition
+- Bereiter & Scardamalia (1987) — The Psychology of Written Composition
+- Dreyfus & Dreyfus (1986) — Mind Over Machine: The Power of Human Intuition and Expertise
+- Spiro et al. (1988) — Cognitive Flexibility Theory: Advanced Knowledge Acquisition in Ill-Structured Domains

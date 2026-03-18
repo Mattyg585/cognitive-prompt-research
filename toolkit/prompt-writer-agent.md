@@ -46,25 +46,56 @@ Most briefs involve two to four of these. The question is whether they can coexi
 
 **Incompatible combinations** — need separation:
 - Investigation + evaluation (evaluation pre-filters investigation)
-- Investigation + generation (only investigates things it can fix)
+- Investigation + generation *for analytical tasks* (only investigates things it can fix)
 - Synthesis during investigation (premature narrative commitment)
 - Reframing before evaluation (simplifies before understanding)
 - Orchestration + any content work (coordinator goes down rabbit holes)
 
+**Context-dependent compatibility — voice-building tasks:**
+- Investigation + generation *for creative/narrative tasks* can be **compatible**. When the output's quality depends on voice, tone, and sustained authorial presence (blog posts, marketing content, essays), investigation funnels toward expression rather than solutions. The exploration IS the voice-finding process. Separating them forces the writer to reconstruct voice from descriptions rather than carrying it forward from discovery. Tier 2 may outperform Tier 3 on the dimension that matters most (voice) even if Tier 3 scores higher on technical dimensions.
+
 If everything fits in one prompt without interference — write one prompt. Don't split for architectural purity. Split because the mixing would degrade output.
 
 ### Is this one prompt or a pipeline?
+
+**The recognition-primed vs investigation-required litmus test**: Ask: "Could the correct analysis be produced without seeing the specific data?" If yes — the task applies known frameworks from training knowledge (recognition-primed) — Tier 2 with proper epistemic stance is usually sufficient. If no — the task requires discovering patterns from novel/specific data (investigation-required) — Tier 3 pipeline with clean context separation between investigation and evaluation is essential.
 
 **One prompt** when:
 - The task needs one or two compatible types of thinking
 - The input is manageable (not hundreds of items to process)
 - The output doesn't need to feed another AI step
 
-**A pipeline** when:
-- The task needs incompatible types of thinking
+**Optimised monolithic (Tier 2)** when:
+- The task is recognition-primed — the model's training knowledge is the primary source
+- Pipeline separation would force the model back down the Dreyfus skill ladder from intuitive expert to deliberate proficient, adding latency and cost without adding insight
+- Proper epistemic stance ("explore before concluding") and scope boundaries are sufficient to prevent mode contamination
+
+**A pipeline (Tier 3)** when:
+- The task is investigation-required — novel data, specific documents, unfamiliar configurations
+- Investigation must run in clean context without evaluation criteria, classification categories, or predetermined frameworks — just lenses that guide attention without pre-filtering what can be found
+- The task needs incompatible types of thinking (especially investigation + evaluation)
 - The input volume requires chunking (too much for one context)
 - Different stages need different context (investigation shouldn't see evaluation criteria)
 - The output of one stage feeds the next
+
+Pipeline separation is essential for investigation-required tasks because it prevents evaluation criteria from suppressing recognition-primed pattern discovery. The investigation agent must run in a clean context — no evaluation framework, no classification categories, just lenses that guide attention without pre-filtering what can be found.
+
+**Voice-continuity pipelines** (creative writing, narrative content, persuasive prose):
+When the task is voice-building — where quality depends on sustained authorial presence, not just analytical accuracy — the pipeline structure should be different:
+- **Fewer, wider stages.** Combine investigation and generation into a single agent that explores AND writes. Voice builds through engagement; separating them fragments it.
+- **The split is content/craft vs compliance.** Separate creative work (exploration + writing) from editorial work (SEO, formatting, channel conventions). This is the productive separation — not thinking vs writing, but creating vs polishing.
+- **Handoffs carry voice samples.** If stages must be separate, pass actual prose fragments that demonstrate the discovered voice, not just structured descriptions of it ("direct, slightly witty" is a description; a paragraph that IS direct and slightly witty is a sample). Mode-carrying prose is a *feature* in creative handoffs, not a risk.
+- **Tier 2 is a strong contender.** For voice-continuity tasks, single-context with scope boundaries may outperform a pipeline on the dimension that matters most. Test both — but don't assume pipeline is always better.
+- **Lighter phase boundaries.** For Tier 2 creative prompts, less vivid phase naming produces less anticipatory interference. A bland transition ("now shift to editing") outperforms a vivid one ("you are now an editor, not a writer") because the vivid framing creates a stronger anticipatory image during earlier phases.
+
+**Anti-patterns to avoid in creative prompts** (see reference material for full detail):
+- Don't put criterion gates inside investigation — "do not move on until you have X that meets criteria Y" converts exploration into criterion-evaluated delivery
+- Don't put process notes inside generation — "write the opening last" concentrates metacognitive attention before a word exists
+- Don't prescribe equal-weight parallel investigation threads — let the model follow what's alive rather than normalising bilateral exploration
+- Don't use vivid role-framing in later phases — it bleeds backward more than bland mode-naming
+- Don't declare multi-phase architecture in a single context unless the phases genuinely don't interfere — the gap between declared and actual architecture is worse than no phases at all
+
+**Epistemic stance is independently powerful** and should be applied in BOTH Tier 2 and Tier 3 designs. It works by setting epistemic aims (exploration over closure) and suppressing premature pattern matching. This is separate from context isolation — Tier 2 gets the stance benefit, Tier 3 gets both stance AND isolation benefits.
 
 When it's a pipeline, the design questions become: how many agents, what order, what crosses between them, and how to execute.
 

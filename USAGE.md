@@ -1,18 +1,19 @@
 # How to Use the Toolkit
 
-This project has three toolkit agents — Prompt Architect, Prompt Writer, and Evaluator — that can be invoked from Claude Code or GitHub Copilot (Chat or CLI). This document covers how to invoke them from each tool.
+This project has two toolkit agents — Prompt Architect and Prompt Writer — that can be invoked from Claude Code or GitHub Copilot (Chat or CLI). This document covers how to invoke them from each tool.
 
 ---
 
-## The Three Agents
+## The Two Agents
 
 | Agent | What it does | When to use it |
 |---|---|---|
 | **prompt-architect** | Analyses a prompt for cognitive mode conflicts, anchors, seed/lens issues | Before revising any prompt |
 | **prompt-writer** | Revises prompts and designs pipelines from architect findings | After analysis; to build Tier 2 or Tier 3 |
-| **evaluator** | Scores outputs blind against the rubric | After all tiers have been run |
 
-These map directly to Steps 1–3 and Step 7 of the experiment protocol.
+Analyse, revise, run, compare. You're the domain expert — you'll know if the output is better.
+
+> **For research replication:** An evaluator agent and rubric also exist (`evaluation/`, `.claude/agents/evaluator.md`) for the formal blind comparison protocol. See `RUN-ALL.md` for the full experiment methodology.
 
 ---
 
@@ -35,15 +36,10 @@ Use the prompt-architect agent to analyse experiments/A1-legal-contract-review/o
 Use the prompt-writer agent to revise the prompt at experiments/A1-legal-contract-review/original/SKILL.md based on the analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
 ```
 
-```
-Use the evaluator agent to compare outputs for experiment A1. Baseline: experiments/A1-legal-contract-review/baseline-runs/. Optimised: experiments/A1-legal-contract-review/optimised-runs/. Pipeline final stage: experiments/A1-legal-contract-review/pipeline-runs/run-N/04-strategic-advisor-output.md
-```
-
 **Via legacy slash commands** (still work, but run in current context — less clean):
 ```
 /analyse-prompt experiments/A1-legal-contract-review/original/SKILL.md
 /write-prompt Revise based on analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md. Original: experiments/A1-legal-contract-review/original/SKILL.md
-/evaluate-run Compare outputs for experiment A1 [paths...]
 ```
 
 **Prefer the explicit "Use the X agent" form.** The legacy slash commands work but run in the current conversation context, which means the architect's output is in context when the writer runs. That's a mild version of the contamination the research documents.
@@ -72,10 +68,6 @@ In the Copilot Chat panel, type:
 
 ```
 @prompt-writer Revise the prompt at experiments/A1-legal-contract-review/original/SKILL.md based on the analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
-```
-
-```
-@evaluator Compare outputs for experiment A1. Baseline in experiments/A1-legal-contract-review/baseline-runs/, optimised in experiments/A1-legal-contract-review/optimised-runs/, pipeline final output at experiments/A1-legal-contract-review/pipeline-runs/run-1/04-strategic-advisor-output.md
 ```
 
 ### Using handoffs
@@ -117,10 +109,6 @@ Copilot CLI delegates to custom agents automatically based on your request. You 
 @prompt-writer revise the prompt at experiments/A1-legal-contract-review/original/SKILL.md using the analysis at experiments/A1-legal-contract-review/analysis/prompt-architect-analysis.md
 ```
 
-```
-@evaluator compare outputs for experiment A1 [paths]
-```
-
 If `@agent-name` syntax doesn't work in your CLI version, use natural language and the CLI will route automatically:
 ```
 Analyse the prompt at experiments/A1-legal-contract-review/original/SKILL.md for cognitive mode conflicts
@@ -160,12 +148,10 @@ The writer knows both formats. It will output correctly structured files with th
 # Claude Code — explicit subagent invocation
 Use the prompt-architect agent to analyse [file]
 Use the prompt-writer agent to [revise / design pipeline] based on [analysis file]
-Use the evaluator agent to compare [baseline / optimised / pipeline outputs]
 
 # Copilot Chat — @ mention
 @prompt-architect [instruction]
 @prompt-writer [instruction]
-@evaluator [instruction]
 
 # Copilot CLI — @ mention or natural language
 @prompt-architect [instruction]
@@ -181,17 +167,17 @@ Use the evaluator agent to compare [baseline / optimised / pipeline outputs]
 .claude/agents/
 ├── prompt-architect.md      # Claude Code subagent
 ├── prompt-writer.md         # Claude Code subagent
-└── evaluator.md             # Claude Code subagent
+└── evaluator.md             # Claude Code subagent (research use)
 
 .github/agents/
 ├── prompt-architect.agent.md   # Copilot Chat + CLI agent
 ├── prompt-writer.agent.md      # Copilot Chat + CLI agent
-└── evaluator.agent.md          # Copilot Chat + CLI agent
+└── evaluator.agent.md          # Copilot Chat + CLI agent (research use)
 
 .claude/commands/               # Legacy slash commands (still work)
 ├── analyse-prompt.md
 ├── write-prompt.md
-└── evaluate-run.md
+└── evaluate-run.md             # Research use
 
 toolkit/
 ├── prompt-architect-agent.md   # Full framework loaded by both agent formats

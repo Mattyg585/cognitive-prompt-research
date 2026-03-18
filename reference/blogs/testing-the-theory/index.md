@@ -1,9 +1,9 @@
 ---
-title: "Testing the Theory — Six Experiments Against Production Prompts"
-date: 2026-03-15
+title: "Testing the Theory — Nine Experiments, One Failed Prediction, and a Sharper Thesis"
+date: 2026-03-18
 draft: false
-description: "I took the cognitive mode separation theory from my Conditional Access project and tested it against Anthropic's production prompts across six domains. Pipeline won in five. The exception was the most interesting finding."
-summary: "The convergent/divergent framework from my AI pipeline project was a theory built on one domain. I tested it against Anthropic's knowledge-work-plugins across legal, marketing, HR, design research, engineering, and security operations. The results were more consistent than I expected — and the one domain where the pattern broke taught me more than the five where it held."
+description: "I tested the cognitive mode separation theory against Anthropic's production prompts, a professional reasoning benchmark, and five additional models. Pipeline won where investigation was required. It lost where recognition was sufficient. The failed prediction was the most useful result."
+summary: "The convergent/divergent framework from my AI pipeline project was a theory built on one domain. I tested it against Anthropic's knowledge-work-plugins across six domains, then against a professional reasoning benchmark. Pipeline won in five of the original six, then lost on the benchmark — and the failure sharpened the thesis into something more honest: pipelines earn their cost only when the correct output can't be produced without seeing the specific input data."
 tags: ["AI", "Context Engineering", "Prompting", "Cognitive Modes", "LLM"]
 series: "AI Reasoning Engine"
 seriesOrder: 5
@@ -64,7 +64,7 @@ The output still looks fine. Competent, thorough, professional. Good output hide
 
 ---
 
-## What the Experiments Showed
+## What the A-Series Experiments Showed
 
 | Experiment | Domain | Baseline | Optimised | Pipeline | External Validation |
 |---|---|---|---|---|---|
@@ -95,6 +95,14 @@ That second quote is the finding in miniature. The baseline is fine. Nobody read
 
 **SecOps (A6)**: The baseline produces a standard postmortem with a mechanical 5 Whys analysis. The pipeline reframes: *"confidence accumulates across checkpoints without coverage expanding"* and *"multiple overlapping checks can produce less safety than one well-scoped check."* Organisational learning versus compliance document.
 
+### A1 v3: The gap is architectural
+
+I re-ran the legal contract review with v3 of the agents — three pipeline stages instead of four, third iteration of the Tier 2 prompt. Three rounds of prompt improvement. Blind evaluation. Tier 2 scored 23/30. Pipeline scored 28/30.
+
+What the pipeline found that Tier 2 did not: a five-clause data rights cascade across Sections 1.4, 1.5, 1.6, 5.6, and 11.1. A compound risk where 29-day suspension combines with non-refundable fees and no SLA remedy. A non-renewal notice date that defaults against the customer. Indemnification exclusions that hollow out the protection they appear to offer. Post-termination ML model persistence. The evaluator's language: "a lawyer who had read Candidate Y and then read Candidate X would be aware of what Candidate X missed, not the reverse."
+
+I also ran Tier 2 five times to test consistency. All five runs identified the same core issues, missed the same non-obvious issues, and scored 3/5 on Natural Variation. The template inherited from the prompt determines what gets found. The structural ceiling isn't about prompt quality — three iterations of improvement didn't lift it. It's about what a single context window can do when investigation and evaluation share the same space.
+
 ### Validation
 
 For A1, A2, and A4, I ran blind evaluations with Claude (web interface, fresh session, no project context) and Google Gemini. The evaluators received randomised IDs — they didn't know which output came from which tier. They couldn't know, because the IDs were randomly generated strings like WLQZF0 and 8SNX69.
@@ -103,29 +111,75 @@ They invented their own vocabulary for what they saw. Claude Web described the l
 
 ---
 
-## The Creative Writing Boundary
+## The B2 Experiment: Where the Prediction Failed
 
-A2 — marketing content — is where the pattern breaks, and it's the most interesting result in the whole project.
+PRBench is a benchmark for professional reasoning — tasks authored by domain experts with detailed scoring criteria. I picked a hard task: 26 criteria covering HSR antitrust law, scored by Sonnet 4.6 against expert-authored rubrics. This was the kind of complex knowledge work where I expected the pipeline to shine.
 
-Claude Web ranked the optimised version first. Gemini ranked the pipeline first. I preferred the optimised version. The evaluators split.
+The prediction: Baseline < Tier 2 < Pipeline.
 
-The pattern: the pipeline produces better *process* — editorial reasoning, SEO strategy, content architecture. The optimised version produces better *prose* — voice, rhythm, naturalness. For a blog post, prose wins. For a legal brief, process wins.
+The result: Baseline 0.759. Pipeline 0.849. Tier 2 0.950.
 
-This maps to something I've started thinking of as the cognitive stack:
+Tier 2 won. Not by a little — by ten percentage points over the pipeline. A single system prompt with the right epistemic stance, scope boundaries, and uncertainty elevation scored 25 of 26 criteria. The pipeline scored 22. The pipeline was better than baseline, but it wasn't better than a well-written monolithic prompt.
+
+The category-level predictions were worse. I expected the pipeline to improve Handling Uncertainty and Practical Utility. It didn't — both matched baseline. I expected Instruction Following to be unchanged. It was the pipeline's strongest category and the only tier to score 1.000 on it. The theory's predictive power on this task was poor.
+
+### Why the pipeline lost
+
+The pipeline lost for a specific reason, and the reason is more useful than a clean win would have been.
+
+HSR antitrust law is knowledge the model already has. The correct analysis — procedural requirements, valuation mechanics, regulatory strategy — lives in training data. The model doesn't need to investigate the input to figure out what matters. It recognises the pattern and generates the right response. That's recognition-primed decision making (Klein), and for tasks where recognition is appropriate, it works.
+
+The pipeline imposed investigation scaffolding on a task that didn't need investigation. Worse, the handoff schemas between stages stripped procedural detail that mattered. Criteria 17-19 (procedural valuation mechanics) scored 0.000 on the pipeline — same as baseline. A specific question about recent SEC commentary (criterion 26) got lost in the handoff compression. The structured boundary between stages, which is the pipeline's whole mechanism, threw away domain content the model already knew how to use.
+
+---
+
+## The Litmus Test
+
+The B2 failure, set against the A-series results, sharpened the thesis into something I can actually use:
+
+**Could the correct output be produced without seeing the specific input data?**
+
+If yes — recognition-primed. The model matches patterns from training to generate the right analysis. Tier 2 is sufficient. Clean up the prompt, set the right epistemic stance, and get out of the way.
+
+If no — investigation-required. The answer lives in the data, not in the model's prior knowledge. The pipeline earns its cost by forcing the model to actually look before it judges.
+
+PRBench is recognition-primed. The correct HSR analysis could be produced by someone who knows HSR law and reads the task description. The contract in A1 is investigation-required. The compound risk where your data enters ML training under Section 1.6, survives termination under Section 5.6, and has no export mechanism under Section 5.5 — that lives in the specific contract. No amount of legal knowledge generates it without reading the document.
+
+This is the A1/B2 contrast. Same framework, opposite predictions, both confirmed. The litmus test explains why: A1 is investigation-required, B2 is recognition-primed.
+
+---
+
+## A2: Voice Is the Dimension That Matters
+
+The marketing content experiment got a full three-tier evaluation — nine outputs, three per tier, blind-scored. Baseline 17/30. Tier 2 24/30. Pipeline 29/30.
+
+The surprise was where the gap lived. Voice and Engagement showed the largest spread of any dimension across all experiments: baseline 2, Tier 2 4, pipeline 5. The evaluator described the pipeline output as sounding like "someone who has lived this experience, not someone who understands it intellectually." The baseline-to-Tier 2 jump was immediately visible. The Tier 2-to-pipeline jump was subtler — visible to a sophisticated reader, easy to miss otherwise.
+
+Earlier blind evaluations had flagged creative writing as a boundary condition where the pipeline might not help. The full evaluation suggests the boundary is more nuanced than that. The pipeline helps with creative work — but through voice quality and audience modelling, not through the analytical depth that drives improvement in A1 and A6. The dimension that matters shifts with the domain.
+
+---
+
+## Why Domains Respond Differently
+
+The distributional interference mechanism from the framing section above is correct but incomplete. It describes what happens — incompatible language patterns pulling generation in conflicting directions — but it doesn't explain why the interference helps some tasks and hurts others.
+
+Three concepts fill the gap.
+
+**Premature closure** (Croskerry, 2003) is the single most common diagnostic error in medicine — accepting a diagnosis before investigation is complete. The investigation-evaluation toxic pair that the pipeline separates is premature closure. The model sees the contract, recognises familiar patterns, and starts generating analysis before it has finished looking. Medicine's intervention is the same as the pipeline's: force a differential before committing. Stage 1 of the pipeline is a forced differential.
+
+**Recognition-primed decision making** (Klein) is the complement. Under monolithic prompting, the model recognises a pattern and activates the first plausible response. For tasks where the pattern is correct — PRBench, where the model knows HSR law — RPD is efficient. For tasks where the pattern is incomplete — A1, where the compound risks live in the specific contract — RPD forces novel data through familiar templates. The pipeline adds value precisely when RPD is the wrong strategy.
+
+**The expertise reversal effect** (Kalyuga, 2007) explains the cost. Scaffolding that helps novices degrades expert performance. The pipeline is scaffolding. When the model is already expert at the task, the scaffolding is overhead. When the task requires investigation the model can't shortcut, the scaffolding is what prevents premature closure. The B2 pipeline failure is literally the expertise reversal effect — the model was already expert at HSR law, and the pipeline's investigative scaffolding hurt rather than helped.
+
+These aren't decorative theory. They're why the litmus test works. "Could the correct output be produced without seeing the data?" is asking: will recognition-primed decision making give you the right answer, or will it give you premature closure?
+
+The cognitive stack from the earlier posts still holds as a map of where interventions land:
 
 ```
 Epistemic stance  →  Intent  →  Expertise  →  Cognitive mode  →  Register  →  Language patterns  →  Tokens
 ```
 
-Each layer shapes the one below it. Pipeline separation operates at the cognitive mode layer. Creative writing quality lives at the register layer — the specific word choices, sentence rhythms, and hedging patterns that make writing feel human. For analytical work, freeing the cognitive mode cascades down and improves everything below it, including register. For creative work, the pipeline's structured handoffs may actually disrupt the register-level flow.
-
-The right intervention for creative work might be Tier 2 — fix the register — rather than Tier 3 — separate the modes. One experiment doesn't prove a boundary condition. But it points at one, and the cognitive stack gives a reason why the boundary would be where it is.
-
----
-
-## Why Different Domains Respond Differently
-
-The type of improvement varies by domain, and the variation maps to the cognitive stack:
+Each layer shapes the one below it. Pipeline separation operates at the cognitive mode layer. The type of improvement varies by domain:
 
 | Domain type | What Pipeline improves | Stack layer |
 |-------------|----------------------|-------------|
@@ -133,17 +187,16 @@ The type of improvement varies by domain, and the variation maps to the cognitiv
 | Synthesis (A4) | Depth — reframing patterns rather than cataloguing | Cognitive mode + Expertise |
 | Template (A3) | Judgment — nuanced assessment vs filling fields | Expertise + Register |
 | Sequential (A5) | Architecture — the investigation structure itself | Cognitive mode |
-| Creative (A2) | Voice — but Tier 2 captures most of this | Register |
+| Creative (A2) | Voice — pipeline helps, but through a different dimension | Register |
+| Knowledge-based (B2) | Nothing — scaffolding becomes overhead | N/A — expertise reversal |
 
-The higher in the stack the improvement lives, the more pipeline separation helps. Analytical work benefits most because the improvement is at the cognitive mode layer — exactly where the pipeline intervenes. Creative work benefits least because the improvement is at the register layer — below where the pipeline operates, and potentially disrupted by the structured handoffs.
-
-This isn't a post-hoc rationalisation. The cognitive stack came from the theoretical framework, and the predictions map to what the experiments actually showed. But I want to be careful about that word "predictions" — I wrote the framework before running the experiments, but I was also the person scoring them. The internal evaluations are mine. The external blind evaluations are the stronger evidence.
+The higher in the stack the improvement lives, the more pipeline separation helps. Analytical work benefits most because the improvement is at the cognitive mode layer — exactly where the pipeline intervenes. Creative work benefits through voice quality at the register layer. And knowledge-based reasoning doesn't benefit at all — the model already has what it needs, and the pipeline's handoff boundaries strip content that matters.
 
 ---
 
-## Then I Tested It on Other Models
+## Cross-Model Testing
 
-Everything above was generated by Claude. That's a problem. If the findings are model-specific, the theory is less interesting. So I re-ran all six experiments across four additional models via GitHub Copilot CLI: GPT-5.2, GPT-5.2-Codex, GPT-5.3-Codex, and Gemini 3 Pro Preview.
+Everything above was generated by Claude. That's a problem. If the findings are model-specific, the theory is less interesting. So I re-ran all six A-series experiments across four additional models via GitHub Copilot CLI: GPT-5.2, GPT-5.2-Codex, GPT-5.3-Codex, and Gemini 3 Pro Preview.
 
 The results are more interesting than a clean replication.
 
@@ -165,7 +218,7 @@ On models with strong context comprehension — models that can infer task inten
 
 ### The trust chain works in both directions
 
-This is where it gets interesting. The trust chain theory — from the original CA pipeline project — predicted that each layer's cognitive quality cascades to the layers above and below it. The positive direction was demonstrated in the Claude experiments. The cross-model testing demonstrated the **negative direction**: when a pipeline stage fails, the failure cascades. A Stage 1 that produces an intake checklist instead of investigation output means every subsequent stage works with the wrong input. The pipeline amplifies in both directions.
+The trust chain theory — from the original CA pipeline project — predicted that each layer's cognitive quality cascades to the layers above and below it. The positive direction was demonstrated in the Claude experiments. The cross-model testing demonstrated the **negative direction**: when a pipeline stage fails, the failure cascades. A Stage 1 that produces an intake checklist instead of investigation output means every subsequent stage works with the wrong input. The pipeline amplifies in both directions.
 
 Predicting how something fails is harder to fake than claiming it works. The cascade failures are arguably stronger evidence for the trust chain than the positive results.
 
@@ -173,34 +226,35 @@ Predicting how something fails is harder to fake than claiming it works. The cas
 
 Tier 2 — prompt-level optimisation — improved output across every model tested. Removing anchors, replacing seeds with lenses, adding scope boundaries. These fixes helped everywhere without risk of catastrophic failure. If you're not sure your model can handle a pipeline, optimise the prompt. That's not a consolation prize — Tier 2 consistently produced meaningful improvement.
 
+---
+
+## A RAG Implication
+
+There's a retrieval-augmented generation implication I haven't tested yet but think matters. Standard RAG stuffs retrieved documents into context and generates — the same dynamic as A1 baseline. The model sees the retrieved chunks through the lens of what it already knows how to say. The findings that A1's pipeline surfaced and Tier 2 missed are what you'd predict happens in production RAG over novel documents.
+
+Most production RAG systems may be leaving their most valuable findings on the table. Nobody knows, because the output looks competent. That's probably the most impactful experiment to run next.
+
+---
+
 ## What I Trust and What I Don't
 
 I trust:
 
 - **The direction.** Baseline was worst across all models and all experiments. Optimised was better everywhere. The pattern is real.
 - **The external validations.** A1 and A4 had blind evaluation by models with zero project context. Rankings converged independently. That's the strongest evidence.
-- **The creative boundary.** A2 showed the same pattern across every model — the gap between pipeline and optimised is consistently smaller for creative work.
+- **The litmus test direction.** Investigation-required tasks consistently benefit from pipeline separation. Recognition-primed tasks don't. The A1/B2 contrast makes this sharp.
 - **The cascade failures.** They match the theory's predictions about how trust chains break.
 
 I'm uncertain about:
 
-- **Whether the pipeline failures are theory failures or implementation failures.** The pipeline was designed by Claude, for Claude, automated while I cooked a BBQ. It was not tuned for other models. The handoff specs might need model-specific tuning. That's an interesting finding in itself — cognitive pipeline architecture may not be portable across models without adaptation.
+- **The litmus test boundary.** The test is new. Creative work (A2) sits in a space where the pipeline helps through voice rather than analytical depth. Consulting engagements, code review of unfamiliar codebases, organisational assessments — these involve data-dependent reasoning but may not need full pipeline separation. The theory says investigation-required. I haven't tested it.
+- **The minimal viable pipeline.** A1 v3 works with three stages instead of four. A2 works with two. The critical boundary appears to be investigation/evaluation separation — everything else is optimisation. But I haven't tested a two-stage pipeline on analytical tasks to see if that holds.
+- **Whether the pipeline failures are theory failures or implementation failures.** The pipeline was designed by Claude, for Claude. It was not tuned for other models. The handoff specs might need model-specific tuning. That's an interesting finding in itself — cognitive pipeline architecture may not be portable across models without adaptation.
 - **Platform differences.** Claude Code (automatic context isolation via subagents) and Copilot CLI (manual session management) are different execution environments. Some failures may reflect the platform, not the model.
 - **The perfect scores on Claude.** Pipeline scored maximum marks in four of six experiments. That's still suspicious. The cross-model data partially addresses this — seeing the same pipeline produce both 5/5 and 1/5 depending on the model makes the high scores feel more real.
 - **Pipeline cost.** A pipeline uses 4-12x more tokens. For a legal brief, worth it. For a quick summary, not.
+- **Whether stronger models make pipelines unnecessary.** The decomposition literature (arXiv:2506.06843) finds pipeline advantages diminish as models improve. The expertise reversal effect suggests that if the model becomes expert enough at investigating novel data within a single context, the scaffolding becomes overhead. But that's theory, not data.
 - **My time.** This is a side project, not funded research. I haven't manually reviewed every pipeline stage across every model. There are likely process flaws I haven't caught. That's an invitation, not an excuse.
-
----
-
-## What This Means
-
-The industry trend is toward bigger, more comprehensive single prompts. Skills, plugins, progressive loading — mechanisms to make prompts effectively longer without hitting token limits. The assumption: more context equals better output.
-
-These experiments suggest that assumption may be backwards for complex tasks. More context means more cognitive mode mixing. More instructions means more distributional interference between incompatible types of thinking. Skills loaded on demand don't just add capabilities — they contaminate the context with whatever language patterns they carry. And the contamination is invisible because the output is still fine.
-
-I don't think every prompt needs to be a pipeline. Simple tasks with one or two compatible types of thinking work fine as single prompts. The claim applies specifically to complex tasks that require incompatible types of thinking — investigation AND evaluation, exploration AND generation, synthesis AND quality checking.
-
-For those tasks, the monolithic prompt appears to be a ceiling, not a floor. The baseline output is always competent. The gap between competent and genuinely insightful is where the pipeline operates — and that gap is invisible until you separate the modes and compare.
 
 ---
 
@@ -210,26 +264,30 @@ I want to be clear: I'm not arguing that skills are bad. Skills that add domain 
 
 What I think is more interesting is the direction the tooling is already heading. GitHub Copilot now has custom agents with handoff mechanisms — one agent finishes, a transition button appears, and structured output carries to the next agent's fresh context. That's almost exactly the pipeline architecture this research advocates for. Claude Code has subagents that spawn with isolated contexts. The infrastructure for cognitively scoped pipelines exists today.
 
-The practical implication: a plugin doesn't have to be a single prompt. It can be a wrapper around a pipeline. The user invokes the plugin the same way. What changes is what happens inside it — sequential agents with clean handoffs instead of one big context window accumulating interference. Same UX, different cognitive architecture underneath. The legal contract review plugin could internally run a Contract Reader → Playbook Comparator → Redline Writer → Strategic Advisor pipeline, with the user seeing only the final output. No change to the interface. Significant change to the quality.
+The practical implication: a plugin doesn't have to be a single prompt. It can be a wrapper around a pipeline. The user invokes the plugin the same way. What changes is what happens inside it — sequential agents with clean handoffs instead of one big context window accumulating interference. Same UX, different cognitive architecture underneath. The legal contract review plugin could internally run a Contract Reader, then a Playbook Comparator, then a Redline Writer, then a Strategic Advisor pipeline, with the user seeing only the final output. No change to the interface. Significant change to the quality.
 
-The argument isn't skills versus no skills. It's: for complex multi-mode tasks, the evidence says scoped agents with deliberate handoffs produce qualitatively better output than monolithic contexts. The tooling already supports this. The principled argument for *why* it works is what this research provides.
+The argument isn't skills versus no skills. It's: for investigation-required tasks, the evidence says scoped agents with deliberate handoffs produce qualitatively better output than monolithic contexts. For recognition-primed tasks, the evidence says clean up your prompt and save the tokens. The tooling already supports both. The litmus test tells you which.
 
 ---
 
-## What's Next
+## Where This Leaves Things
 
-The full research — all six experiments, all outputs, all evaluations, the theoretical framework, and the toolkit — is [on GitHub](https://github.com/Mattyg585/cognitive-prompt-research). MIT licence. Do whatever you want with it.
+The thesis is narrower and more honest than where I started. Not "pipelines beat monolithic prompts on complex tasks." Instead: pipelines beat monolithic prompts specifically when the task requires investigation of novel data — when the correct output can't be produced from training knowledge alone. For everything else, clean up your prompt and save the tokens.
+
+The cognitive science connections aren't window dressing. They're why the litmus test predicts correctly. Premature closure, recognition-primed decision making, expertise reversal — these are mechanisms with decades of research behind them, and they map directly to the experimental results. The framework went from "this seems to work" to "here's why it works and when it doesn't."
+
+The thing I got wrong — the B2 prediction — turned out to be the most useful result. A theory that always wins is a theory you can't learn from. The failure narrowed the claim, sharpened the test, and connected the work to cognitive science that explains both the successes and the failures.
+
+The full research — all experiments, outputs, evaluations, the theoretical framework, and the toolkit — is [on GitHub](https://github.com/Mattyg585/cognitive-prompt-research). MIT licence. Do whatever you want with it.
 
 The toolkit includes a prompt analysis agent that you can point at any prompt. It identifies mode interference patterns and recommends both prompt-level fixes and pipeline reconstruction. It works in Claude Code and GitHub Copilot. The agents encode the theory — you don't need to understand cognitive linguistics to use them. Point the architect at your prompt, read what it says, decide if the fixes are worth it.
 
-What I'm planning: model-specific pipeline tuning (can richer handoff specs that carry intent without carrying mode fix the cross-model failures?), a pure creative writing experiment to test the boundary condition properly, and skills composition testing to measure whether loading multiple skills into one context degrades each skill's output.
+If you work in a domain where investigation of novel data is the core task — legal, medical, security analysis, anything where the answer lives in the specific case rather than the general knowledge — I'd like to know whether this maps to your experience. And if you're building RAG systems, I'd especially like to hear whether the premature closure framing matches what you're seeing in production.
 
-But the thing that would actually matter most: **domain expert review**. I'm not a lawyer. I'm not a UX researcher. I'm not a security operations engineer. The experiment outputs are in the repo. If you work in one of these domains and you have twenty minutes, read the three versions (baseline, optimised, pipeline) for the experiment in your field and tell me whether the pipeline version is genuinely better or whether I'm measuring something that doesn't matter in practice. That's the evidence I can't generate from inside.
-
-This started as a side project about Conditional Access policies. It turned into something I didn't expect — a question about whether the way we build AI prompts is leaving quality on the table in a way that's invisible from inside. Six experiments later, I think the answer is yes for analytical work, probably not for creative work, and worth investigating further either way.
+This started as a side project about Conditional Access policies. It turned into something I didn't expect — a question about whether the way we build AI prompts is leaving quality on the table in a way that's invisible from inside. Nine experiments later, I think the answer is yes for investigation-required work, probably not for knowledge-based reasoning, and worth investigating further either way.
 
 The output was always good enough to stop at. Until you see what it looks like when the modes aren't fighting each other.
 
 ---
 
-*[Matt Graham](https://www.linkedin.com/in/matthewgrahamau/) is a cloud consultant specialising in the Microsoft ecosystem, based on the Sunshine Coast, Australia. The research described in this post used prompts from Anthropic's knowledge-work-plugins as baselines, with all experiments conducted using Claude Code (Opus 4.6). External validation by Claude Web and Google Gemini. Full data and methodology at [github.com/Mattyg585/cognitive-prompt-research](https://github.com/Mattyg585/cognitive-prompt-research).*
+*[Matt Graham](https://www.linkedin.com/in/matthewgrahamau/) is a cloud consultant specialising in the Microsoft ecosystem, based on the Sunshine Coast, Australia. The research described in this post used prompts from Anthropic's knowledge-work-plugins as baselines, with experiments conducted using Claude Code (Opus 4.6) and cross-model testing via GitHub Copilot CLI. External validation by Claude Web and Google Gemini. Full data and methodology at [github.com/Mattyg585/cognitive-prompt-research](https://github.com/Mattyg585/cognitive-prompt-research).*

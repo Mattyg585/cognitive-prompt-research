@@ -56,9 +56,11 @@ Tested Anthropic's [knowledge-work-plugins](https://github.com/anthropics/knowle
 
 **On Claude (Opus 4.6):** Pipeline won 5/6. Creative writing (A2) was the boundary — pipeline improves process but disrupts prose.
 
-**v3 agent iterations (A1, A2):** Three iterations of the agents confirmed the pattern. A1 pipeline consistently found compound risks Tier 2 missed. A2 pipeline maintained its voice advantage while Tier 2 fixed its v2 regression. The agents are robust across task types.
+**v3 agent iterations (A1, A2):** Three iterations of the agents confirmed the pattern and revealed different improvement dynamics by task type. A1 pipeline consistently found compound risks Tier 2 missed — three iterations of better Tier 2 prompts raised the floor (more consistent execution) but never expanded the investigative range. The same compound risks were missed every time. This sharpens the theory: mode interference is a category problem, not a magnitude problem. You cannot prompt your way into discoveries that require clean mode separation.
 
-**Cross-model (Copilot CLI):** GPT-5.3-Codex mirrored Claude (6/6). GPT-5.2 favoured Tier 2. GPT-5.2-Codex and Gemini 3 Pro had catastrophic pipeline failures. **Tier 2 was the universally safe improvement across all models.** See [findings.md](findings.md).
+A2 exposed the over-engineering trap in creative work. The v2 agents added criterion gates and declared phases to the creative prompt — analytically sound structures that created anticipatory interference worse than no optimisation. The model wrote toward the evaluation criteria instead of toward the reader. v3 fixed it by going lighter: "Read the brief as a writer, not as someone filling a template." The principle: for creative tasks, the ceiling is reached by doing less, not more.
+
+**Cross-model (Copilot CLI):** GPT-5.3-Codex mirrored Claude (6/6). GPT-5.2 favoured Tier 2. GPT-5.2-Codex and Gemini 3 Pro had catastrophic pipeline failures — and the failure modes are theoretically significant. Three distinct patterns emerged: wrong artifact type (a pipeline stage produced an intake checklist instead of a postmortem), stage didn't execute (produced clarification questions instead of content), and pipeline introduced errors the monolith avoided. A1/Gemini and A3/Gemini both introduced gender bias — masculine pronouns for the gender-neutral "Jordan Chen" — that baseline handled correctly. The pipeline stripped the guardrails that shared context preserved. The trust chain theory predicted cascade failures; confirming a prediction of failure is harder to fake than claiming something works. **Tier 2 was the universally safe improvement across all models.** See [findings.md](findings.md).
 
 ### B-Series: External benchmarks
 
@@ -72,7 +74,7 @@ Tested Anthropic's [knowledge-work-plugins](https://github.com/anthropics/knowle
 | Pipeline (Tier 3) | 0.849 | 22/26 |
 | **Optimised (Tier 2)** | **0.950** | **25/26** |
 
-Tier 2 beat the pipeline. The epistemic stance intervention in a single prompt captured nearly all the improvement. The pipeline lost procedural details in its structured handoffs. See [experiments/B2-prbench/FINDINGS.md](experiments/B2-prbench/FINDINGS.md).
+Tier 2 beat the pipeline. The epistemic stance intervention in a single prompt captured nearly all the improvement. The pipeline's structured handoffs lost procedural details through the same mechanism that makes them cognitively clean: criteria 17-19 (valuation mechanics) fell between schema fields — too specific for "rules," too analytical for "facts" — and were lost in compression. Criterion 26 (a specific request for SEC commentary) never reached Stage 3 because the original question didn't propagate through handoffs. This is a genuine trade-off: you cannot strip cognitive residue without risking procedural detail — the same mechanism does both. One counter-finding worth noting: Instruction Following scored 1.000 only in the pipeline — Stage 3's clean context gave it cognitive space the other tiers spent on analysis. See [experiments/B2-prbench/FINDINGS.md](experiments/B2-prbench/FINDINGS.md).
 
 ### What the A-series improvements look like
 
@@ -114,7 +116,7 @@ One question determines the right tier:
 
 ### The RAG prediction
 
-The same litmus test applies to RAG: **Is the answer already in the model's training, with RAG just providing citation support?** Standard RAG is fine. **Must the answer be discovered from the retrieved documents?** Standard RAG causes premature closure — competent-looking answers that miss what's genuinely novel. Most production RAG is deployed on investigation-required tasks (legal discovery, medical records, compliance review). The implication is uncomfortable but testable.
+The same litmus test applies to RAG: **Is the answer already in the model's training, with RAG just providing citation support?** Standard RAG is fine. **Must the answer be discovered from the retrieved documents?** Standard RAG causes premature closure — competent-looking answers that miss what's genuinely novel. A1 contract review is the existence proof: the contract is the retrieved document, and the pipeline's compound findings that Tier 2 missed are exactly what the theory predicts standard RAG would miss over novel documents. Most production RAG is deployed on investigation-required tasks (legal discovery, medical records, compliance review). The implication is uncomfortable but already demonstrated, not just predicted.
 
 ---
 

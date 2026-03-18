@@ -46,7 +46,7 @@ If Tier 2 improves incrementally and Tier 3 produces a qualitative leap, the fin
 │   ├── v3-v4-comparison/       # The V3→V4 prompts and outputs (strongest evidence)
 │   └── graph-tool-pipeline/    # Full production prompt set from the CA pipeline
 ├── .claude/
-│   ├── agents/             # Predefined subagents (prompt-architect, prompt-writer, evaluator)
+│   ├── agents/             # Predefined subagents (prompt-architect, prompt-writer, plus evaluator for research)
 │   └── commands/           # Legacy slash commands (still work)
 ├── .github/
 │   └── agents/             # Copilot Chat + CLI agents (same three agents, .agent.md format)
@@ -65,21 +65,23 @@ If Tier 2 improves incrementally and Tier 3 produces a qualitative leap, the fin
 ```
 Use the prompt-architect agent to analyse experiments/A1-legal-contract-review/original/SKILL.md
 Use the prompt-writer agent to revise based on that analysis
-Use the evaluator agent to compare outputs across all three tiers
 ```
 
 **In Copilot Chat / CLI** — use @ mention:
 ```
 @prompt-architect analyse experiments/A1-legal-contract-review/original/SKILL.md
 @prompt-writer revise based on the analysis
-@evaluator compare outputs
 ```
-Copilot has handoff buttons between agents (architect → writer → evaluator). Use them — they carry structured output forward without the exploratory prose.
+Copilot has handoff buttons between agents (architect → writer). They carry structured output forward without the exploratory prose.
+
+Then run the revised prompt yourself and compare. You're the domain expert — you'll know if the output is better.
 
 **Legacy slash commands** (still work in Claude Code, but run in current context — less clean):
 ```
-/analyse-prompt    /write-prompt    /evaluate-run
+/analyse-prompt    /write-prompt
 ```
+
+> **Note:** An evaluator agent and rubric exist in the repo (`evaluation/`, `.claude/agents/evaluator.md`) for running the formal blind comparison protocol used in the research. Most users won't need it — run the revised prompt and judge the output yourself.
 
 ### Key isolation rule
 Each pipeline stage (Tier 3, Step 6) **must** run in a completely separate session — not just `/clear`. The pipeline's whole value is clean context at each stage boundary. Contaminating it recreates the monolithic pattern you're testing against.

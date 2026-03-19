@@ -95,6 +95,4 @@ The full narrative, including the PRBench failure that nearly broke the thesis a
 
 ---
 
-*Built by [Matt Graham](https://www.linkedin.com/in/matthewgrahamau/), a cloud consultant on the Sunshine Coast, Australia, with seventeen years of infrastructure experience, no formal AI or cognitive science background, and a side project that got out of hand. Research conducted with Claude Code (Opus 4.6). Cross-model testing on GPT-5.2, GPT-5.3-Codex, GPT-5.2-Codex, and Gemini 3 Pro. External validation by Claude Web and Google Gemini.*
-
 [MIT License](LICENSE)

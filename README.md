@@ -4,7 +4,7 @@
 
 LLMs learned from human language. Human language carries cognition — decades of research in cognitive science study exactly how thinking gets encoded in text. If that encoding is what models learned from, then cognitive science should have something to say about how we write prompts.
 
-I tested that hypothesis across six domains, five models, and an external benchmark. The short version: every time I applied cognitive science to prompt design, the output improved — and every time things broke, cognitive science explained why. The [full story is in the blog series](#the-full-story). The evidence is in this repo. The tools are ready to run.
+I tested that hypothesis across six domains, five models, and an external benchmark. The short version: every time I applied cognitive science to prompt design, the output improved — and every time things broke, cognitive science explained why. The [full story is in the blog series](https://thegrahams.au/blog/testing-the-theory/). The evidence is in this repo. The tools are ready to run.
 
 ---
 
@@ -91,7 +91,7 @@ The full narrative, including the PRBench failure that nearly broke the thesis a
 2. [Why Good Prompting Wasn't Enough](https://thegrahams.au/blog/why-good-prompting-wasnt-enough/) — Seven months of wrong turns
 3. [Context Carries Cognitive Mode](https://thegrahams.au/blog/context-carries-cognitive-mode/) — The evidence for mode separation
 4. [Evidence & Methods](https://thegrahams.au/blog/the-evidence-for-thinking-in-modes-evidence/) — Full experiment designs and claims tables
-5. [What Does Cognitive Science Say About Prompt Engineering?](https://thegrahams.au/blog/what-does-cognitive-science-say/) — Six experiments against production prompts (this research)
+5. [What Does Cognitive Science Say About Prompt Engineering?](https://thegrahams.au/blog/testing-the-theory/) — Six experiments against production prompts (this research)
 
 ---
 

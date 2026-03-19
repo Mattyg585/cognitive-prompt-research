@@ -1,10 +1,14 @@
-# Cognitive Prompt Research
+\# Cognitive Prompt Research
 
-**What does cognitive science say about prompt engineering?**
+**Good AI output hides great output. Cognitive science showed me why.**
 
-LLMs learned from human language. Human language carries cognition — decades of research in cognitive science study exactly how thinking gets encoded in text. If that encoding is what models learned from, then cognitive science should have something to say about how we write prompts.
+Everyone knows the basics: keep contexts focused, split complex work into stages, use subagents. We know this works. But would you notice when it doesn't? In my experience, getting this wrong still produces good output — competent, thorough, professional. The gap only appears when you fix the interference and compare the output to what you had before. Good hides great.
 
-I tested that hypothesis across six domains, five models, and an external benchmark. The short version: every time I applied cognitive science to prompt design, the output improved — and every time things broke, cognitive science explained why. The [full story is in the blog series](https://thegrahams.au/blog/testing-the-theory/). The evidence is in this repo. The tools are ready to run.
+I wanted to know *why* splitting helps when it helps, and whether I could predict when it would hurt. Cognitive science had answers. Human language carries cognitive patterns — exploratory writing looks statistically different from evaluative writing. LLMs learned those patterns from training data. When incompatible patterns share a context, they interfere. When you know *what's* interfering, you can predict whether splitting will help (because you're separating incompatible modes) or hurt (because you're scaffolding a model that already knows the domain).
+
+I tested this across six domains, five models, and an external benchmark. On [PRBench](https://github.com/prbench/prbench) (rubrics from 182 domain experts), a cognitively restructured *single* prompt scored 0.95 versus 0.76 baseline — and the pipeline scored *lower* at 0.85. Splitting hurt. On five other domains, splitting produced qualitative leaps. The difference was predictable: cognitive science told me which was which before I ran anything.
+
+**[The full story →](#the-full-story)** | **[Try the agents on your prompts →](QUICK-START.md)** | **[Full results →](findings.md)**
 
 ---
 

@@ -1,13 +1,3 @@
----
-title: "Testing the Theory — Nine Experiments, One Failed Prediction, and a Sharper Thesis"
-date: 2026-03-18
-draft: false
-description: "I tested the cognitive mode separation theory against Anthropic's production prompts, a professional reasoning benchmark, and five additional models. Pipeline won where investigation was required. It lost where recognition was sufficient. The failed prediction was the most useful result."
-summary: "The convergent/divergent framework from my AI pipeline project was a theory built on one domain. I tested it against Anthropic's knowledge-work-plugins across six domains, then against a professional reasoning benchmark. Pipeline won in five of the original six, then lost on the benchmark — and the failure sharpened the thesis into something more honest: pipelines earn their cost only when the correct output can't be produced without seeing the specific input data."
-tags: ["AI", "Context Engineering", "Prompting", "Cognitive Modes", "LLM"]
-series: "AI Reasoning Engine"
-seriesOrder: 5
----
 # What Does Cognitive Science Say About Prompt Engineering?
 
 *AI Reasoning Engine — Part 5 of 5*
@@ -20,15 +10,19 @@ seriesOrder: 5
 
 ---
 
-Everything in this series grew out of one question. Not "how do I write better prompts?" — that's an engineering question, and people are already answering it well. The question was: **does cognitive science have something to say about prompt engineering?**
+Everyone knows the basics of context management by now. Keep chat sessions short and focused. Reset often. Split complex work into multi-stage workflows. We know this works.
 
-It sounds like a stretch. Cognitive science studies human thinking. LLMs aren't thinking. But here's the thing — LLMs don't need to think for cognitive science to be relevant. They need to have *learned from* thinking. And they have. Every word of training data was produced by a human who was in some cognitive state when they wrote it. Exploratory writing has different statistical properties than evaluative writing — different hedging, different sentence structures, different levels of commitment. The model learned those distributions. It doesn't know what exploration *is*, but it knows what exploratory language looks like, because that's all it has.
+But I wanted to know *why*. Can we predict when we should split and when splitting will make things worse? And more importantly — would you even notice the difference?
 
-Cognitive science has spent decades studying how thinking gets encoded in language. If that encoding is what LLMs learned from, then cognitive science isn't a metaphor for what's happening in the model. It's a description of the *training signal*.
+That's the part that got me. In my experience, getting this wrong still produces good output. Competent, thorough, professional. Nobody would complain. But getting it right — that's where you see what was being left on the table. That's where good turns to great. And the gap is invisible until you fix the prompt and compare the output to what you had before.
 
-I'm a cloud infrastructure consultant with seventeen years of Microsoft experience and no formal background in AI or cognitive science. I'm not the person you'd expect to be writing this. But I spent seven months building an AI pipeline that forced me to confront this question, and when I finally asked it directly — when I stopped guessing at prompt fixes and started asking "what does cognitive science say?" — the answers kept coming. Every time. Including when things broke.
+I stumbled onto a theory that cognitive science should have something to say here. Not because LLMs think — they don't — but because they learned from human language, and human language carries cognition. Every word of training data was produced by a human in some cognitive state. Exploratory writing looks statistically different from evaluative writing — different hedging, different sentence structures, different levels of commitment. The model learned those distributions. It doesn't know what exploration *is*, but it knows what exploratory language looks like, because that's all it has.
 
-This post is about what happened when I took that question seriously and tested it against production prompts across six domains. The [full research repo](https://github.com/Mattyg585/cognitive-prompt-research) is public if you want to evaluate the evidence yourself. What follows is the story.
+Cognitive science has spent decades studying how thinking gets encoded in language. If that encoding is what LLMs learned from, then cognitive science isn't a metaphor for what's happening in the model. It's a description of the *training signal*. And it should be able to predict which context splits help (because you're separating incompatible cognitive modes) and which ones hurt (because you're adding scaffolding to a model that already knows the domain) — *before you run anything*.
+
+Every time I leaned into this, the needle moved. Every time things broke, cognitive science explained why. I saw just how bad "good" output was when I understood what my cognitively confused prompts were actually doing.
+
+I'm a cloud infrastructure consultant with seventeen years of Microsoft experience and no formal background in AI or cognitive science. I'm not the person you'd expect to be writing this. But I spent seven months building an AI pipeline that forced me to confront this question, and the answers kept coming. This post is about what happened when I took that seriously and tested it against production prompts across six domains. The [full research repo](https://github.com/Mattyg585/cognitive-prompt-research) is public if you want to evaluate the evidence yourself. What follows is the story.
 
 ---
 
@@ -43,6 +37,8 @@ But I didn't just re-run the same experiment in different domains. I went back t
 The answers were specific. Cognitive science says that numeric anchors (like "identify 3-5 key findings") create anchoring bias — the model will find the number you gave it, not the number that's there. It says that seeded examples function as availability heuristics — they make the model more likely to find things that look like the examples and less likely to find things that don't. It says that mixing evaluative language with investigative language creates something analogous to task-set inertia — the model gets pulled toward one mode and stays there.
 
 These aren't vague principles. They're specific, testable predictions about what you'll find wrong with a given prompt and what will happen when you fix it. So I built agents that look for exactly these patterns.
+
+One thing to flag before the experiments: the Tier 2 results — where a single, better-written prompt dramatically improved output without any separation at all — are the strongest evidence that context isolation isn't the mechanism. You don't need to split anything. You need to fix the cognitive mode of the language that's already there. Sometimes that means splitting. Sometimes it means rewriting. Sometimes it means removing a section entirely. The framework tells you which.
 
 ---
 
@@ -70,7 +66,7 @@ The prediction: if cognitive science has explanatory power over prompt design, T
 
 ## It kept working
 
-Each experiment needed test material — you can't review a contract without a contract. For legal, I used a real, open-source SaaS agreement (the Common Paper Cloud Service Agreement v2.1, CC BY 4.0). For the other five domains, I created realistic synthetic scenarios: a fictional product launch brief for marketing, a senior engineer's performance data for HR, six user interview transcripts for design research, a production Lambda failure with logs for engineering, and a SEV1 customer data exposure timeline for SecOps. Then the three tiers of each prompt ran against the same test material, and the outputs went through a scoring rubric designed to measure the kind of qualitative differences the theory predicted — not just "is this correct?" but "does this demonstrate investigation or just retrieval?"
+Each experiment needed test material — you can't review a contract without a contract. For legal, I used a real, open-source SaaS agreement (the Common Paper Cloud Service Agreement v2.1, CC BY 4.0) — I didn't plant anything in it for the pipeline to find. For the other five domains, I created realistic synthetic scenarios: a fictional product launch brief for marketing, a senior engineer's performance data for HR, six user interview transcripts for design research, a production Lambda failure with logs for engineering, and a SEV1 customer data exposure timeline for SecOps. Then the three tiers of each prompt ran against the same test material, and the outputs went through a scoring rubric designed to measure the kind of qualitative differences the theory predicted — not just "is this correct?" but "does this demonstrate investigation or just retrieval?"
 
 Pipeline won five of six domains on Claude cleanly. Creative writing — the sixth — was more complicated, and it turned out to be one of the most interesting results. I'll come back to it.
 

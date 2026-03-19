@@ -1,6 +1,6 @@
 # Cross-Experiment Findings
 
-Updated as experiments complete. Patterns, boundary conditions, and surprises.
+Six domains. Five models. Three tiers of intervention. This page has the full results — what improved, what didn't, what broke, and why. If you're coming from the [README](README.md), this is where the summary claims get tested against the data.
 
 ---
 

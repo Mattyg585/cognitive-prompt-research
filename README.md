@@ -1,4 +1,4 @@
-\# Cognitive Prompt Research
+# Cognitive Prompt Research
 
 **Good AI output hides great output. Cognitive science showed me why.**
 

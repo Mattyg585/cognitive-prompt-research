@@ -1,15 +1,18 @@
 # How to Use the Toolkit
 
-This project has two toolkit agents — Prompt Architect and Prompt Writer — that can be invoked from Claude Code or GitHub Copilot (Chat or CLI). This document covers how to invoke them from each tool.
+This project has three toolkit agents — Prompt Excavator, Prompt Architect, and Prompt Writer — that can be invoked from Claude Code or GitHub Copilot (Chat or CLI). This document covers how to invoke them from each tool.
 
 ---
 
-## The Two Agents
+## The Three Agents
 
 | Agent | What it does | When to use it |
 |---|---|---|
+| **prompt-excavator** | Helps articulate what you need from AI — surfaces tacit knowledge, judgment calls, edge cases | Before you have a prompt; when starting from a vague idea |
 | **prompt-architect** | Analyses a prompt for cognitive mode conflicts, anchors, seed/lens issues | Before revising any prompt |
 | **prompt-writer** | Revises prompts and designs pipelines from architect findings | After analysis; to build Tier 2 or Tier 3 |
+
+The natural flow: **Excavate** (figure out what you need) → **Architect** (analyse the prompt) → **Writer** (build or revise). You don't always need all three — if you already have a prompt, start with the architect. If you already know what you need, start with the writer. The excavator is for when you're starting from scratch or a vague idea.
 
 Analyse, revise, run, compare. You're the domain expert — you'll know if the output is better.
 
@@ -28,6 +31,14 @@ Claude will sometimes delegate automatically based on your request. You can also
 ### Invoking
 
 **Explicit invocation** (most reliable):
+```
+Use the prompt-excavator agent to help me define what I need for a quoting automation system
+```
+
+```
+Use the prompt-excavator agent in primer mode — I'm meeting a builder about their quoting process
+```
+
 ```
 Use the prompt-architect agent to analyse experiments/A1-legal-contract-review/original/SKILL.md
 ```
@@ -63,6 +74,10 @@ Custom agents in `.github/agents/` are available in the Copilot Chat panel. You 
 In the Copilot Chat panel, type:
 
 ```
+@prompt-excavator Help me define what I need for a quoting automation system
+```
+
+```
 @prompt-architect Analyse experiments/A1-legal-contract-review/original/SKILL.md
 ```
 
@@ -72,7 +87,7 @@ In the Copilot Chat panel, type:
 
 ### Using handoffs
 
-The Copilot agents are wired with handoffs. After the `@prompt-architect` completes its analysis, a "Hand off to prompt-writer" button will appear. Click it to transition — the structured output carries over without the exploratory prose.
+The Copilot agents are wired with handoffs. After `@prompt-excavator` produces a structured brief, a "Hand off to prompt-writer" button will appear. After `@prompt-architect` completes its analysis, a "Hand off to prompt-writer" button will appear. Click it to transition — the structured output carries over without the exploratory prose.
 
 This is the pipeline pattern applied to the meta-level: the research tooling itself uses scoped contexts and deliberate handoffs.
 
@@ -102,6 +117,10 @@ Select your model:
 Copilot CLI delegates to custom agents automatically based on your request. You can also invoke explicitly:
 
 ```
+@prompt-excavator help me define what I need for an invoice processing system
+```
+
+```
 @prompt-architect analyse experiments/A1-legal-contract-review/original/SKILL.md
 ```
 
@@ -111,7 +130,7 @@ Copilot CLI delegates to custom agents automatically based on your request. You 
 
 If `@agent-name` syntax doesn't work in your CLI version, use natural language and the CLI will route automatically:
 ```
-Analyse the prompt at experiments/A1-legal-contract-review/original/SKILL.md for cognitive mode conflicts
+Help me figure out what I need for an invoice processing automation
 ```
 
 ### Fresh context between steps
@@ -146,14 +165,17 @@ The writer knows both formats. It will output correctly structured files with th
 
 ```
 # Claude Code — explicit subagent invocation
+Use the prompt-excavator agent to [describe what you need / prepare for a meeting]
 Use the prompt-architect agent to analyse [file]
 Use the prompt-writer agent to [revise / design pipeline] based on [analysis file]
 
 # Copilot Chat — @ mention
+@prompt-excavator [describe what you need]
 @prompt-architect [instruction]
 @prompt-writer [instruction]
 
 # Copilot CLI — @ mention or natural language
+@prompt-excavator [describe what you need]
 @prompt-architect [instruction]
 /clear   ← between steps
 [new terminal session] ← between pipeline stages
@@ -165,11 +187,13 @@ Use the prompt-writer agent to [revise / design pipeline] based on [analysis fil
 
 ```
 .claude/agents/
+├── prompt-excavator.md     # Claude Code subagent
 ├── prompt-architect.md      # Claude Code subagent
 ├── prompt-writer.md         # Claude Code subagent
 └── evaluator.md             # Claude Code subagent (research use)
 
 .github/agents/
+├── prompt-excavator.agent.md  # Copilot Chat + CLI agent
 ├── prompt-architect.agent.md   # Copilot Chat + CLI agent
 ├── prompt-writer.agent.md      # Copilot Chat + CLI agent
 └── evaluator.agent.md          # Copilot Chat + CLI agent (research use)
@@ -180,8 +204,12 @@ Use the prompt-writer agent to [revise / design pipeline] based on [analysis fil
 └── evaluate-run.md             # Research use
 
 toolkit/
-├── prompt-architect-agent.md   # Full framework loaded by both agent formats
-├── prompt-writer-agent.md      # Full framework loaded by both agent formats
+├── prompt-excavator-agent.md   # Full framework loaded by excavator agents
+├── prompt-architect-agent.md   # Full framework loaded by architect agents
+├── prompt-writer-agent.md      # Full framework loaded by writer agents
 ├── cognitive-stance-reference.md
-└── cognitive-science-research.md
+├── cognitive-science-research.md
+├── excavation-research-elicitation.md    # Research: CTA, MI, design thinking
+├── excavation-research-conversational.md # Research: dialogue design, gap detection
+└── excavation-research-bridging.md       # Research: task decomposition, triage
 ```
